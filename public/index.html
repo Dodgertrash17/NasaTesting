@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sky Blink: spot what moved</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <main>
+    <section id="hook" aria-labelledby="hook-title">
+      <h1 id="hook-title">There may be a ninth planet. Could you spot it?</h1>
+      <button type="button" id="start">Start looking</button>
+    </section>
+
+    <section id="challenge" aria-labelledby="challenge-title" hidden>
+      <h2 id="challenge-title">Something in this patch moved. Find it.</h2>
+      <figure class="viewer">
+        <canvas id="sky" width="600" height="600" tabindex="0"
+                aria-describedby="sky-caption"></canvas>
+        <figcaption id="sky-caption">Two infrared images of the same patch of sky,
+          taken months apart by NASA's SPHEREx.</figcaption>
+      </figure>
+      <div class="controls">
+        <button type="button" id="blink" aria-pressed="false">Blink</button>
+        <label for="frame">Date</label>
+        <input type="range" id="frame" min="0" max="1" step="1" value="0">
+        <output id="frame-date" for="frame"></output>
+        <button type="button" id="reveal">Show me</button>
+      </div>
+      <p id="status" role="status"></p>
+    </section>
+  </main>
+  <footer>Data: SPHEREx/JPL/Caltech/NASA, via NASA/IPAC IRSA</footer>
+</body>
+</html>

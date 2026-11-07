@@ -1,0 +1,21 @@
+:root {
+  --sky: #05070d;      /* behind images: near-black with a blue tint */
+  --panel: #111726;
+  --text: #e8ecf6;
+  --muted: #9aa6bf;
+  --accent: #ffc857;   /* candidate circles and focus rings only */
+  --radius: 10px;
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+}
+body { margin: 0; background: var(--sky); color: var(--text); line-height: 1.5; }
+main { max-width: 960px; margin: 0 auto; padding: 16px; }
+
+.viewer canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+button { min-height: 44px; padding: 0 18px; border-radius: var(--radius); font: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (min-width: 800px) {
+  #challenge { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+}
