@@ -13,10 +13,26 @@ main { max-width: 960px; margin: 0 auto; padding: 16px; }
 [hidden] { display: none !important; }
 
 .viewer canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; margin: 0;}
-.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-
+.controls { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
 button { min-height: 44px; padding: 0 18px; border-radius: var(--radius); font: inherit; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+#frame-date { flex-basis: 100%; }
+
+#blink {
+  width: 6.5rem;      /* wide enough for the longer word, with padding */
+  text-align: center;
+}
+
+#frame {
+  width: 10rem;
+  flex: none;         /* don't let flexbox resize it */
+}
+
+#frame-date {
+  display: inline-block;
+  min-width: 10ch;
+  font-variant-numeric: tabular-nums;
+}
 
 footer { max-width: 960px; margin: 0 auto; padding: 16px; color: var(--muted); font-size: 0.875rem; }
 

@@ -40,11 +40,6 @@ async function loadJSON(url) {
   return res.json();
 }
 
-function stopBlink() {
-  clearInterval(state.timer);
-  state.playing = false;
-}
-
 function render() {
   const patch = currentPatch();
   const frame = patch.frames[state.frame];
@@ -93,6 +88,25 @@ async function openPatch(id) {
   }
 }
 
+const SPEED_MS = { slow: 1000, normal: 500, fast: 250 } // ms
+
+function startBlink(speed = 'normal') {
+  clearInterval(state.timer);          // never run two timers at once
+  state.playing = true;
+  state.timer = setInterval(() => {
+    state.frame = (state.frame + 1) % currentPatch().frames.length;
+    render();
+  }, SPEED_MS[speed]);
+  render();
+}
+
+function stopBlink() {
+  clearInterval(state.timer);
+  state.playing = false;
+  render();
+}
+
+
 els.frame.addEventListener('input', () => {
   stopBlink();
   state.frame = Number(els.frame.value);
@@ -102,6 +116,20 @@ els.frame.addEventListener('input', () => {
 els.start.addEventListener('click', () => {
   els.hook.hidden = true;
   els.challenge.hidden = false;
+});
+
+els.blink.addEventListener('click', () => {
+  state.playing ? stopBlink() : startBlink();
+});
+
+els.canvas.addEventListener('keydown', (e) => {
+  const last = currentPatch().frames.length - 1;
+  if (e.key === ' ') {
+    e.preventDefault();                // stop the page scrolling
+    state.playing ? stopBlink() : startBlink();
+  }
+  if (e.key === 'ArrowRight') { stopBlink(); state.frame = Math.min(state.frame + 1, last); render(); }
+  if (e.key === 'ArrowLeft')  { stopBlink(); state.frame = Math.max(state.frame - 1, 0);    render(); }
 });
 
 async function start() {
