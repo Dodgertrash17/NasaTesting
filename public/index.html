@@ -3,144 +3,87 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SPHEREx Sky Viewer</title>
-  <meta name="description" content="Watch a patch of sky change over time with infrared images from NASA's SPHEREx mission.">
+  <title>SkyBlink · Home</title>
+  <meta name="description" content="Watch the sky change over time with infrared images from NASA's SPHEREx mission.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/main.js" defer></script>
+  <script>
+    // Old links like index.html?ra=..&dec=.. now go to the viewer.
+    if (/[?&]ra=/.test(location.search) && /[?&]dec=/.test(location.search)) location.replace('viewer.html' + location.search);
+  </script>
+  <script src="js/common.js" defer></script>
+  <script src="js/home.js" defer></script>
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="./">
-      <span class="brand-mark" aria-hidden="true"></span>
-      SPHEREx Sky Viewer
-    </a>
-    <span class="brand-sub">Near-infrared, all-sky, every six months</span>
-  </header>
+<body data-page="home">
+  <canvas class="home-sky" id="home-sky" aria-hidden="true"></canvas>
+  <header id="site-header"></header>
 
   <main>
-    <section id="search-section" class="card" aria-labelledby="search-title">
-      <h1 id="search-title">Watch a patch of sky change over time</h1>
-      <p class="lede">Enter sky coordinates, then flip between SPHEREx images taken months apart.
-        Anything that jumps or flickers is moving or changing brightness.</p>
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">NASA SPHEREx · Hackathon project</p>
+        <h1 id="hero-title">Welcome to <em>SkyBlink</em>, the astronomy blinker</h1>
+        <p class="lede">
+          Since 2025, NASA's SPHEREx telescope has photographed the entire sky every six months
+          in 102 colors of infrared light. Hidden in those pictures are things that move:
+          asteroids, comets, nearby stars, and cold brown dwarfs drifting through our corner of the galaxy.
+        </p>
+        <p class="lede">
+          SkyBlink lines up images of the same patch of sky taken months apart and flips between them,
+          the same trick that found Pluto in 1930. Anything that jumps or flickers is worth a closer look.
+          No telescope or astronomy degree needed.
+        </p>
+      </div>
 
-      <form id="search" novalidate>
-        <div class="field">
-          <label for="ra">Right Ascension</label>
-          <input id="ra" name="ra" autocomplete="off" required spellcheck="false"
-                 placeholder="133.795 or 08h55m10s" aria-describedby="form-error">
+      <figure class="hero-demo">
+        <div class="stage">
+          <canvas id="hero-canvas" width="512" height="512" aria-label="Animated example: two infrared images blinking back and forth"></canvas>
+          <span class="badge badge-warn">Simulated example</span>
+          <span class="badge badge-date mono" id="hero-date"></span>
         </div>
-        <div class="field">
-          <label for="dec">Declination</label>
-          <input id="dec" name="dec" autocomplete="off" required spellcheck="false"
-                 placeholder="-7.245 or -7d14m42s" aria-describedby="form-error">
-        </div>
-        <div class="field field-fov">
-          <label for="fov">Field of view</label>
-          <select id="fov" name="fov">
-            <option value="0.1">0.1°</option>
-            <option value="0.25" selected>0.25°</option>
-            <option value="0.5">0.5°</option>
-            <option value="1">1°</option>
-          </select>
-        </div>
-        <button type="submit" class="primary">Show images</button>
-      </form>
-      <p id="form-error" role="alert"></p>
+        <figcaption>Spot the dot that moves: that's the blink technique in action.</figcaption>
+      </figure>
+    </section>
 
-      <div class="presets-wrap">
-        <span class="presets-label" id="presets-label">Try a challenge target</span>
-        <div id="presets" role="group" aria-labelledby="presets-label"></div>
+    <section class="goals" aria-labelledby="goals-title">
+      <h2 id="goals-title">Our goals</h2>
+      <p>What makes SkyBlink different.</p>
+      <div class="goal-grid">
+        <article class="card goal">
+          <div class="goal-icon" aria-hidden="true">🔭</div>
+          <h3>Amateur accessibility</h3>
+          <p>Anyone should be able to look at real NASA data and make a discovery. Plain language,
+             one-click examples, and a built-in guide to what you're looking at.</p>
+        </article>
+        <article class="card goal placeholder">
+          <span class="pill">To be decided</span>
+          <div class="goal-icon" aria-hidden="true">✦</div>
+          <h3>Unique factor #2</h3>
+          <p>Placeholder: describe our second unique feature here.</p>
+        </article>
+        <article class="card goal placeholder">
+          <span class="pill">To be decided</span>
+          <div class="goal-icon" aria-hidden="true">✦</div>
+          <h3>Unique factor #3</h3>
+          <p>Placeholder: describe our third unique feature here.</p>
+        </article>
       </div>
     </section>
 
-    <section id="empty" class="card empty" hidden aria-live="polite">
-      <h2>No SPHEREx images for this spot yet</h2>
-      <p id="empty-detail"></p>
-    </section>
-
-    <section id="challenge" aria-labelledby="challenge-title" hidden>
-      <div class="viewer-head">
-        <div>
-          <h2 id="challenge-title">Images of this patch of sky</h2>
-          <p id="target-coords" class="mono muted"></p>
-        </div>
-        <button type="button" id="copy-link" class="ghost">Copy link</button>
-      </div>
-
-      <div class="viewer-grid">
-        <figure class="viewer">
-          <div class="stage">
-            <canvas id="sky" width="600" height="600" tabindex="0"
-                    aria-describedby="sky-caption"></canvas>
-            <div class="crosshair" aria-hidden="true"></div>
-            <span id="sim-badge" class="badge badge-warn" hidden>Simulated data</span>
-            <span id="frame-badge" class="badge badge-date mono" aria-hidden="true"></span>
-            <div id="loading" class="loading" hidden><span class="spinner"></span>Loading sky images…</div>
-          </div>
-          <figcaption id="sky-caption" class="muted">
-            Infrared images of this patch of sky from NASA's SPHEREx. North is up, east is left.
-          </figcaption>
-        </figure>
-
-        <div class="side">
-          <div class="panel">
-            <div class="transport">
-              <button type="button" id="prev" class="icon" aria-label="Previous date">&#9664;&#xFE0E;</button>
-              <button type="button" id="blink" class="primary" aria-pressed="false">Blink</button>
-              <button type="button" id="next" class="icon" aria-label="Next date">&#9654;&#xFE0E;</button>
-              <label class="speed">
-                <span class="visually-hidden">Blink speed</span>
-                <select id="speed">
-                  <option value="slow">Slow</option>
-                  <option value="normal" selected>Normal</option>
-                  <option value="fast">Fast</option>
-                </select>
-              </label>
-            </div>
-
-            <label for="frame" class="slider-label">
-              <span>Date</span>
-              <output id="frame-date" for="frame" class="mono"></output>
-            </label>
-            <input type="range" id="frame" min="0" max="1" step="1" value="0">
-            <p id="frame-count" class="muted small"></p>
-          </div>
-
-          <div class="panel">
-            <h3>View</h3>
-            <div class="segmented" role="radiogroup" aria-label="Image mode">
-              <label><input type="radio" name="mode" value="normal" checked><span>Image</span></label>
-              <label><input type="radio" name="mode" value="diff"><span>Difference</span></label>
-            </div>
-            <p class="muted small" id="mode-help">Each date as observed.</p>
-
-            <label class="range-row" for="stretch">Brightness
-              <input type="range" id="stretch" min="0.5" max="3" step="0.1" value="1"></label>
-            <label class="range-row" for="contrast">Contrast
-              <input type="range" id="contrast" min="0.5" max="3" step="0.1" value="1"></label>
-
-            <label class="check"><input type="checkbox" id="invert"> Invert colors</label>
-            <label class="check"><input type="checkbox" id="crosshair" checked> Show target crosshair</label>
-            <label class="check"><input type="checkbox" id="reveal"> Circle known movers</label>
-          </div>
-
-          <div class="panel">
-            <h3>About this patch</h3>
-            <dl id="meta" class="meta"></dl>
-          </div>
-
-          <p class="muted small keys">Keys (click the image first): <kbd>Space</kbd> blink,
-            <kbd>&larr;</kbd> <kbd>&rarr;</kbd> step through dates.</p>
-        </div>
-      </div>
-
-      <ol id="filmstrip" class="filmstrip" aria-label="All dates"></ol>
-      <p id="status" role="status"></p>
-    </section>
+    <nav class="cta" aria-label="Get started">
+      <a href="learn.html">
+        <div><strong>Education</strong><span class="muted">New to astronomy? Start with the basics.</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="search.html" class="primary-cta">
+        <div><strong>Search Tool</strong><span class="muted">Pick a spot in the sky and start blinking.</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
   </main>
-  <footer>Data: SPHEREx/JPL/Caltech/NASA, via NASA/IPAC IRSA</footer>
+
+  <footer id="site-footer"></footer>
 </body>
 </html>

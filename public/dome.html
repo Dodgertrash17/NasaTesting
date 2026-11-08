@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkyBlink · Sky Dome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/common.js" defer></script>
+  <script src="js/dome.js" defer></script>
+</head>
+<body data-page="dome">
+  <header id="site-header"></header>
+
+  <main>
+    <!-- SKELETON ONLY. The interactive all-sky view is not built yet. -->
+    <div class="dome" id="dome">
+      <!-- The real sky renderer goes here (e.g. Aladin Lite or WorldWide Telescope). -->
+      <canvas class="dome-sky" id="dome-sky" aria-hidden="true"></canvas>
+      <div class="dome-horizon" aria-hidden="true"></div>
+
+      <!-- Sub-nav from the sketch. Fades out when the mouse is still. -->
+      <nav class="dome-toolbar" aria-label="Sky Dome">
+        <a href="search.html#gallery">Gallery</a>
+        <a aria-disabled="true" title="Planned">Exoplanet Explorer</a>
+        <a href="search.html#filtered">Filtered Search</a>
+        <a href="search.html#raw">Raw Search</a>
+      </nav>
+
+      <section class="card dome-card" aria-labelledby="dome-title">
+        <p class="eyebrow">Coming soon</p>
+        <h1 id="dome-title" style="font-size:1.8rem;margin-bottom:12px">Sky Dome</h1>
+        <p class="muted" id="dome-target">Stand in an open field and look all around the SPHEREx sky.</p>
+        <p class="label" style="margin-top:20px">Planned</p>
+        <ul>
+          <li>Drag to look in any direction, scroll to zoom, like standing under the night sky.</li>
+          <li>Points of interest as dots; bigger dots for brighter or more interesting objects. Click one to open it.</li>
+          <li>For each point: see it across SPHEREx's wavelengths and blink between them.</li>
+          <li>Jump here from the viewer, and back to the viewer from any dot.</li>
+        </ul>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <a class="btn primary" id="back-to-viewer" href="search.html" hidden>← Back to viewer</a>
+          <a class="btn" href="search.html">Open the Search Tool</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

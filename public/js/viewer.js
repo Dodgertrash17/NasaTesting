@@ -1,171 +1,82 @@
+// Viewer page: viewer.html?ra=133.795&dec=-7.245&fov=0.25[&name=WISE+0855]
+// Left: raw data · Center: image + blink · Bottom: timeline · Right: AI predictions.
+// Shared helpers (parseRA, formatRA, loadJSON, mjdToDate, ...) live in common.js.
+
 const state = {
   patches: [],      // the list from data/patches.json
-  patch: null,      // the open patch's handshake file, e.g. data/demo.json
+  patch: null,      // the open patch's data file, e.g. data/demo.json
+  jsonUrl: null,
   frame: 0,         // which date is showing
   playing: false,   // is the blink running?
-  revealed: false,  // circle known movers?
+  revealed: false,  // circle every candidate?
+  selected: null,   // id of the highlighted AI prediction
   mode: 'normal',   // 'normal' or 'diff' (this date minus the first date)
   speed: 'normal',
   timer: null,
-  target: null,     // { ra, dec, fov } the user asked for
+  target: null,     // { ra, dec, fov, name } from the URL
 };
 
 let images = [];    // decoded <img> per frame
-let pixels = [];    // ImageData per frame, made on first use (for difference mode)
+let pixels = [];    // ImageData per frame, made on first use
 
 const $ = (s) => document.querySelector(s);
 const els = {
-  form:      $('#search'),
-  ra:        $('#ra'),
-  dec:       $('#dec'),
-  fov:       $('#fov'),
-  formError: $('#form-error'),
-  presets:   $('#presets'),
-  empty:     $('#empty'),
-  emptyText: $('#empty-detail'),
-  challenge: $('#challenge'),
+  title:     $('#viewer-title'),
   coords:    $('#target-coords'),
   copyLink:  $('#copy-link'),
-  stage:     $('.stage'),
+  empty:     $('#empty'),
+  emptyText: $('#empty-detail'),
+  viewer:    $('#viewer'),
+  stage:     $('#stage'),
   canvas:    $('#sky'),
   simBadge:  $('#sim-badge'),
   badge:     $('#frame-badge'),
+  countBadge:$('#count-badge'),
   loading:   $('#loading'),
   prev:      $('#prev'),
   next:      $('#next'),
   blink:     $('#blink'),
   speed:     $('#speed'),
-  frame:     $('#frame'),
-  frameDate: $('#frame-date'),
-  frameCount:$('#frame-count'),
   modeHelp:  $('#mode-help'),
   stretch:   $('#stretch'),
   contrast:  $('#contrast'),
   invert:    $('#invert'),
   crosshair: $('#crosshair'),
+  frame:     $('#frame'),
+  frameDate: $('#frame-date'),
+  ticks:     $('#tl-ticks'),
+  domeLink:  $('#dome-link'),
+  rawFrame:  $('#raw-frame'),
+  rawCursor: $('#raw-cursor'),
+  rawPatch:  $('#raw-patch'),
+  download:  $('#download'),
+  aiList:    $('#ai-list'),
   reveal:    $('#reveal'),
-  meta:      $('#meta'),
-  filmstrip: $('#filmstrip'),
   status:    $('#status'),
 };
-
-// Challenge targets (J2000). Each data file the pipeline makes goes in data/patches.json with ra/dec.
-const TARGETS = [
-  { id: 'wise0855', name: 'WISE 0855',      ra: 133.7951, dec: -7.2451 },
-  { id: 'barnard',  name: "Barnard's Star", ra: 269.4521, dec: 4.6934 },
-  { id: 'epsindib', name: 'Epsilon Indi B', ra: 331.0438, dec: -56.7827 },
-  { id: 'rwaur',    name: 'RW Aurigae',     ra: 76.9563,  dec: 30.4013 },
-  { id: 'rdra',     name: 'R Draconis',     ra: 248.1675, dec: 66.7551 },
-];
 
 const SPEED_MS = { slow: 1000, normal: 500, fast: 250 };
 const DISPLAY_PX = 768;   // draw at least this big so markers stay crisp
 
-// ---------- small helpers ----------
-
-// The handshake file gives times as MJD (days since 1858-11-17). 40587 is 1970-01-01.
-function mjdToDate(mjd) {
-  return new Date((mjd - 40587) * 86400000).toISOString().slice(0, 10);   // "2025-05-01"
-}
-
 function setStatus(text) { els.status.textContent = text; }
 
-async function loadJSON(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-  return res.json();
+function fillDL(dl, rows) {
+  dl.replaceChildren(...rows.flatMap(([k, v]) => {
+    const dt = document.createElement('dt'); dt.textContent = k;
+    const dd = document.createElement('dd'); dd.textContent = v;
+    return [dt, dd];
+  }));
 }
 
-async function loadImage(src) {
-  const img = new Image();
-  img.src = src;
-  await img.decode();
-  return img;
-}
-
-function pad(n, w = 2, d = 0) { 
-  return n.toFixed(d).padStart(w + (d ? d + 1 : 0), '0'); 
-}
-
-function formatRA(deg) {
-  let s = deg / 15 * 3600;
-  const h = Math.floor(s / 3600); s -= h * 3600;
-  const m = Math.floor(s / 60);   s -= m * 60;
-  return `${pad(h)}h${pad(m)}m${pad(s, 2, 2)}s`;
-}
-
-function formatDec(deg) {
-  const sign = deg < 0 ? '−' : '+';
-  let s = Math.abs(deg) * 3600;
-  const d = Math.floor(s / 3600); s -= d * 3600;
-  const m = Math.floor(s / 60);   s -= m * 60;
-  return `${sign}${pad(d)}°${pad(m)}′${pad(s, 2, 1)}″`;
-}
-
-// Angle between two sky positions, in degrees.
-function separation(ra1, dec1, ra2, dec2) {
-  const r = Math.PI / 180;
-  const c = Math.sin(dec1 * r) * Math.sin(dec2 * r) +
-            Math.cos(dec1 * r) * Math.cos(dec2 * r) * Math.cos((ra1 - ra2) * r);
-  return Math.acos(Math.min(1, Math.max(-1, c))) / r;
-}
-
-// ---------- coordinate parsing ----------
-
-function parseAngle(text) {
-  const t = text.trim().replace('−', '-');            // accept a typographic minus
-  if (t === '') return null;
-
-  const negative = t.startsWith('-');
-  const cleaned = t
-    .replace(/^[+-]/, '')
-    .replace(/[hdms°′″'":]/gi, ' ')
-    .trim();
-  if (cleaned === '') return null;
-
-  const parts = cleaned.split(/\s+/);
-  if (parts.length > 3) return null;
-  if (!parts.every(p => /^\d+(\.\d+)?$/.test(p))) return null;
-
-  const [a, b = 0, c = 0] = parts.map(Number);
-  if (b >= 60 || c >= 60) return null;
-
-  return { negative, value: a + b / 60 + c / 3600, count: parts.length };
-}
-
-function parseRA(text) {
-  const p = parseAngle(text);
-  if (!p || p.negative) return null;
-  const isHours = /[h:]/i.test(text) || p.count > 1;  // "08h55m..." or "08 55 10" means hours
-  const deg = isHours ? p.value * 15 : p.value;
-  return deg >= 0 && deg < 360 ? deg : null;
-}
-
-function parseDec(text) {
-  const p = parseAngle(text);
-  if (!p) return null;
-  const deg = p.negative ? -p.value : p.value;
-  return deg >= -90 && deg <= 90 ? deg : null;
+// Arcseconds per pixel: from the data file if given, else worked out from the field of view.
+function pixelScale() {
+  const p = state.patch?.patch || {};
+  if (p.pixel_scale_arcsec) return p.pixel_scale_arcsec;
+  const fov = p.fov_deg || state.target.fov;
+  return p.width_px ? (fov * 3600) / p.width_px : null;
 }
 
 // ---------- drawing ----------
-
-function frameSource(i) {
-  if (state.mode !== 'diff') return images[i];
-  // Difference: this date minus the first date. Grey = no change, bright = new, dark = gone.
-  const a = getPixels(i), b = getPixels(0);
-  const out = new ImageData(a.width, a.height);
-  for (let p = 0; p < a.data.length; p += 4) {
-    const v = 128 + (a.data[p] - b.data[p]);
-    const g = 128 + (a.data[p + 1] - b.data[p + 1]);
-    const bl = 128 + (a.data[p + 2] - b.data[p + 2]);
-    out.data[p] = v; out.data[p + 1] = g; out.data[p + 2] = bl; out.data[p + 3] = 255;
-  }
-  const c = document.createElement('canvas');
-  c.width = a.width; c.height = a.height;
-  c.getContext('2d').putImageData(out, 0, 0);
-  return c;
-}
 
 function getPixels(i) {
   if (!pixels[i]) {
@@ -177,6 +88,23 @@ function getPixels(i) {
     pixels[i] = ctx.getImageData(0, 0, c.width, c.height);
   }
   return pixels[i];
+}
+
+function frameSource(i) {
+  if (state.mode !== 'diff') return images[i];
+  // Difference: this date minus the first date. Grey = no change, bright = new, dark = gone.
+  const a = getPixels(i), b = getPixels(0);
+  const out = new ImageData(a.width, a.height);
+  for (let p = 0; p < a.data.length; p += 4) {
+    out.data[p]     = 128 + (a.data[p]     - b.data[p]);
+    out.data[p + 1] = 128 + (a.data[p + 1] - b.data[p + 1]);
+    out.data[p + 2] = 128 + (a.data[p + 2] - b.data[p + 2]);
+    out.data[p + 3] = 255;
+  }
+  const c = document.createElement('canvas');
+  c.width = a.width; c.height = a.height;
+  c.getContext('2d').putImageData(out, 0, 0);
+  return c;
 }
 
 function drawFrame(i) {
@@ -191,20 +119,44 @@ function drawFrame(i) {
   return k;
 }
 
-function drawMarker(ctx, x, y) {
-  const r = Math.max(6, ctx.canvas.width * 0.04);
+function drawMarker(ctx, x, y, { color = '#ffc857', dashed = false } = {}) {
+  const r = Math.max(6, ctx.canvas.width * 0.035);
+  ctx.save();
   ctx.lineWidth = Math.max(2, r / 6);
-  ctx.strokeStyle = '#ffc857';
+  ctx.strokeStyle = color;
+  if (dashed) ctx.setLineDash([r / 2, r / 3]);
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.stroke();
+  ctx.restore();
 }
 
-function drawCandidates(patch, frameIndex, k) {
+function drawOverlays(k) {
   const ctx = els.canvas.getContext('2d');
-  for (const c of patch.candidates || []) {
-    if (c.seen_in === `e${frameIndex}`) drawMarker(ctx, (c.x + 0.5) * k, (c.y + 0.5) * k);
+  const at = (v) => (v + 0.5) * k;
+
+  if (state.revealed) {
+    for (const p of predictions()) {
+      const pt = p.track.find(t => t.epoch === state.frame);
+      if (pt) drawMarker(ctx, at(pt.x), at(pt.y), { color: '#ffc857aa', dashed: true });
+    }
   }
+
+  const sel = predictions().find(p => p.id === state.selected);
+  if (!sel) return;
+  if (sel.track.length > 1) {                       // the path across all dates
+    ctx.save();
+    ctx.strokeStyle = '#ffc857';
+    ctx.globalAlpha = 0.6;
+    ctx.lineWidth = Math.max(1.5, k / 3);
+    ctx.setLineDash([k * 1.5, k]);
+    ctx.beginPath();
+    sel.track.forEach((t, i) => ctx[i ? 'lineTo' : 'moveTo'](at(t.x), at(t.y)));
+    ctx.stroke();
+    ctx.restore();
+  }
+  const pt = sel.track.find(t => t.epoch === state.frame);
+  if (pt) drawMarker(ctx, at(pt.x), at(pt.y));
 }
 
 function applyFilters() {
@@ -218,81 +170,145 @@ function render() {
   if (!patch || !images.length) return;
   const frame = patch.frames[state.frame];
   const k = drawFrame(state.frame);
-  if (state.revealed) drawCandidates(patch, state.frame, k);
+  drawOverlays(k);
 
   const date = mjdToDate(frame.mjd);
-  els.frame.max = patch.frames.length - 1;
+  const n = patch.frames.length;
+  els.frame.max = n - 1;
   els.frame.value = state.frame;
-  els.frameDate.textContent = date;
+  els.frameDate.textContent = `${date} · image ${state.frame + 1} of ${n}`;
   els.badge.textContent = state.mode === 'diff' ? `${date} − ${mjdToDate(patch.frames[0].mjd)}` : date;
-  els.frameCount.textContent = `Image ${state.frame + 1} of ${patch.frames.length}`;
+  els.countBadge.textContent = `${state.frame + 1} / ${n}`;
   els.blink.setAttribute('aria-pressed', String(state.playing));
   els.blink.textContent = state.playing ? 'Pause' : 'Blink';
-  for (const [i, b] of [...els.filmstrip.querySelectorAll('button')].entries()) {
+  for (const [i, b] of [...els.ticks.children].entries()) {
     b.setAttribute('aria-current', String(i === state.frame));
   }
+  renderRawFrame(frame);
 }
 
-// ---------- page sections ----------
+// ---------- left panel: raw data ----------
 
-function renderPresets() {
-  els.presets.replaceChildren(...TARGETS.map(t => {
+function renderRawFrame(frame) {
+  fillDL(els.rawFrame, [
+    ['Date', mjdToDate(frame.mjd)],
+    ['MJD', frame.mjd.toFixed(3)],
+    ['Band', frame.band || '—'],
+    ['Flags', frame.flags?.length ? frame.flags.join(', ') : 'none'],
+    ['File', frame.file.split('/').pop()],
+  ]);
+  els.download.href = new URL(frame.file, state.jsonUrl);
+}
+
+function renderRawPatch() {
+  const p = state.patch.patch || {};
+  const t = state.target;
+  const scale = pixelScale();
+  fillDL(els.rawPatch, [
+    ['RA (deg)', t.ra.toFixed(5)],
+    ['Dec (deg)', t.dec.toFixed(5)],
+    ['Field', `${t.fov}°`],
+    ['Size', p.width_px ? `${p.width_px}×${p.height_px} px` : '—'],
+    ['Pixel', scale ? `${scale.toFixed(2)}″` : '—'],
+    ['Dates', state.patch.frames.length],
+    ['Span', `${mjdToDate(state.patch.frames[0].mjd)} → ${mjdToDate(state.patch.frames.at(-1).mjd)}`],
+  ]);
+}
+
+function renderCursor(e) {
+  if (!images.length) return;
+  const img = images[state.frame];
+  const r = els.canvas.getBoundingClientRect();
+  const x = Math.floor((e.clientX - r.left) / r.width * img.naturalWidth);
+  const y = Math.floor((e.clientY - r.top) / r.height * img.naturalHeight);
+  if (x < 0 || y < 0 || x >= img.naturalWidth || y >= img.naturalHeight) return;
+  const idx = (y * img.naturalWidth + x) * 4;
+  const v = getPixels(state.frame).data[idx];
+  const v0 = getPixels(0).data[idx];
+  const scale = pixelScale();
+  const cx = img.naturalWidth / 2, cy = img.naturalHeight / 2;
+  fillDL(els.rawCursor, [
+    ['Pixel', `${x}, ${y}`],
+    ['Value', v],
+    ['Δ vs first', (v - v0 > 0 ? '+' : '') + (v - v0)],
+    ['From center', scale ? `${((x + 0.5 - cx) * scale).toFixed(0)}″, ${((cy - y - 0.5) * scale).toFixed(0)}″` : '—'],
+  ]);
+}
+
+// ---------- bottom: timeline ----------
+
+function renderTimeline() {
+  const frames = state.patch.frames;
+  const n = frames.length;
+  const every = Math.ceil(n / 6);                  // with many dates, label only some
+  els.ticks.replaceChildren(...frames.map((f, i) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.textContent = t.name;
-    b.addEventListener('click', () => {
-      els.ra.value = formatRA(t.ra);
-      els.dec.value = formatDec(t.dec);
-      els.form.requestSubmit();
-    });
-    b.dataset.ra = t.ra; b.dataset.dec = t.dec;
+    b.className = 'tl-tick' + (i % every && i !== n - 1 ? ' tl-hide-label' : '');
+    b.style.left = n > 1 ? `${(i / (n - 1)) * 100}%` : '50%';
+    b.setAttribute('aria-label', `Show image from ${mjdToDate(f.mjd)}`);
+    b.innerHTML = `<span>${mjdToShort(f.mjd)}</span>`;
+    b.addEventListener('click', () => { stopBlink(); state.frame = i; render(); });
     return b;
   }));
 }
 
-function markPreset(ra, dec) {
-  for (const b of els.presets.querySelectorAll('button')) {
-    const hit = separation(ra, dec, +b.dataset.ra, +b.dataset.dec) < 0.01;
-    b.setAttribute('aria-current', String(hit));
+// ---------- right: AI predictions ----------
+
+// Use `predictions` from the data file when the model provides them.
+// Otherwise fall back to grouping `candidates` (same match name = same object).
+function predictions() {
+  const patch = state.patch;
+  if (!patch) return [];
+  if (patch.predictions) return patch.predictions;
+  const groups = new Map();
+  for (const c of patch.candidates || []) {
+    const key = c.match?.name || 'Unknown mover';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push({ epoch: Number(String(c.seen_in).replace(/\D/g, '')), x: c.x, y: c.y });
   }
+  return [...groups].map(([label, track], i) => ({
+    id: String(i), label, kind: 'Candidate', confidence: null, track,
+  }));
 }
 
-function renderFilmstrip(patch, jsonUrl) {
-  els.filmstrip.replaceChildren(...patch.frames.map((f, i) => {
+function renderPredictions() {
+  const list = predictions();
+  if (!list.length) {
+    els.aiList.innerHTML = '<li class="ai-note">No candidates for this patch yet.</li>';
+    return;
+  }
+  const scale = pixelScale();
+  els.aiList.replaceChildren(...list.map(p => {
     const li = document.createElement('li');
+    li.className = 'ai-item';
     const b = document.createElement('button');
     b.type = 'button';
-    b.setAttribute('aria-label', `Show image from ${mjdToDate(f.mjd)}`);
-    const img = document.createElement('img');
-    img.src = new URL(f.file, jsonUrl); img.alt = '';
-    const cap = document.createElement('span');
-    cap.textContent = mjdToDate(f.mjd);
-    b.append(img, cap);
-    b.addEventListener('click', () => { stopBlink(); state.frame = i; render(); });
+    b.setAttribute('aria-pressed', String(state.selected === p.id));
+    const first = p.track[0], last = p.track.at(-1);
+    const px = Math.hypot(last.x - first.x, last.y - first.y);
+    const motion = p.track.length > 1 && px > 0.5
+      ? `moved ≈ ${scale ? Math.round(px * scale) + '″' : px.toFixed(1) + ' px'}`
+      : p.track.length === 1 ? 'seen on one date' : 'stays in place';
+    const conf = p.confidence == null ? null : Math.round(p.confidence * 100);
+    b.innerHTML = `
+      <span class="ai-row"><strong></strong><span class="mono small">${conf == null ? '—' : conf + '%'}</span></span>
+      ${conf == null ? '' : `<span class="conf" aria-hidden="true"><i style="width:${conf}%"></i></span>`}
+      <span class="ai-kind"></span>`;
+    b.querySelector('strong').textContent = p.label;
+    b.querySelector('.ai-kind').textContent = `${p.kind} · ${motion}`;
+    b.addEventListener('click', () => {
+      state.selected = state.selected === p.id ? null : p.id;
+      renderPredictions();
+      render();
+    });
     li.append(b);
     return li;
   }));
 }
 
-function renderMeta(patch) {
-  const p = patch.patch || {};
-  const first = mjdToDate(patch.frames[0].mjd);
-  const last = mjdToDate(patch.frames.at(-1).mjd);
-  const rows = [
-    ['Dates', patch.frames.length],
-    ['Span', `${first} → ${last}`],
-    ['Image size', p.width_px ? `${p.width_px} × ${p.height_px} px` : '—'],
-    ['Field of view', `${state.target.fov}°`],
-    ['Known movers', (patch.candidates || []).filter(c => c.match).length ? 'yes' : 'none listed'],
-  ];
-  els.meta.replaceChildren(...rows.flatMap(([k, v]) => {
-    const dt = document.createElement('dt'); dt.textContent = k;
-    const dd = document.createElement('dd'); dd.textContent = v;
-    return [dt, dd];
-  }));
-}
+// ---------- loading ----------
 
-// Find the closest data file that covers the requested spot.
 function findPatch(ra, dec, fov) {
   let best = null;
   for (const p of state.patches) {
@@ -303,8 +319,14 @@ function findPatch(ra, dec, fov) {
   return best;
 }
 
+function showEmpty(text) {
+  els.viewer.hidden = true;
+  els.empty.hidden = false;
+  els.emptyText.textContent = text;
+}
+
 async function openPatch(id) {
-  els.challenge.hidden = false;
+  els.viewer.hidden = false;
   els.loading.hidden = false;
   setStatus('Loading sky images…');
   try {
@@ -312,48 +334,20 @@ async function openPatch(id) {
     const patch = await loadJSON(jsonUrl);
     images = await Promise.all(patch.frames.map(f => loadImage(new URL(f.file, jsonUrl))));
     pixels = [];
-    Object.assign(state, { patch, frame: 0 });
+    Object.assign(state, { patch, jsonUrl, frame: 0, selected: null });
     els.simBadge.hidden = !patch.patch?.simulated;
-    renderFilmstrip(patch, jsonUrl);
-    renderMeta(patch);
+    renderTimeline();
+    renderRawPatch();
+    renderPredictions();
     setStatus('');
     render();
   } catch (err) {
     console.error(err);
-    els.challenge.hidden = true;
     setStatus('');
     showEmpty('We could not load the sky images. Check your connection and try again.');
   } finally {
     els.loading.hidden = true;
   }
-}
-
-function showEmpty(text) {
-  els.empty.hidden = false;
-  els.emptyText.textContent = text;
-}
-
-async function search(ra, dec, fov, { updateUrl = true } = {}) {
-  stopBlink();
-  state.target = { ra, dec, fov };
-  els.empty.hidden = true;
-  els.coords.textContent = `RA ${formatRA(ra)}  ·  Dec ${formatDec(dec)}  ·  ${fov}° field`;
-  markPreset(ra, dec);
-
-  if (updateUrl) {
-    const q = new URLSearchParams({ ra: ra.toFixed(5), dec: dec.toFixed(5), fov });
-    history.replaceState(null, '', `?${q}`);
-  }
-
-  const hit = findPatch(ra, dec, fov);
-  if (!hit) {
-    els.challenge.hidden = true;
-    showEmpty(`Nothing in our image set covers RA ${formatRA(ra)}, Dec ${formatDec(dec)} yet. ` +
-              'Try one of the challenge targets above, or check back after the next SPHEREx data release.');
-    return;
-  }
-  await openPatch(hit.id);
-  els.challenge.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ---------- blink ----------
@@ -386,32 +380,15 @@ function step(delta) {
 
 // ---------- events ----------
 
-els.form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const ra = parseRA(els.ra.value);
-  const dec = parseDec(els.dec.value);
-  els.ra.setAttribute('aria-invalid', String(ra === null));
-  els.dec.setAttribute('aria-invalid', String(dec === null));
-  if (ra === null || dec === null) {
-    els.formError.textContent = ra === null
-      ? 'Right Ascension should look like 133.795 (degrees) or 08h55m10s (hours).'
-      : 'Declination should be between −90 and +90, like -7.245 or -7d14m42s.';
-    (ra === null ? els.ra : els.dec).focus();
-    return;
-  }
-  els.formError.textContent = '';
-  search(ra, dec, Number(els.fov.value));
-});
-
 els.frame.addEventListener('input', () => {
   state.frame = Number(els.frame.value);
   stopBlink();
 });
-
 els.blink.addEventListener('click', () => { state.playing ? stopBlink() : startBlink(); });
 els.prev.addEventListener('click', () => step(-1));
 els.next.addEventListener('click', () => step(1));
 els.canvas.addEventListener('click', () => step(1));
+els.canvas.addEventListener('mousemove', renderCursor);
 
 els.speed.addEventListener('change', () => {
   state.speed = els.speed.value;
@@ -443,37 +420,48 @@ els.copyLink.addEventListener('click', async () => {
   setTimeout(() => { els.copyLink.textContent = 'Copy link'; }, 1600);
 });
 
-els.canvas.addEventListener('keydown', (e) => {
-  if (!state.patch) return;
-  if (e.key === ' ') {
-    e.preventDefault();
-    state.playing ? stopBlink() : startBlink();
-  }
+// Keyboard shortcuts anywhere on the page, except while typing or using a control.
+document.addEventListener('keydown', (e) => {
+  if (!state.patch || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.target.closest('input, select, textarea, button, summary, a')) return;
+  if (e.key === ' ') { e.preventDefault(); state.playing ? stopBlink() : startBlink(); }
   if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
   if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
 });
 
 // ---------- start ----------
 
-async function start() {
-  renderPresets();
+(async function start() {
   applyFilters();
+  const q = new URLSearchParams(location.search);
+  const ra = parseRA(q.get('ra') ?? '');
+  const dec = parseDec(q.get('dec') ?? '');
+  const fov = Number(q.get('fov')) || 0.25;
+
+  if (ra === null || dec === null) {
+    els.title.textContent = 'Pick a patch of sky';
+    showEmpty('No coordinates were given. Use the Search Tool to choose a spot.');
+    return;
+  }
+
+  const known = TARGETS.find(t => separation(ra, dec, t.ra, t.dec) < 0.01);
+  const name = q.get('name') || known?.name || 'Patch of sky';
+  state.target = { ra, dec, fov, name };
+  els.title.textContent = name;
+  document.title = `SkyBlink · ${name}`;
+  els.coords.textContent = `RA ${formatRA(ra)} · Dec ${formatDec(dec)} · ${fov}° field`;
+  els.domeLink.href = `dome.html?${new URLSearchParams({ ra: ra.toFixed(5), dec: dec.toFixed(5), fov, name })}`;
+
   try {
     state.patches = await loadJSON('data/patches.json');
   } catch {
     state.patches = [];
   }
-
-  // Coordinates in the URL (?ra=133.795&dec=-7.245&fov=0.25) open straight to the viewer,
-  // so other sites can link or embed a specific patch of sky.
-  const q = new URLSearchParams(location.search);
-  if (q.has('ra') && q.has('dec')) {
-    els.ra.value = q.get('ra');
-    els.dec.value = q.get('dec');
-    if (q.has('fov') && [...els.fov.options].some(o => o.value === q.get('fov'))) els.fov.value = q.get('fov');
-    const ra = parseRA(els.ra.value), dec = parseDec(els.dec.value);
-    if (ra !== null && dec !== null) search(ra, dec, Number(els.fov.value), { updateUrl: false });
+  const hit = findPatch(ra, dec, fov);
+  if (!hit) {
+    showEmpty(`Nothing in our image set covers RA ${formatRA(ra)}, Dec ${formatDec(dec)} yet. ` +
+              'New SPHEREx data arrives regularly. Check back after the next release, or try the demo.');
+    return;
   }
-}
-
-start();
+  await openPatch(hit.id);
+})();

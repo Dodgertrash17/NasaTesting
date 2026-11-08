@@ -11,19 +11,29 @@
   "frames": [
     {
       "file": "frames/demo_e0.png",
-      "mjd": 60800.1
+      "mjd": 60800.1,
+      "flags": [],
+      "band": "All 102 bands stacked"
     },
     {
       "file": "frames/demo_e1.png",
-      "mjd": 60983.0
+      "mjd": 60983.0,
+      "flags": [],
+      "band": "All 102 bands stacked"
     },
     {
       "file": "frames/demo_e2.png",
-      "mjd": 61165.2
+      "mjd": 61165.2,
+      "flags": [
+        "near bright star"
+      ],
+      "band": "All 102 bands stacked"
     },
     {
       "file": "frames/demo_e3.png",
-      "mjd": 61348.0
+      "mjd": 61348.0,
+      "flags": [],
+      "band": "All 102 bands stacked"
     }
   ],
   "candidates": [
@@ -58,6 +68,77 @@
       "match": {
         "name": "Simulated mover"
       }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "A",
+      "label": "Candidate A",
+      "kind": "Moving object",
+      "confidence": 0.92,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 40.0,
+          "y": 86.0
+        },
+        {
+          "epoch": 1,
+          "x": 53.0,
+          "y": 77.0
+        },
+        {
+          "epoch": 2,
+          "x": 66.0,
+          "y": 68.0
+        },
+        {
+          "epoch": 3,
+          "x": 79.0,
+          "y": 59.0
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "Candidate B",
+      "kind": "Brightness change",
+      "confidence": 0.71,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 92.0,
+          "y": 30.0
+        },
+        {
+          "epoch": 1,
+          "x": 92.0,
+          "y": 30.0
+        },
+        {
+          "epoch": 2,
+          "x": 92.0,
+          "y": 30.0
+        },
+        {
+          "epoch": 3,
+          "x": 92.0,
+          "y": 30.0
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "label": "Candidate C",
+      "kind": "Possible artifact",
+      "confidence": 0.18,
+      "track": [
+        {
+          "epoch": 2,
+          "x": 17.0,
+          "y": 110.0
+        }
+      ]
     }
   ]
 }

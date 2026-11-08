@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkyBlink · Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/common.js" defer></script>
+  <script src="js/viewer.js" defer></script>
+</head>
+<body data-page="search">
+  <header id="site-header"></header>
+
+  <main>
+    <a class="back-link" href="search.html" id="back-link">← Back to search</a>
+
+    <div class="viewer-top">
+      <div class="title-block">
+        <h1 id="viewer-title">Patch of sky</h1>
+        <p class="coords mono" id="target-coords"></p>
+      </div>
+      <div class="actions">
+        <button type="button" id="copy-link" class="ghost">Copy link</button>
+      </div>
+    </div>
+
+    <!-- Shown when no images cover the requested spot -->
+    <section id="empty" class="card empty" hidden aria-live="polite">
+      <h2>No SPHEREx images for this spot yet</h2>
+      <p id="empty-detail"></p>
+      <div class="actions">
+        <a class="btn" href="search.html#raw">Try other coordinates</a>
+        <a class="btn" href="search.html#gallery">Browse the gallery</a>
+        <a class="btn primary" href="viewer.html?ra=133.79510&dec=-7.24510&fov=0.25&name=WISE+0855">Open the demo</a>
+      </div>
+    </section>
+
+    <div id="viewer" class="viewer-layout" hidden>
+
+      <!-- LEFT: raw data -->
+      <aside class="panel raw area-raw" aria-labelledby="raw-title">
+        <h3 id="raw-title">This image</h3>
+        <dl id="raw-frame"></dl>
+        <h3>Under cursor</h3>
+        <p class="hint">Hover over the image.</p>
+        <dl id="raw-cursor"></dl>
+        <h3>Patch</h3>
+        <dl id="raw-patch"></dl>
+        <a id="download" class="btn ghost small" download style="width:100%">Download this image</a>
+      </aside>
+
+      <!-- CENTER: image -->
+      <figure class="area-image" style="margin:0">
+        <div class="stage" id="stage">
+          <canvas id="sky" width="600" height="600" tabindex="0"
+                  aria-label="SPHEREx image of the selected patch of sky. Space to blink, arrow keys to change date."></canvas>
+          <div class="crosshair" aria-hidden="true"></div>
+          <span id="sim-badge" class="badge badge-warn" hidden>Simulated data</span>
+          <span id="frame-badge" class="badge badge-date mono" aria-hidden="true"></span>
+          <span id="count-badge" class="badge badge-count mono" aria-hidden="true"></span>
+          <div id="loading" class="loading" hidden><span class="spinner"></span>Loading sky images…</div>
+        </div>
+      </figure>
+
+      <!-- under the image: blink + view controls -->
+      <div class="area-controls">
+        <div class="controls-bar">
+          <div class="transport">
+            <button type="button" id="prev" class="icon" aria-label="Previous date">&#9664;&#xFE0E;</button>
+            <button type="button" id="blink" class="primary" aria-pressed="false">Blink</button>
+            <button type="button" id="next" class="icon" aria-label="Next date">&#9654;&#xFE0E;</button>
+          </div>
+          <label>
+            <span class="visually-hidden">Blink speed</span>
+            <select id="speed">
+              <option value="slow">Slow</option>
+              <option value="normal" selected>Normal</option>
+              <option value="fast">Fast</option>
+            </select>
+          </label>
+          <div class="segmented" role="radiogroup" aria-label="Image mode">
+            <label><input type="radio" name="mode" value="normal" checked><span>Image</span></label>
+            <label><input type="radio" name="mode" value="diff"><span>Difference</span></label>
+          </div>
+          <details class="adjust">
+            <summary>Adjust</summary>
+            <div class="adjust-pop">
+              <label class="range-row" for="stretch">Brightness
+                <input type="range" id="stretch" min="0.5" max="3" step="0.1" value="1"></label>
+              <label class="range-row" for="contrast">Contrast
+                <input type="range" id="contrast" min="0.5" max="3" step="0.1" value="1"></label>
+              <label class="check"><input type="checkbox" id="invert"> Invert colors</label>
+              <label class="check"><input type="checkbox" id="crosshair" checked> Target crosshair</label>
+            </div>
+          </details>
+        </div>
+        <p class="muted small" id="mode-help">Each date as observed.</p>
+      </div>
+
+      <!-- BOTTOM: timeline -->
+      <section class="panel area-timeline timeline" aria-label="Timeline">
+        <div class="tl-track">
+          <div class="tl-head">
+            <p class="label">Timeline</p>
+            <output id="frame-date" for="frame" class="mono small"></output>
+          </div>
+          <label for="frame" class="visually-hidden">Date</label>
+          <input type="range" id="frame" min="0" max="1" step="1" value="0">
+          <div class="tl-ticks" id="tl-ticks"></div>
+        </div>
+        <a class="btn dome-btn" id="dome-link" href="dome.html">🌐 View in Sky Dome</a>
+      </section>
+
+      <!-- RIGHT: AI predictions -->
+      <aside class="panel area-ai" aria-labelledby="ai-title">
+        <div class="ai-head">
+          <h2 id="ai-title">Mover predictions</h2>
+          <span class="pill pill-warn">AI · prototype</span>
+        </div>
+        <p class="ai-note">Objects our model thinks moved or changed. Pick one to highlight it on the image.</p>
+        <ol class="ai-list" id="ai-list"></ol>
+        <label class="check small"><input type="checkbox" id="reveal"> Circle all candidates</label>
+        <p class="ai-note" style="margin-top:12px">Is this right? Your blink is the final check. Predictions are a starting point, not an answer.</p>
+      </aside>
+    </div>
+
+    <p id="status" role="status" class="muted small"></p>
+  </main>
+
+  <footer id="site-footer"></footer>
+</body>
+</html>

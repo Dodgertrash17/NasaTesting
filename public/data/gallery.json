@@ -1,0 +1,51 @@
+[
+  {
+    "id": "wise0855",
+    "name": "WISE 0855",
+    "type": "brown-dwarf",
+    "ra": 133.7951, "dec": -7.2451, "fov": 0.25,
+    "thumb": "data/frames/demo_e0.png",
+    "status": "demo",
+    "blurb": "The coldest brown dwarf known, about 7 light-years away. Colder than the North Pole, and one of the fastest movers on the sky."
+  },
+  {
+    "id": "barnard",
+    "name": "Barnard's Star",
+    "type": "star",
+    "ra": 269.4521, "dec": 4.6934, "fov": 0.25,
+    "status": "pending",
+    "blurb": "A small red star 6 light-years away with the largest motion across the sky of any star: about 10 arcseconds per year."
+  },
+  {
+    "id": "epsindib",
+    "name": "Epsilon Indi B",
+    "type": "brown-dwarf",
+    "ra": 331.0438, "dec": -56.7827, "fov": 0.25,
+    "status": "pending",
+    "blurb": "A pair of brown dwarfs orbiting each other, and together orbiting the star Epsilon Indi, about 12 light-years away."
+  },
+  {
+    "id": "rwaur",
+    "name": "RW Aurigae",
+    "type": "variable",
+    "ra": 76.9563, "dec": 30.4013, "fov": 0.25,
+    "status": "pending",
+    "blurb": "A young star still surrounded by a dusty disk. It dims unpredictably as clumps of dust pass in front of it."
+  },
+  {
+    "id": "rdra",
+    "name": "R Draconis",
+    "type": "variable",
+    "ra": 248.1675, "dec": 66.7551, "fov": 0.25,
+    "status": "pending",
+    "blurb": "An aging red giant that swells and fades over roughly 8 months: a classic pulsating variable star."
+  },
+  {
+    "id": "m42",
+    "name": "Orion Nebula",
+    "type": "nebula",
+    "ra": 83.8221, "dec": -5.3911, "fov": 1,
+    "status": "pending",
+    "blurb": "A stellar nursery where new stars are forming. Infrared light cuts through its dust to reveal hidden young stars."
+  }
+]

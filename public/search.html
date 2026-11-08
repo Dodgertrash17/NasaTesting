@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkyBlink · Search Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/common.js" defer></script>
+  <script src="js/search.js" defer></script>
+</head>
+<body data-page="search">
+  <header id="site-header"></header>
+
+  <main>
+    <div class="page-head">
+      <p class="eyebrow">Search Tool</p>
+      <h1>Find a patch of sky</h1>
+      <p>Type exact coordinates, browse interesting objects, or filter by what you want to find.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Ways to search">
+      <button role="tab" id="tab-raw" aria-controls="panel-raw" aria-selected="false">Raw search</button>
+      <button role="tab" id="tab-gallery" aria-controls="panel-gallery" aria-selected="false">Gallery</button>
+      <button role="tab" id="tab-filtered" aria-controls="panel-filtered" aria-selected="false">Filtered search <span class="pill pill-warn tab-hint">Prototype</span></button>
+    </div>
+
+    <!-- RAW: coordinates -->
+    <section id="panel-raw" role="tabpanel" aria-labelledby="tab-raw" hidden>
+      <div class="card">
+        <form id="coord-form" novalidate>
+          <div class="field">
+            <label for="ra">Right Ascension</label>
+            <input id="ra" name="ra" autocomplete="off" required spellcheck="false"
+                   placeholder="133.795 or 08h55m10s" aria-describedby="form-error">
+          </div>
+          <div class="field">
+            <label for="dec">Declination</label>
+            <input id="dec" name="dec" autocomplete="off" required spellcheck="false"
+                   placeholder="-7.245 or -7d14m42s" aria-describedby="form-error">
+          </div>
+          <div class="field field-fov">
+            <label for="fov">Field of view</label>
+            <select id="fov" name="fov">
+              <option value="0.1">0.1°</option>
+              <option value="0.25" selected>0.25°</option>
+              <option value="0.5">0.5°</option>
+              <option value="1">1°</option>
+            </select>
+          </div>
+          <button type="submit" class="primary">Show images →</button>
+        </form>
+        <p id="form-error" role="alert"></p>
+        <div class="presets">
+          <span class="muted small" id="presets-label">Challenge targets:</span>
+          <div id="presets" class="presets" role="group" aria-labelledby="presets-label" style="margin:0"></div>
+        </div>
+      </div>
+
+      <div class="raw-help">
+        <div class="panel"><h3>Degrees or hours</h3><p>RA as <code>133.795</code> or <code>08h55m10.8s</code>; Dec as <code>-7.245</code> or <code>-7d14m42s</code>.</p></div>
+        <div class="panel"><h3>Field of view</h3><p>A bigger field shows more sky and catches faster movers, but takes longer to load.</p></div>
+        <div class="panel"><h3>Not sure where to look?</h3><p>Try the <a href="#gallery">Gallery</a>, or read <a href="learn.html#basics/coordinates">how sky coordinates work</a>.</p></div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="panel-gallery" role="tabpanel" aria-labelledby="tab-gallery" hidden>
+      <div class="gallery" id="gallery"></div>
+    </section>
+
+    <!-- FILTERED (prototype) -->
+    <section id="panel-filtered" role="tabpanel" aria-labelledby="tab-filtered" hidden>
+      <div class="wip" role="note">
+        <span aria-hidden="true">🛠</span>
+        <span><strong>Work in progress.</strong> We're still designing filtered search. For now it filters the gallery list by object type and data availability.</span>
+      </div>
+      <div class="filters">
+        <form class="card filter-box" id="filter-form">
+          <fieldset>
+            <legend class="label">Object type</legend>
+            <label class="check"><input type="checkbox" name="type" value="brown-dwarf" checked> Brown dwarfs</label>
+            <label class="check"><input type="checkbox" name="type" value="star" checked> Nearby stars</label>
+            <label class="check"><input type="checkbox" name="type" value="variable" checked> Variable stars</label>
+            <label class="check"><input type="checkbox" name="type" value="nebula" checked> Nebulae</label>
+            <label class="check"><input type="checkbox" name="type" value="asteroid" checked disabled> Asteroids &amp; comets (soon)</label>
+          </fieldset>
+          <fieldset>
+            <legend class="label">Data</legend>
+            <label class="check"><input type="checkbox" name="hasData"> Only show targets with images</label>
+          </fieldset>
+          <fieldset>
+            <legend class="label">Sky region</legend>
+            <select name="hemisphere" aria-label="Sky region">
+              <option value="any">Anywhere</option>
+              <option value="north">Northern sky (Dec &gt; 0°)</option>
+              <option value="south">Southern sky (Dec &lt; 0°)</option>
+            </select>
+          </fieldset>
+        </form>
+        <div>
+          <p class="results-count" id="results-count" aria-live="polite"></p>
+          <div class="gallery" id="filtered-results"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+</body>
+</html>
