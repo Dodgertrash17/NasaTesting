@@ -1,0 +1,461 @@
+{
+  "patch": {
+    "id": "rdra",
+    "name": "R Draconis",
+    "width_px": 146,
+    "height_px": 146,
+    "ra": 248.1675,
+    "dec": 66.7551,
+    "fov_deg": 0.25,
+    "pixel_scale_arcsec": 6.164,
+    "coord_epoch": 2000.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/rdra/e00.png",
+      "flags_file": "frames/rdra/e00_flags.png",
+      "mjd": 60815.36,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 22,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e01.png",
+      "flags_file": "frames/rdra/e01_flags.png",
+      "mjd": 60845.15,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 14,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e02.png",
+      "flags_file": "frames/rdra/e02_flags.png",
+      "mjd": 60876.77,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 10,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e03.png",
+      "flags_file": "frames/rdra/e03_flags.png",
+      "mjd": 60905.75,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 20,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e04.png",
+      "flags_file": "frames/rdra/e04_flags.png",
+      "mjd": 60937.2,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 23,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e05.png",
+      "flags_file": "frames/rdra/e05_flags.png",
+      "mjd": 60966.75,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 13,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e06.png",
+      "flags_file": "frames/rdra/e06_flags.png",
+      "mjd": 60997.92,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 19,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e07.png",
+      "flags_file": "frames/rdra/e07_flags.png",
+      "mjd": 61028.13,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 11,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e08.png",
+      "flags_file": "frames/rdra/e08_flags.png",
+      "mjd": 61055.51,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 21,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e09.png",
+      "flags_file": "frames/rdra/e09_flags.png",
+      "mjd": 61088.36,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 13,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e10.png",
+      "flags_file": "frames/rdra/e10_flags.png",
+      "mjd": 61117.97,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 17,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e11.png",
+      "flags_file": "frames/rdra/e11_flags.png",
+      "mjd": 61146.04,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 10,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e12.png",
+      "flags_file": "frames/rdra/e12_flags.png",
+      "mjd": 61177.67,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 8,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e13.png",
+      "flags_file": "frames/rdra/e13_flags.png",
+      "mjd": 61204.78,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 19,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e14.png",
+      "flags_file": "frames/rdra/e14_flags.png",
+      "mjd": 61236.43,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 19,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e15.png",
+      "flags_file": "frames/rdra/e15_flags.png",
+      "mjd": 61265.04,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 13,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e16.png",
+      "flags_file": "frames/rdra/e16_flags.png",
+      "mjd": 61294.85,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 8,
+      "flags": [
+        "4 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rdra/e17.png",
+      "flags_file": "frames/rdra/e17_flags.png",
+      "mjd": 61327.94,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 22,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e0",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e3",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e4",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e5",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e6",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e7",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e8",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e9",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e10",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e11",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e12",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e13",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e14",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e15",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e16",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e17",
+      "match": {
+        "name": "Candidate A"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "V",
+      "label": "Candidate A",
+      "kind": "Brightness change",
+      "confidence": 0.93,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 1,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 2,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 3,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 4,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 5,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 6,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 7,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 8,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 9,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 10,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 11,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 12,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 13,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 14,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 15,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 16,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 17,
+          "x": 72.5,
+          "y": 72.5
+        }
+      ]
+    }
+  ]
+}

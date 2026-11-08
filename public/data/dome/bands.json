@@ -1,0 +1,821 @@
+{
+ "note": "Approximate SPHEREx bands for testing: 6 detectors x 17 channels, 0.75-5.0 \u00b5m. Check against the official band list.",
+ "bands": [
+  {
+   "index": 0,
+   "detector": 1,
+   "channel": 0,
+   "center_um": 0.7583,
+   "width_um": 0.0194,
+   "resolving_power": 39
+  },
+  {
+   "index": 1,
+   "detector": 1,
+   "channel": 1,
+   "center_um": 0.7752,
+   "width_um": 0.0199,
+   "resolving_power": 39
+  },
+  {
+   "index": 2,
+   "detector": 1,
+   "channel": 2,
+   "center_um": 0.7924,
+   "width_um": 0.0203,
+   "resolving_power": 39
+  },
+  {
+   "index": 3,
+   "detector": 1,
+   "channel": 3,
+   "center_um": 0.81,
+   "width_um": 0.0208,
+   "resolving_power": 39
+  },
+  {
+   "index": 4,
+   "detector": 1,
+   "channel": 4,
+   "center_um": 0.828,
+   "width_um": 0.0212,
+   "resolving_power": 39
+  },
+  {
+   "index": 5,
+   "detector": 1,
+   "channel": 5,
+   "center_um": 0.8464,
+   "width_um": 0.0217,
+   "resolving_power": 39
+  },
+  {
+   "index": 6,
+   "detector": 1,
+   "channel": 6,
+   "center_um": 0.8653,
+   "width_um": 0.0222,
+   "resolving_power": 39
+  },
+  {
+   "index": 7,
+   "detector": 1,
+   "channel": 7,
+   "center_um": 0.8845,
+   "width_um": 0.0227,
+   "resolving_power": 39
+  },
+  {
+   "index": 8,
+   "detector": 1,
+   "channel": 8,
+   "center_um": 0.9042,
+   "width_um": 0.0232,
+   "resolving_power": 39
+  },
+  {
+   "index": 9,
+   "detector": 1,
+   "channel": 9,
+   "center_um": 0.9243,
+   "width_um": 0.0237,
+   "resolving_power": 39
+  },
+  {
+   "index": 10,
+   "detector": 1,
+   "channel": 10,
+   "center_um": 0.9448,
+   "width_um": 0.0242,
+   "resolving_power": 39
+  },
+  {
+   "index": 11,
+   "detector": 1,
+   "channel": 11,
+   "center_um": 0.9658,
+   "width_um": 0.0248,
+   "resolving_power": 39
+  },
+  {
+   "index": 12,
+   "detector": 1,
+   "channel": 12,
+   "center_um": 0.9873,
+   "width_um": 0.0253,
+   "resolving_power": 39
+  },
+  {
+   "index": 13,
+   "detector": 1,
+   "channel": 13,
+   "center_um": 1.0092,
+   "width_um": 0.0259,
+   "resolving_power": 39
+  },
+  {
+   "index": 14,
+   "detector": 1,
+   "channel": 14,
+   "center_um": 1.0317,
+   "width_um": 0.0265,
+   "resolving_power": 39
+  },
+  {
+   "index": 15,
+   "detector": 1,
+   "channel": 15,
+   "center_um": 1.0546,
+   "width_um": 0.027,
+   "resolving_power": 39
+  },
+  {
+   "index": 16,
+   "detector": 1,
+   "channel": 16,
+   "center_um": 1.0781,
+   "width_um": 0.0276,
+   "resolving_power": 39
+  },
+  {
+   "index": 17,
+   "detector": 2,
+   "channel": 0,
+   "center_um": 1.1126,
+   "width_um": 0.0271,
+   "resolving_power": 41
+  },
+  {
+   "index": 18,
+   "detector": 2,
+   "channel": 1,
+   "center_um": 1.1382,
+   "width_um": 0.0278,
+   "resolving_power": 41
+  },
+  {
+   "index": 19,
+   "detector": 2,
+   "channel": 2,
+   "center_um": 1.1644,
+   "width_um": 0.0284,
+   "resolving_power": 41
+  },
+  {
+   "index": 20,
+   "detector": 2,
+   "channel": 3,
+   "center_um": 1.1913,
+   "width_um": 0.0291,
+   "resolving_power": 41
+  },
+  {
+   "index": 21,
+   "detector": 2,
+   "channel": 4,
+   "center_um": 1.2187,
+   "width_um": 0.0297,
+   "resolving_power": 41
+  },
+  {
+   "index": 22,
+   "detector": 2,
+   "channel": 5,
+   "center_um": 1.2468,
+   "width_um": 0.0304,
+   "resolving_power": 41
+  },
+  {
+   "index": 23,
+   "detector": 2,
+   "channel": 6,
+   "center_um": 1.2755,
+   "width_um": 0.0311,
+   "resolving_power": 41
+  },
+  {
+   "index": 24,
+   "detector": 2,
+   "channel": 7,
+   "center_um": 1.3049,
+   "width_um": 0.0318,
+   "resolving_power": 41
+  },
+  {
+   "index": 25,
+   "detector": 2,
+   "channel": 8,
+   "center_um": 1.3349,
+   "width_um": 0.0326,
+   "resolving_power": 41
+  },
+  {
+   "index": 26,
+   "detector": 2,
+   "channel": 9,
+   "center_um": 1.3657,
+   "width_um": 0.0333,
+   "resolving_power": 41
+  },
+  {
+   "index": 27,
+   "detector": 2,
+   "channel": 10,
+   "center_um": 1.3971,
+   "width_um": 0.0341,
+   "resolving_power": 41
+  },
+  {
+   "index": 28,
+   "detector": 2,
+   "channel": 11,
+   "center_um": 1.4293,
+   "width_um": 0.0349,
+   "resolving_power": 41
+  },
+  {
+   "index": 29,
+   "detector": 2,
+   "channel": 12,
+   "center_um": 1.4622,
+   "width_um": 0.0357,
+   "resolving_power": 41
+  },
+  {
+   "index": 30,
+   "detector": 2,
+   "channel": 13,
+   "center_um": 1.4959,
+   "width_um": 0.0365,
+   "resolving_power": 41
+  },
+  {
+   "index": 31,
+   "detector": 2,
+   "channel": 14,
+   "center_um": 1.5304,
+   "width_um": 0.0373,
+   "resolving_power": 41
+  },
+  {
+   "index": 32,
+   "detector": 2,
+   "channel": 15,
+   "center_um": 1.5656,
+   "width_um": 0.0382,
+   "resolving_power": 41
+  },
+  {
+   "index": 33,
+   "detector": 2,
+   "channel": 16,
+   "center_um": 1.6017,
+   "width_um": 0.0391,
+   "resolving_power": 41
+  },
+  {
+   "index": 34,
+   "detector": 3,
+   "channel": 0,
+   "center_um": 1.6489,
+   "width_um": 0.0402,
+   "resolving_power": 41
+  },
+  {
+   "index": 35,
+   "detector": 3,
+   "channel": 1,
+   "center_um": 1.6872,
+   "width_um": 0.0412,
+   "resolving_power": 41
+  },
+  {
+   "index": 36,
+   "detector": 3,
+   "channel": 2,
+   "center_um": 1.7265,
+   "width_um": 0.0421,
+   "resolving_power": 41
+  },
+  {
+   "index": 37,
+   "detector": 3,
+   "channel": 3,
+   "center_um": 1.7667,
+   "width_um": 0.0431,
+   "resolving_power": 41
+  },
+  {
+   "index": 38,
+   "detector": 3,
+   "channel": 4,
+   "center_um": 1.8078,
+   "width_um": 0.0441,
+   "resolving_power": 41
+  },
+  {
+   "index": 39,
+   "detector": 3,
+   "channel": 5,
+   "center_um": 1.8498,
+   "width_um": 0.0451,
+   "resolving_power": 41
+  },
+  {
+   "index": 40,
+   "detector": 3,
+   "channel": 6,
+   "center_um": 1.8929,
+   "width_um": 0.0462,
+   "resolving_power": 41
+  },
+  {
+   "index": 41,
+   "detector": 3,
+   "channel": 7,
+   "center_um": 1.9369,
+   "width_um": 0.0472,
+   "resolving_power": 41
+  },
+  {
+   "index": 42,
+   "detector": 3,
+   "channel": 8,
+   "center_um": 1.982,
+   "width_um": 0.0483,
+   "resolving_power": 41
+  },
+  {
+   "index": 43,
+   "detector": 3,
+   "channel": 9,
+   "center_um": 2.0281,
+   "width_um": 0.0495,
+   "resolving_power": 41
+  },
+  {
+   "index": 44,
+   "detector": 3,
+   "channel": 10,
+   "center_um": 2.0753,
+   "width_um": 0.0506,
+   "resolving_power": 41
+  },
+  {
+   "index": 45,
+   "detector": 3,
+   "channel": 11,
+   "center_um": 2.1236,
+   "width_um": 0.0518,
+   "resolving_power": 41
+  },
+  {
+   "index": 46,
+   "detector": 3,
+   "channel": 12,
+   "center_um": 2.173,
+   "width_um": 0.053,
+   "resolving_power": 41
+  },
+  {
+   "index": 47,
+   "detector": 3,
+   "channel": 13,
+   "center_um": 2.2236,
+   "width_um": 0.0542,
+   "resolving_power": 41
+  },
+  {
+   "index": 48,
+   "detector": 3,
+   "channel": 14,
+   "center_um": 2.2753,
+   "width_um": 0.0555,
+   "resolving_power": 41
+  },
+  {
+   "index": 49,
+   "detector": 3,
+   "channel": 15,
+   "center_um": 2.3283,
+   "width_um": 0.0568,
+   "resolving_power": 41
+  },
+  {
+   "index": 50,
+   "detector": 3,
+   "channel": 16,
+   "center_um": 2.3824,
+   "width_um": 0.0581,
+   "resolving_power": 41
+  },
+  {
+   "index": 51,
+   "detector": 4,
+   "channel": 0,
+   "center_um": 2.4527,
+   "width_um": 0.0701,
+   "resolving_power": 35
+  },
+  {
+   "index": 52,
+   "detector": 4,
+   "channel": 1,
+   "center_um": 2.5195,
+   "width_um": 0.072,
+   "resolving_power": 35
+  },
+  {
+   "index": 53,
+   "detector": 4,
+   "channel": 2,
+   "center_um": 2.588,
+   "width_um": 0.0739,
+   "resolving_power": 35
+  },
+  {
+   "index": 54,
+   "detector": 4,
+   "channel": 3,
+   "center_um": 2.6585,
+   "width_um": 0.076,
+   "resolving_power": 35
+  },
+  {
+   "index": 55,
+   "detector": 4,
+   "channel": 4,
+   "center_um": 2.7308,
+   "width_um": 0.078,
+   "resolving_power": 35
+  },
+  {
+   "index": 56,
+   "detector": 4,
+   "channel": 5,
+   "center_um": 2.8051,
+   "width_um": 0.0801,
+   "resolving_power": 35
+  },
+  {
+   "index": 57,
+   "detector": 4,
+   "channel": 6,
+   "center_um": 2.8815,
+   "width_um": 0.0823,
+   "resolving_power": 35
+  },
+  {
+   "index": 58,
+   "detector": 4,
+   "channel": 7,
+   "center_um": 2.9599,
+   "width_um": 0.0846,
+   "resolving_power": 35
+  },
+  {
+   "index": 59,
+   "detector": 4,
+   "channel": 8,
+   "center_um": 3.0405,
+   "width_um": 0.0869,
+   "resolving_power": 35
+  },
+  {
+   "index": 60,
+   "detector": 4,
+   "channel": 9,
+   "center_um": 3.1232,
+   "width_um": 0.0892,
+   "resolving_power": 35
+  },
+  {
+   "index": 61,
+   "detector": 4,
+   "channel": 10,
+   "center_um": 3.2082,
+   "width_um": 0.0917,
+   "resolving_power": 35
+  },
+  {
+   "index": 62,
+   "detector": 4,
+   "channel": 11,
+   "center_um": 3.2955,
+   "width_um": 0.0942,
+   "resolving_power": 35
+  },
+  {
+   "index": 63,
+   "detector": 4,
+   "channel": 12,
+   "center_um": 3.3852,
+   "width_um": 0.0967,
+   "resolving_power": 35
+  },
+  {
+   "index": 64,
+   "detector": 4,
+   "channel": 13,
+   "center_um": 3.4773,
+   "width_um": 0.0994,
+   "resolving_power": 35
+  },
+  {
+   "index": 65,
+   "detector": 4,
+   "channel": 14,
+   "center_um": 3.572,
+   "width_um": 0.1021,
+   "resolving_power": 35
+  },
+  {
+   "index": 66,
+   "detector": 4,
+   "channel": 15,
+   "center_um": 3.6692,
+   "width_um": 0.1048,
+   "resolving_power": 35
+  },
+  {
+   "index": 67,
+   "detector": 4,
+   "channel": 16,
+   "center_um": 3.7691,
+   "width_um": 0.1077,
+   "resolving_power": 35
+  },
+  {
+   "index": 68,
+   "detector": 5,
+   "channel": 0,
+   "center_um": 3.8459,
+   "width_um": 0.0343,
+   "resolving_power": 112
+  },
+  {
+   "index": 69,
+   "detector": 5,
+   "channel": 1,
+   "center_um": 3.878,
+   "width_um": 0.0346,
+   "resolving_power": 112
+  },
+  {
+   "index": 70,
+   "detector": 5,
+   "channel": 2,
+   "center_um": 3.9103,
+   "width_um": 0.0349,
+   "resolving_power": 112
+  },
+  {
+   "index": 71,
+   "detector": 5,
+   "channel": 3,
+   "center_um": 3.9428,
+   "width_um": 0.0352,
+   "resolving_power": 112
+  },
+  {
+   "index": 72,
+   "detector": 5,
+   "channel": 4,
+   "center_um": 3.9757,
+   "width_um": 0.0355,
+   "resolving_power": 112
+  },
+  {
+   "index": 73,
+   "detector": 5,
+   "channel": 5,
+   "center_um": 4.0088,
+   "width_um": 0.0358,
+   "resolving_power": 112
+  },
+  {
+   "index": 74,
+   "detector": 5,
+   "channel": 6,
+   "center_um": 4.0422,
+   "width_um": 0.0361,
+   "resolving_power": 112
+  },
+  {
+   "index": 75,
+   "detector": 5,
+   "channel": 7,
+   "center_um": 4.0758,
+   "width_um": 0.0364,
+   "resolving_power": 112
+  },
+  {
+   "index": 76,
+   "detector": 5,
+   "channel": 8,
+   "center_um": 4.1098,
+   "width_um": 0.0367,
+   "resolving_power": 112
+  },
+  {
+   "index": 77,
+   "detector": 5,
+   "channel": 9,
+   "center_um": 4.144,
+   "width_um": 0.037,
+   "resolving_power": 112
+  },
+  {
+   "index": 78,
+   "detector": 5,
+   "channel": 10,
+   "center_um": 4.1785,
+   "width_um": 0.0373,
+   "resolving_power": 112
+  },
+  {
+   "index": 79,
+   "detector": 5,
+   "channel": 11,
+   "center_um": 4.2133,
+   "width_um": 0.0376,
+   "resolving_power": 112
+  },
+  {
+   "index": 80,
+   "detector": 5,
+   "channel": 12,
+   "center_um": 4.2484,
+   "width_um": 0.0379,
+   "resolving_power": 112
+  },
+  {
+   "index": 81,
+   "detector": 5,
+   "channel": 13,
+   "center_um": 4.2838,
+   "width_um": 0.0382,
+   "resolving_power": 112
+  },
+  {
+   "index": 82,
+   "detector": 5,
+   "channel": 14,
+   "center_um": 4.3195,
+   "width_um": 0.0386,
+   "resolving_power": 112
+  },
+  {
+   "index": 83,
+   "detector": 5,
+   "channel": 15,
+   "center_um": 4.3555,
+   "width_um": 0.0389,
+   "resolving_power": 112
+  },
+  {
+   "index": 84,
+   "detector": 5,
+   "channel": 16,
+   "center_um": 4.3917,
+   "width_um": 0.0392,
+   "resolving_power": 112
+  },
+  {
+   "index": 85,
+   "detector": 6,
+   "channel": 0,
+   "center_um": 4.4361,
+   "width_um": 0.0347,
+   "resolving_power": 128
+  },
+  {
+   "index": 86,
+   "detector": 6,
+   "channel": 1,
+   "center_um": 4.4683,
+   "width_um": 0.0349,
+   "resolving_power": 128
+  },
+  {
+   "index": 87,
+   "detector": 6,
+   "channel": 2,
+   "center_um": 4.5009,
+   "width_um": 0.0352,
+   "resolving_power": 128
+  },
+  {
+   "index": 88,
+   "detector": 6,
+   "channel": 3,
+   "center_um": 4.5336,
+   "width_um": 0.0354,
+   "resolving_power": 128
+  },
+  {
+   "index": 89,
+   "detector": 6,
+   "channel": 4,
+   "center_um": 4.5666,
+   "width_um": 0.0357,
+   "resolving_power": 128
+  },
+  {
+   "index": 90,
+   "detector": 6,
+   "channel": 5,
+   "center_um": 4.5999,
+   "width_um": 0.0359,
+   "resolving_power": 128
+  },
+  {
+   "index": 91,
+   "detector": 6,
+   "channel": 6,
+   "center_um": 4.6334,
+   "width_um": 0.0362,
+   "resolving_power": 128
+  },
+  {
+   "index": 92,
+   "detector": 6,
+   "channel": 7,
+   "center_um": 4.6671,
+   "width_um": 0.0365,
+   "resolving_power": 128
+  },
+  {
+   "index": 93,
+   "detector": 6,
+   "channel": 8,
+   "center_um": 4.7011,
+   "width_um": 0.0367,
+   "resolving_power": 128
+  },
+  {
+   "index": 94,
+   "detector": 6,
+   "channel": 9,
+   "center_um": 4.7353,
+   "width_um": 0.037,
+   "resolving_power": 128
+  },
+  {
+   "index": 95,
+   "detector": 6,
+   "channel": 10,
+   "center_um": 4.7698,
+   "width_um": 0.0373,
+   "resolving_power": 128
+  },
+  {
+   "index": 96,
+   "detector": 6,
+   "channel": 11,
+   "center_um": 4.8045,
+   "width_um": 0.0375,
+   "resolving_power": 128
+  },
+  {
+   "index": 97,
+   "detector": 6,
+   "channel": 12,
+   "center_um": 4.8394,
+   "width_um": 0.0378,
+   "resolving_power": 128
+  },
+  {
+   "index": 98,
+   "detector": 6,
+   "channel": 13,
+   "center_um": 4.8747,
+   "width_um": 0.0381,
+   "resolving_power": 128
+  },
+  {
+   "index": 99,
+   "detector": 6,
+   "channel": 14,
+   "center_um": 4.9102,
+   "width_um": 0.0384,
+   "resolving_power": 128
+  },
+  {
+   "index": 100,
+   "detector": 6,
+   "channel": 15,
+   "center_um": 4.9459,
+   "width_um": 0.0386,
+   "resolving_power": 128
+  },
+  {
+   "index": 101,
+   "detector": 6,
+   "channel": 16,
+   "center_um": 4.9819,
+   "width_um": 0.0389,
+   "resolving_power": 128
+  }
+ ]
+}

@@ -1,0 +1,143 @@
+{
+  "patch": {
+    "id": "wise0855",
+    "name": "WISE 0855",
+    "width_px": 146,
+    "height_px": 146,
+    "ra": 133.7951,
+    "dec": -7.2451,
+    "fov_deg": 0.25,
+    "pixel_scale_arcsec": 6.164,
+    "coord_epoch": 2014.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/wise0855/e00.png",
+      "flags_file": "frames/wise0855/e00_flags.png",
+      "mjd": 60863.05,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 23,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/wise0855/e01.png",
+      "flags_file": "frames/wise0855/e01_flags.png",
+      "mjd": 61046.89,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 9,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/wise0855/e02.png",
+      "flags_file": "frames/wise0855/e02_flags.png",
+      "mjd": 61230.77,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 18,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "x": 87.5,
+      "y": 71.3,
+      "seen_in": "e0",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 88.2,
+      "y": 71.2,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 88.8,
+      "y": 71.2,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 118.5,
+      "y": 86.5,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate B"
+      }
+    },
+    {
+      "x": 73,
+      "y": 37,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate C"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "A",
+      "label": "Candidate A",
+      "kind": "Moving object (steady drift)",
+      "confidence": 0.88,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 87.5,
+          "y": 71.3
+        },
+        {
+          "epoch": 1,
+          "x": 88.2,
+          "y": 71.2
+        },
+        {
+          "epoch": 2,
+          "x": 88.8,
+          "y": 71.2
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "Candidate B",
+      "kind": "Seen on one date only (asteroid?)",
+      "confidence": 0.64,
+      "track": [
+        {
+          "epoch": 2,
+          "x": 118.5,
+          "y": 86.5
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "label": "Candidate C",
+      "kind": "Possible artifact (cosmic ray)",
+      "confidence": 0.12,
+      "track": [
+        {
+          "epoch": 1,
+          "x": 73,
+          "y": 37
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,42 @@
 [
-  { "id": "demo", "title": "Simulated demo (WISE 0855 position)", "ra": 133.7951, "dec": -7.2451 },
-  { "id": "m101", "title": "Practice patch" }
+  {
+    "id": "wise0855",
+    "title": "WISE 0855 (simulated)",
+    "ra": 133.7951,
+    "dec": -7.2451
+  },
+  {
+    "id": "barnard",
+    "title": "Barnard's Star (simulated)",
+    "ra": 269.4521,
+    "dec": 4.6934
+  },
+  {
+    "id": "epsindib",
+    "title": "Epsilon Indi B (simulated)",
+    "ra": 331.0438,
+    "dec": -56.7827
+  },
+  {
+    "id": "rwaur",
+    "title": "RW Aurigae (simulated)",
+    "ra": 76.9563,
+    "dec": 30.4013
+  },
+  {
+    "id": "rdra",
+    "title": "R Draconis (simulated)",
+    "ra": 248.1675,
+    "dec": 66.7551
+  },
+  {
+    "id": "m42",
+    "title": "Orion Nebula (simulated)",
+    "ra": 83.8221,
+    "dec": -5.3911
+  },
+  {
+    "id": "m101",
+    "title": "Practice patch"
+  }
 ]

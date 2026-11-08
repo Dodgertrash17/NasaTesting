@@ -1,0 +1,126 @@
+{
+  "patch": {
+    "id": "barnard",
+    "name": "Barnard's Star",
+    "width_px": 146,
+    "height_px": 146,
+    "ra": 269.4521,
+    "dec": 4.6934,
+    "fov_deg": 0.25,
+    "pixel_scale_arcsec": 6.164,
+    "coord_epoch": 2000.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/barnard/e00.png",
+      "flags_file": "frames/barnard/e00_flags.png",
+      "mjd": 60934.61,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 8,
+      "flags": [
+        "2 cosmic rays",
+        "1 saturated px"
+      ]
+    },
+    {
+      "file": "frames/barnard/e01.png",
+      "flags_file": "frames/barnard/e01_flags.png",
+      "mjd": 61116.99,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 20,
+      "flags": [
+        "6 cosmic rays",
+        "1 saturated px"
+      ]
+    },
+    {
+      "file": "frames/barnard/e02.png",
+      "flags_file": "frames/barnard/e02_flags.png",
+      "mjd": 61297.31,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 17,
+      "flags": [
+        "4 cosmic rays",
+        "1 saturated px",
+        "near detector edge"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "x": 75.8,
+      "y": 29.4,
+      "seen_in": "e0",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 75.9,
+      "y": 28.6,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 76.0,
+      "y": 27.8,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 121.4,
+      "y": 120.2,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate B"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "A",
+      "label": "Candidate A",
+      "kind": "Moving object (steady drift)",
+      "confidence": 0.88,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 75.8,
+          "y": 29.4
+        },
+        {
+          "epoch": 1,
+          "x": 75.9,
+          "y": 28.6
+        },
+        {
+          "epoch": 2,
+          "x": 76.0,
+          "y": 27.8
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "Candidate B",
+      "kind": "Seen on one date only (asteroid?)",
+      "confidence": 0.64,
+      "track": [
+        {
+          "epoch": 1,
+          "x": 121.4,
+          "y": 120.2
+        }
+      ]
+    }
+  ]
+}

@@ -70,11 +70,14 @@ async function loadJSON(url) {
   return res.json();
 }
 
-async function loadImage(src) {
-  const img = new Image();
-  img.src = src;
-  await img.decode();
-  return img;
+// Uses the load event rather than img.decode(): decode() can wait indefinitely in background tabs.
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`Could not load ${src}`));
+    img.src = src;
+  });
 }
 
 function pad(n, w = 2, d = 0) {

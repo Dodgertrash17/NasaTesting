@@ -1,0 +1,52 @@
+{
+  "patch": {
+    "id": "m42",
+    "name": "Orion Nebula",
+    "width_px": 256,
+    "height_px": 256,
+    "ra": 83.8221,
+    "dec": -5.3911,
+    "fov_deg": 1.0,
+    "pixel_scale_arcsec": 14.062,
+    "coord_epoch": 2000.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/m42/e00.png",
+      "flags_file": "frames/m42/e00_flags.png",
+      "mjd": 60838.25,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 14,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/m42/e01.png",
+      "flags_file": "frames/m42/e01_flags.png",
+      "mjd": 61019.25,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 17,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/m42/e02.png",
+      "flags_file": "frames/m42/e02_flags.png",
+      "mjd": 61202.36,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 13,
+      "flags": [
+        "5 cosmic rays"
+      ]
+    }
+  ],
+  "candidates": [],
+  "predictions": []
+}

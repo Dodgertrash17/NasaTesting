@@ -18,6 +18,7 @@ const state = {
 
 let images = [];    // decoded <img> per frame
 let pixels = [];    // ImageData per frame, made on first use
+let flagLayers = []; // red overlay canvas per frame, from frames[].flags_file (null if none)
 
 const $ = (s) => document.querySelector(s);
 const els = {
@@ -52,6 +53,7 @@ const els = {
   download:  $('#download'),
   aiList:    $('#ai-list'),
   reveal:    $('#reveal'),
+  showFlags: $('#show-flags'),
   status:    $('#status'),
 };
 
@@ -131,9 +133,29 @@ function drawMarker(ctx, x, y, { color = '#ffc857', dashed = false } = {}) {
   ctx.restore();
 }
 
+// Turn a 0/255 mask image into a see-through red layer.
+function makeFlagLayer(img) {
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  const d = ctx.getImageData(0, 0, c.width, c.height);
+  for (let p = 0; p < d.data.length; p += 4) {
+    const on = d.data[p] > 0;
+    d.data[p] = 255; d.data[p + 1] = 60; d.data[p + 2] = 60; d.data[p + 3] = on ? 200 : 0;
+  }
+  ctx.putImageData(d, 0, 0);
+  return c;
+}
+
 function drawOverlays(k) {
   const ctx = els.canvas.getContext('2d');
   const at = (v) => (v + 0.5) * k;
+
+  if (els.showFlags.checked && flagLayers[state.frame]) {
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(flagLayers[state.frame], 0, 0, els.canvas.width, els.canvas.height);
+  }
 
   if (state.revealed) {
     for (const p of predictions()) {
@@ -334,6 +356,9 @@ async function openPatch(id) {
     const patch = await loadJSON(jsonUrl);
     images = await Promise.all(patch.frames.map(f => loadImage(new URL(f.file, jsonUrl))));
     pixels = [];
+    flagLayers = await Promise.all(patch.frames.map(f => f.flags_file
+      ? loadImage(new URL(f.flags_file, jsonUrl)).then(makeFlagLayer).catch(() => null)
+      : null));
     Object.assign(state, { patch, jsonUrl, frame: 0, selected: null });
     els.simBadge.hidden = !patch.patch?.simulated;
     renderTimeline();
@@ -409,6 +434,7 @@ for (const el of [els.stretch, els.contrast, els.invert, els.crosshair]) {
   el.addEventListener('input', applyFilters);
 }
 els.reveal.addEventListener('change', () => { state.revealed = els.reveal.checked; render(); });
+els.showFlags.addEventListener('change', render);
 
 els.copyLink.addEventListener('click', async () => {
   try {

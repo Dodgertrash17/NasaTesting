@@ -1,0 +1,101 @@
+{
+  "patch": {
+    "id": "rwaur",
+    "name": "RW Aurigae",
+    "width_px": 146,
+    "height_px": 146,
+    "ra": 76.9563,
+    "dec": 30.4013,
+    "fov_deg": 0.25,
+    "pixel_scale_arcsec": 6.164,
+    "coord_epoch": 2000.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/rwaur/e00.png",
+      "flags_file": "frames/rwaur/e00_flags.png",
+      "mjd": 60833.41,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 23,
+      "flags": [
+        "2 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rwaur/e01.png",
+      "flags_file": "frames/rwaur/e01_flags.png",
+      "mjd": 61018.59,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 8,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/rwaur/e02.png",
+      "flags_file": "frames/rwaur/e02_flags.png",
+      "mjd": 61201.46,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 10,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e0",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 72.5,
+      "y": 72.5,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate A"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "V",
+      "label": "Candidate A",
+      "kind": "Brightness change",
+      "confidence": 0.93,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 1,
+          "x": 72.5,
+          "y": 72.5
+        },
+        {
+          "epoch": 2,
+          "x": 72.5,
+          "y": 72.5
+        }
+      ]
+    }
+  ]
+}

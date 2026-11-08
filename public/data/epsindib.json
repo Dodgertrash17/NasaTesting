@@ -1,0 +1,122 @@
+{
+  "patch": {
+    "id": "epsindib",
+    "name": "Epsilon Indi B",
+    "width_px": 146,
+    "height_px": 146,
+    "ra": 331.0438,
+    "dec": -56.7827,
+    "fov_deg": 0.25,
+    "pixel_scale_arcsec": 6.164,
+    "coord_epoch": 2000.0,
+    "simulated": true,
+    "boost": 1.0
+  },
+  "frames": [
+    {
+      "file": "frames/epsindib/e00.png",
+      "flags_file": "frames/epsindib/e00_flags.png",
+      "mjd": 60965.73,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 13,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/epsindib/e01.png",
+      "flags_file": "frames/epsindib/e01_flags.png",
+      "mjd": 61145.08,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 9,
+      "flags": [
+        "3 cosmic rays"
+      ]
+    },
+    {
+      "file": "frames/epsindib/e02.png",
+      "flags_file": "frames/epsindib/e02_flags.png",
+      "mjd": 61328.16,
+      "band": "All 102 bands stacked",
+      "detector": "all",
+      "n_exposures": 21,
+      "flags": [
+        "6 cosmic rays"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "x": 55.8,
+      "y": 82.8,
+      "seen_in": "e0",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 55.5,
+      "y": 83.0,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 55.2,
+      "y": 83.2,
+      "seen_in": "e2",
+      "match": {
+        "name": "Candidate A"
+      }
+    },
+    {
+      "x": 106,
+      "y": 134,
+      "seen_in": "e1",
+      "match": {
+        "name": "Candidate C"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "A",
+      "label": "Candidate A",
+      "kind": "Moving object (steady drift)",
+      "confidence": 0.88,
+      "track": [
+        {
+          "epoch": 0,
+          "x": 55.8,
+          "y": 82.8
+        },
+        {
+          "epoch": 1,
+          "x": 55.5,
+          "y": 83.0
+        },
+        {
+          "epoch": 2,
+          "x": 55.2,
+          "y": 83.2
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "label": "Candidate C",
+      "kind": "Possible artifact (cosmic ray)",
+      "confidence": 0.12,
+      "track": [
+        {
+          "epoch": 1,
+          "x": 106,
+          "y": 134
+        }
+      ]
+    }
+  ]
+}
