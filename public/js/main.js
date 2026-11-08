@@ -8,6 +8,9 @@ const state = {
 };
 
 const els = {
+  hook:      document.querySelector('#hook'),
+  start:     document.querySelector('#start'),
+  challenge: document.querySelector('#challenge'),
   canvas:    document.querySelector('#sky'),
   blink:     document.querySelector('#blink'),
   frame:     document.querySelector('#frame'),
@@ -23,6 +26,10 @@ function currentPatch() {
 // The handshake file gives times as MJD (days since 1858-11-17). 40587 is 1970-01-01.
 function mjdToDate(mjd) {
   return new Date((mjd - 40587) * 86400000).toISOString().slice(0, 10);   // "2025-05-01"
+}
+
+function drawFrame() {
+
 }
 
 function render() {
@@ -41,4 +48,9 @@ els.frame.addEventListener('input', () => {
   stopBlink();
   state.frame = Number(els.frame.value);
   render();
+});
+
+els.start.addEventListener('click', () => {
+  els.hook.hidden = true;
+  els.challenge.hidden = false;
 });
