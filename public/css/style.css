@@ -437,6 +437,58 @@ body[data-page="dome"] main { max-width: none; padding: 0; position: relative; d
   .poi-panel { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 52%; }
 }
 
+
+/* dome: GPU layer, filter drawer, date row */
+.dome canvas.dome-gl { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wave-bar { gap: 10px; }
+.bar-row { display: grid; gap: 6px; }
+.bar-row + .bar-row { padding-top: 8px; border-top: 1px solid var(--line); }
+.bar-row.all-bands input[type="range"], .bar-row.latest input[type="range"] { opacity: .45; }
+.dome-left #open-filter { width: 100%; justify-content: space-between; }
+.dome-left #open-filter .pill { color: #04111f; border-color: #04111f55; }
+
+.filter-panel { position: absolute; top: 14px; left: 14px; bottom: 14px; z-index: 6; width: 310px; padding: 16px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 12px; }
+.filter-panel header { display: flex; justify-content: space-between; align-items: center; }
+.filter-panel h2 { font-size: 1.15rem; }
+.filter-panel .close { min-height: 34px; width: 34px; padding: 0; }
+.filter-panel input[type="search"] { min-height: 42px; padding: 0 12px; border-radius: var(--radius); background: var(--panel-2); border: 1px solid var(--line); width: 100%; }
+.cat-fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cat-fieldset legend { margin-bottom: 8px; }
+.cat-fieldset .row { display: flex; gap: 6px; }
+.cat-fieldset .row button { flex: 1; min-height: 34px; font-size: 0.85rem; }
+.cat-list { display: grid; gap: 2px; }
+.cat-list label { display: grid; grid-template-columns: 18px 20px 1fr auto; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 8px; cursor: pointer; font-size: 0.93rem; }
+.cat-list label:hover { background: var(--panel-2); }
+.cat-list input { width: 16px; height: 16px; margin: 0; }
+.cat-list .n { color: var(--muted); font-family: var(--mono); font-size: 0.8rem; }
+.obj-count { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.obj-list { list-style: none; margin: 0; padding: 0; flex: none; display: grid; align-content: start; gap: 2px; }
+.obj-list button { width: 100%; min-height: 36px; justify-content: flex-start; gap: 10px; padding: 0 8px; background: transparent; border-color: transparent; text-align: left; font-size: 0.92rem; }
+.obj-list button:hover, .obj-list button[aria-current="true"] { background: var(--panel-2); border-color: var(--line); }
+.obj-list .t { margin-left: auto; color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+
+.dates { display: grid; gap: 8px; }
+.date-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.date-chips button { min-height: 30px; padding: 0 8px; font-size: 0.78rem; font-family: var(--mono); border-radius: 999px; }
+.date-chips button[aria-current="true"] { background: var(--brand); color: #04111f; border-color: transparent; font-weight: 700; }
+.date-chips button.future { opacity: .45; }
+.date-ctrl { display: flex; gap: 6px; }
+.date-ctrl button { min-height: 34px; padding: 0 10px; font-size: 0.85rem; }
+.date-ctrl button[aria-pressed="true"] { border-color: var(--brand); color: var(--brand); }
+.lightcurve { width: 100%; height: 70px; display: block; background: var(--panel); border-radius: 8px; border: 1px solid var(--line); cursor: pointer; }
+.dome-debug { position: absolute; right: 14px; top: 14px; z-index: 7; font-family: var(--mono); font-size: 0.75rem; padding: 6px 10px; }
+@media (max-width: 700px) {
+  .filter-panel { top: 8px; left: 8px; right: 8px; bottom: 8px; width: auto; }
+  .dome-left { top: 66px; bottom: auto; right: auto; left: 8px; width: 190px; grid-template-columns: 1fr; padding: 8px; }
+  .dome-left .check { display: none; }
+  .wave-bar { left: 8px; right: 8px; bottom: 8px; padding: 8px 10px; }
+  .wave-top { flex-wrap: wrap; }
+  .wave-top .wave-read { order: 3; flex-basis: 100%; font-size: 0.78rem; }
+  .wave-top button:last-of-type { margin-left: auto; }
+}
+@media (max-width: 1100px) and (min-width: 701px) { .dome-left { bottom: 190px; } }
+
 /* ---------- ABOUT ---------- */
 .about { display: grid; gap: 20px; max-width: 900px; margin: 0 auto; }
 .team { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }

@@ -49,10 +49,17 @@ The viewer opens `data/<id>.json` for the closest entry within half the field of
 
 - `bands.json`: 102 bands, each `{index, detector 1-6, channel 0-16, center_um, width_um, resolving_power}`.
   Approximate values for testing; check them against the official SPHEREx band list.
-- `poi.json`: points of interest, each `{id, name, type, ra, dec, size 1-5, blurb, patch, cube, spectrum[102]}`.
-  `patch` links to a Viewer data file when there is one.
-- `cubes/<id>.png`: 17 × 6 grid of 40 px images, one per band. Row = detector (short to long wavelength),
-  column = channel. Tile *n* is at `x = channel * 40, y = (detector - 1) * 40`.
+- `poi.json`:
+  - `categories`: `{ id: {label, color, shape} }`. These drive the dome's type filter and marker shapes.
+    Add a new type (e.g. `comet`) here, and it appears in the filter automatically.
+  - `pois`: each `{id, name, category, type, ra, dec, size 1-5, blurb, patch, spectrum[102], epochs[]}`.
+    `patch` links to a Viewer data file when there is one.
+    `epochs` is one entry per observation date: `{mjd, cube, brightness}` (brightness 1 = normal; used to dim or brighten the dot).
+- `cubes/<id>/eNN.png`: one per date. 17 × 6 grid of 32 px images, one per band. Row = detector (short to long wavelength),
+  column = channel. Tile *n* is at `x = channel * 32, y = (detector - 1) * 32`. These load only when an object is opened.
+
+The dome is tested with `dome.html?stress=20000&debug` (20,000 extra fake points, with timing shown).
+For much bigger catalogs (hundreds of thousands), split `poi.json` into sky tiles and load only the tiles in view.
 
 ## Real SPHEREx data vs. this format
 

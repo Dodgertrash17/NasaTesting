@@ -16,8 +16,11 @@
 
   <main>
     <div class="dome" id="dome">
+      <!-- Sky, Milky Way and stars: drawn by the graphics card (WebGL), with a slower fallback. -->
+      <canvas class="dome-gl" id="dome-gl" aria-hidden="true"></canvas>
+      <!-- Points of interest, labels and pole markers: drawn on top, only when something changes. -->
       <canvas class="dome-sky" id="dome-sky" tabindex="0"
-              aria-label="All-sky view from an open field. Drag or use arrow keys to look around, scroll or plus and minus to zoom. Points of interest are listed in the Fly to menu."></canvas>
+              aria-label="Full 360 degree view of the sky. Drag or use arrow keys to look in any direction, including straight up and down; scroll or plus and minus to zoom. Open Objects for a list of every point of interest."></canvas>
 
       <!-- Sub-nav from the sketch. Fades out when the mouse is still. -->
       <nav class="dome-toolbar" aria-label="Sky Dome">
@@ -30,33 +33,64 @@
       <div class="dome-glass dome-status" id="dome-status" aria-live="polite"></div>
 
       <div class="dome-glass dome-hint" id="dome-hint">
-        <strong>Drag to look around</strong> · scroll to zoom · click a glowing dot
+        <strong>Drag to look in any direction</strong> · scroll to zoom · click a glowing marker
       </div>
 
       <!-- Left: view controls -->
       <div class="dome-glass dome-left" role="group" aria-label="View controls">
-        <label class="visually-hidden" for="fly-to">Fly to a point of interest</label>
-        <select id="fly-to"><option value="">Fly to…</option></select>
+        <button type="button" id="open-filter" class="primary" aria-controls="filter-panel" aria-expanded="false">
+          ☰ Objects <span class="pill" id="shown-count"></span></button>
         <div class="row">
           <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
           <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
-          <button type="button" id="reset-view" title="Back to the horizon">Horizon</button>
+          <button type="button" id="reset-view" title="Zoom back out to a wide view">Wide</button>
         </div>
-        <label class="check"><input type="checkbox" id="show-ground" checked> Ground</label>
         <label class="check"><input type="checkbox" id="show-labels" checked> Labels</label>
-        <label class="check"><input type="checkbox" id="show-grid"> Compass grid</label>
+        <label class="check"><input type="checkbox" id="show-grid"> Coordinate grid</label>
       </div>
 
-      <!-- Bottom: the 102 SPHEREx bands -->
-      <div class="dome-glass wave-bar all-bands" id="wave-bar" role="group" aria-label="Wavelength">
-        <div class="wave-top">
-          <button type="button" id="all-bands" aria-pressed="true" title="Add all 102 bands together">All bands</button>
-          <span class="wave-read" id="wave-read"></span>
-          <button type="button" id="band-blink" aria-pressed="false" title="Sweep through all 102 bands">▶ Sweep bands</button>
+      <!-- Left drawer: filter by object type, search, list -->
+      <aside class="dome-glass filter-panel" id="filter-panel" hidden aria-labelledby="filter-title">
+        <header>
+          <h2 id="filter-title">Objects &amp; filters</h2>
+          <button class="close" type="button" id="close-filter" aria-label="Close objects and filters">✕</button>
+        </header>
+        <label class="visually-hidden" for="obj-search">Search objects by name</label>
+        <input type="search" id="obj-search" placeholder="Search by name…" autocomplete="off">
+        <fieldset class="cat-fieldset">
+          <legend class="label">Show these types</legend>
+          <div id="cat-list" class="cat-list"></div>
+          <div class="row">
+            <button type="button" id="cats-all">Show all</button>
+            <button type="button" id="cats-none">Hide all</button>
+          </div>
+        </fieldset>
+        <label class="check"><input type="checkbox" id="only-patch"> Only objects with Viewer images</label>
+        <p class="obj-count" id="obj-count" aria-live="polite"></p>
+        <ul class="obj-list" id="obj-list"></ul>
+      </aside>
+
+      <!-- Bottom: the 102 SPHEREx bands, and the survey date -->
+      <div class="dome-glass wave-bar" id="wave-bar">
+        <div class="bar-row all-bands" id="band-row" role="group" aria-label="Wavelength">
+          <div class="wave-top">
+            <button type="button" id="all-bands" aria-pressed="true" title="Add all 102 bands together">All bands</button>
+            <span class="wave-read" id="wave-read"></span>
+            <button type="button" id="band-blink" aria-pressed="false" title="Sweep through all 102 bands">▶ Sweep bands</button>
+          </div>
+          <label class="visually-hidden" for="band">SPHEREx band, 1 to 102</label>
+          <input type="range" id="band" min="0" max="101" step="1" value="40">
+          <div class="det-strip" id="det-strip" aria-hidden="true"></div>
         </div>
-        <label class="visually-hidden" for="band">SPHEREx band, 1 to 102</label>
-        <input type="range" id="band" min="0" max="101" step="1" value="40">
-        <div class="det-strip" id="det-strip" aria-hidden="true"></div>
+        <div class="bar-row latest" id="date-row" role="group" aria-label="Date">
+          <div class="wave-top">
+            <button type="button" id="latest" aria-pressed="true" title="Show each object's most recent image">Latest</button>
+            <span class="wave-read" id="date-read"></span>
+            <button type="button" id="date-blink" aria-pressed="false" title="Step through observation dates">▶ Sweep dates</button>
+          </div>
+          <label class="visually-hidden" for="date">Observation date</label>
+          <input type="range" id="date" min="0" max="1" step="1" value="0">
+        </div>
       </div>
 
       <!-- Right: point of interest details -->

@@ -10,7 +10,7 @@ Writes into public/data/:
   frames/<target>/eNN_flags.png pixel mask: 255 = flagged (cosmic ray / saturated)
   dome/bands.json               the 102 SPHEREx bands (approximate centers and widths)
   dome/poi.json                 points of interest for the Sky Dome, each with a 102-band spectrum
-  dome/cubes/<poi>.png          17 x 6 grid of small images, one per band (row = detector)
+  dome/cubes/<poi>/eNN.png      per date: 17 x 6 grid of small images, one per band (row = detector)
 
 Nothing here is real data. Shapes, units and numbers are chosen to behave like the real thing
 (pixel size, cadence, proper motions, rough spectral shapes) so the UI can be tested before release.
@@ -96,6 +96,7 @@ SPECTRA = {
     "galactic-center": lambda l: absorb(bb(l, 3500) * 10 ** (-0.4 * 3 * (2.2 / l) ** 2), l, ICES[:2]),
     "synchrotron": lambda l: l ** 0.3 * 0.1 + 0.05 * g(l, 1.64, 0.01),
     "lbv":      lambda l: bb(l, 20000) + bb(l, 800) * 400 + 0.3 * g(l, 2.166, 0.02),
+    "white-dwarf": lambda l: bb(l, 15000),
 }
 
 def bands():
@@ -243,82 +244,134 @@ def make_target(t):
 
 # ---------------------------------------------------------------- Sky Dome: points of interest with 102-band cubes
 
+# Categories drive the Sky Dome filter. Each has a label, color and marker shape (shape matters for color-blind users).
+CATEGORIES = {
+    "star":           {"label": "Stars",                  "color": "#ffd27a", "shape": "circle"},
+    "white-dwarf":    {"label": "White dwarfs",           "color": "#cfe3ff", "shape": "diamond"},
+    "brown-dwarf":    {"label": "Brown dwarfs",           "color": "#ff8f6b", "shape": "square"},
+    "variable":       {"label": "Variable & young stars", "color": "#7be0c8", "shape": "triangle"},
+    "exoplanet-host": {"label": "Planet-hosting stars",   "color": "#9be37b", "shape": "ring"},
+    "cluster":        {"label": "Star clusters",          "color": "#ffe9a8", "shape": "cross"},
+    "nebula":         {"label": "Nebulae & clouds",       "color": "#ff7ac8", "shape": "hexagon"},
+    "galaxy":         {"label": "Galaxies",               "color": "#b49cff", "shape": "ellipse"},
+    "region":         {"label": "Special regions",        "color": "#8fb3d9", "shape": "dashed"},
+}
+
 POIS = [
-    # id, name, type label, spectrum, ra, dec, dot size 1-5, extended (px sigma), blurb, linked patch
-    ("wise0855", "WISE 0855", "Brown dwarf", "y-dwarf", 133.7951, -7.2451, 2, 0, "Coldest known brown dwarf; only shows up at the longest wavelengths.", "wise0855"),
-    ("barnard", "Barnard's Star", "Nearby star", "m-dwarf", 269.4521, 4.6934, 3, 0, "Fastest-moving star on the sky.", "barnard"),
-    ("epsindib", "Epsilon Indi B", "Brown dwarfs", "t-dwarf", 331.0438, -56.7827, 2, 0, "Two brown dwarfs, too close together for SPHEREx to split.", "epsindib"),
-    ("rwaur", "RW Aurigae", "Young star", "t-tauri", 76.9563, 30.4013, 3, 0, "Young star with a dusty disk: extra glow at long wavelengths.", "rwaur"),
-    ("rdra", "R Draconis", "Variable star", "mira", 248.1675, 66.7551, 4, 0, "Pulsating red giant with deep water absorption bands.", "rdra"),
-    ("m42", "Orion Nebula", "Nebula", "nebula", 83.8221, -5.3911, 5, 5, "Glowing gas: emission lines and a 3.3 µm PAH feature.", "m42"),
-    ("betelgeuse", "Betelgeuse", "Red supergiant", "red-giant", 88.7929, 7.4071, 5, 0, "One of the brightest infrared stars in the sky.", None),
-    ("vega", "Vega", "Hot star", "hot-star", 279.2347, 38.7837, 4, 0, "A hot blue-white star: brightest at short wavelengths.", None),
-    ("polaris", "Polaris", "Star", "f-star", 37.9546, 89.2641, 3, 0, "The North Star.", None),
-    ("sgra", "Galactic Center", "Galactic center", "galactic-center", 266.4168, -29.0078, 5, 3, "Hidden by dust in visible light; infrared sees through, with ice absorption.", None),
-    ("m31", "Andromeda Galaxy", "Galaxy", "galaxy", 10.6847, 41.2690, 5, 7, "Our nearest big neighbor galaxy.", None),
-    ("m82", "Cigar Galaxy (M82)", "Starburst galaxy", "starburst", 148.9685, 69.6797, 4, 4, "Making stars fast: strong 3.3 µm PAH emission.", None),
-    ("lmc", "Large Magellanic Cloud", "Galaxy", "galaxy", 80.8939, -69.7561, 5, 8, "Satellite galaxy of the Milky Way.", None),
-    ("pleiades", "Pleiades", "Star cluster", "hot-star", 56.75, 24.1167, 4, 2, "Young hot stars in a faint dusty haze.", None),
-    ("crab", "Crab Nebula", "Supernova remnant", "synchrotron", 83.6331, 22.0145, 3, 3, "Remains of a star that exploded in 1054.", None),
-    ("etacar", "Eta Carinae", "Massive star", "lbv", 161.2648, -59.6844, 4, 1, "Huge unstable star wrapped in hot dust.", None),
-    ("rhooph", "Rho Ophiuchi cloud", "Star-forming cloud", "protostar", 246.79, -24.54, 3, 2, "Baby stars buried in icy dust: water, CO2 and CO ice dips.", None),
-    ("taurus", "Taurus molecular cloud", "Star-forming cloud", "protostar", 68.0, 26.0, 3, 2, "Nearby stellar nursery, rich in ices.", None),
-    ("nep", "North Ecliptic Pole deep field", "Deep field", "galaxy", 270.0, 66.5607, 2, 1, "SPHEREx's most-visited patch: deepest images.", None),
-    ("sep", "South Ecliptic Pole deep field", "Deep field", "galaxy", 90.0, -66.5607, 2, 1, "The southern deep field.", None),
+    # id, name, category, type label, spectrum, ra, dec, dot size 1-5, extended (px sigma), blurb, linked patch
+    ("wise0855", "WISE 0855", "brown-dwarf", "Brown dwarf", "y-dwarf", 133.7951, -7.2451, 2, 0, "Coldest known brown dwarf; only shows up at the longest wavelengths.", "wise0855"),
+    ("barnard", "Barnard's Star", "star", "Nearby red dwarf", "m-dwarf", 269.4521, 4.6934, 3, 0, "Fastest-moving star on the sky, with small planets found in 2024-25.", "barnard"),
+    ("epsindib", "Epsilon Indi B", "brown-dwarf", "Brown dwarf pair", "t-dwarf", 331.0438, -56.7827, 2, 0, "Two brown dwarfs, too close together for SPHEREx to split.", "epsindib"),
+    ("luhman16", "Luhman 16", "brown-dwarf", "Brown dwarf pair", "t-dwarf", 162.3289, -53.3194, 2, 0, "The nearest brown dwarfs to the Sun, about 6.5 light-years away.", None),
+    ("rwaur", "RW Aurigae", "variable", "Young star", "t-tauri", 76.9563, 30.4013, 3, 0, "Young star with a dusty disk: extra glow at long wavelengths.", "rwaur"),
+    ("rdra", "R Draconis", "variable", "Pulsating giant", "mira", 248.1675, 66.7551, 4, 0, "Pulsating red giant with deep water absorption bands.", "rdra"),
+    ("mira", "Mira", "variable", "Pulsating giant", "mira", 34.8366, -2.9776, 4, 0, "The original pulsating variable: brightens and fades over 11 months.", None),
+    ("etacar", "Eta Carinae", "variable", "Massive star", "lbv", 161.2648, -59.6844, 4, 1, "Huge unstable star wrapped in hot dust.", None),
+    ("betelgeuse", "Betelgeuse", "star", "Red supergiant", "red-giant", 88.7929, 7.4071, 5, 0, "One of the brightest infrared stars in the sky.", None),
+    ("vega", "Vega", "star", "Hot star", "hot-star", 279.2347, 38.7837, 4, 0, "A hot blue-white star: brightest at short wavelengths.", None),
+    ("polaris", "Polaris", "star", "Star", "f-star", 37.9546, 89.2641, 3, 0, "The North Star.", None),
+    ("siriusb", "Sirius B", "white-dwarf", "White dwarf", "white-dwarf", 101.2872, -16.7161, 2, 0, "Earth-sized leftover core of a star, orbiting the brightest star in the sky.", None),
+    ("procyonb", "Procyon B", "white-dwarf", "White dwarf", "white-dwarf", 114.8255, 5.2250, 2, 0, "A faint white dwarf companion to Procyon.", None),
+    ("40erib", "40 Eridani B", "white-dwarf", "White dwarf", "white-dwarf", 63.8180, -7.6528, 2, 0, "The easiest white dwarf to see with a small telescope.", None),
+    ("vanmaanen", "Van Maanen's Star", "white-dwarf", "White dwarf", "white-dwarf", 12.2913, 5.3886, 1, 0, "The closest solitary white dwarf, found because of its fast motion.", None),
+    ("trappist1", "TRAPPIST-1", "exoplanet-host", "Planet host", "m-dwarf", 346.6224, -5.0414, 2, 0, "A tiny cool star with seven Earth-sized planets.", None),
+    ("proxima", "Proxima Centauri", "exoplanet-host", "Planet host", "m-dwarf", 217.4289, -62.6795, 2, 0, "The nearest star to the Sun, with at least one planet.", None),
+    ("51peg", "51 Pegasi", "exoplanet-host", "Planet host", "f-star", 344.3667, 20.7689, 2, 0, "The first Sun-like star found with a planet (1995).", None),
+    ("pleiades", "Pleiades", "cluster", "Open cluster", "hot-star", 56.75, 24.1167, 4, 2, "Young hot stars in a faint dusty haze.", None),
+    ("omegacen", "Omega Centauri", "cluster", "Globular cluster", "red-giant", 201.6970, -47.4795, 4, 3, "Millions of old stars packed into a ball.", None),
+    ("m13", "Hercules Cluster (M13)", "cluster", "Globular cluster", "red-giant", 250.4235, 36.4613, 3, 2, "The brightest globular cluster in the northern sky.", None),
+    ("m42", "Orion Nebula", "nebula", "Nebula", "nebula", 83.8221, -5.3911, 5, 5, "Glowing gas: emission lines and a 3.3 µm PAH feature.", "m42"),
+    ("crab", "Crab Nebula", "nebula", "Supernova remnant", "synchrotron", 83.6331, 22.0145, 3, 3, "Remains of a star that exploded in 1054.", None),
+    ("ring", "Ring Nebula (M57)", "nebula", "Planetary nebula", "nebula", 283.3963, 33.0292, 2, 2, "A dying star's shed outer layers, around a new white dwarf.", None),
+    ("rhooph", "Rho Ophiuchi cloud", "nebula", "Star-forming cloud", "protostar", 246.79, -24.54, 3, 2, "Baby stars buried in icy dust: water, CO2 and CO ice dips.", None),
+    ("taurus", "Taurus molecular cloud", "nebula", "Star-forming cloud", "protostar", 68.0, 26.0, 3, 2, "Nearby stellar nursery, rich in ices.", None),
+    ("m31", "Andromeda Galaxy", "galaxy", "Galaxy", "galaxy", 10.6847, 41.2690, 5, 7, "Our nearest big neighbor galaxy.", None),
+    ("m82", "Cigar Galaxy (M82)", "galaxy", "Starburst galaxy", "starburst", 148.9685, 69.6797, 4, 4, "Making stars fast: strong 3.3 µm PAH emission.", None),
+    ("lmc", "Large Magellanic Cloud", "galaxy", "Galaxy", "galaxy", 80.8939, -69.7561, 5, 8, "Satellite galaxy of the Milky Way.", None),
+    ("sgra", "Galactic Center", "region", "Galactic center", "galactic-center", 266.4168, -29.0078, 5, 3, "Hidden by dust in visible light; infrared sees through, with ice absorption.", None),
+    ("nep", "North Ecliptic Pole deep field", "region", "Deep field", "galaxy", 270.0, 66.5607, 2, 1, "SPHEREx's most-visited patch: deepest images.", None),
+    ("sep", "South Ecliptic Pole deep field", "region", "Deep field", "galaxy", 90.0, -66.5607, 2, 1, "The southern deep field.", None),
 ]
 
-def make_dome(blist):
-    T, COLS, ROWS = 40, 17, 6
+def ecliptic_lat(ra, dec):
+    e = 23.4393 * math.pi / 180
+    r, d = ra * math.pi / 180, dec * math.pi / 180
+    return math.degrees(math.asin(math.sin(d) * math.cos(e) - math.cos(d) * math.sin(e) * math.sin(r)))
+
+def variability(spec, mjd, k, rnd):
+    if spec == "mira":     return 0.55 + 0.45 * math.cos(2 * math.pi * (mjd - 60900) / 245)
+    if spec == "t-tauri":  return [1.0, 0.45, 0.85, 0.3, 0.9, 0.6][k % 6]
+    if spec == "lbv":      return 1 + 0.12 * math.sin(k * 1.3)
+    return 1 + rnd.gauss(0, 0.015)
+
+def make_dome(blist, patches):
+    T, COLS, ROWS = 32, 17, 6
+    tdict = {t["id"]: t for t in TARGETS}
     pois = []
-    for pid, name, typ, spec, ra, dec, size, ext, blurb, patch in POIS:
+    for pid, name, cat, typ, spec, ra, dec, size, ext, blurb, patch in POIS:
         rnd = random.Random("dome-" + pid)
+        random.seed("dome-dates-" + pid)
         f = SPECTRA[spec]
         flux = [max(f(b["center_um"]), 0.0) for b in blist]
         top = max(flux) or 1.0
         rel = [v / top for v in flux]
+        # dates: same as the Viewer data when there is a patch; otherwise twice a year (monthly near the ecliptic poles)
+        if patch and patch in patches:
+            mjds = [fr["mjd"] for fr in patches[patch]["frames"]]
+        else:
+            cadence = 30.0 if abs(ecliptic_lat(ra, dec)) > 80 else 182.6
+            mjds = visits(ra, cadence)[:6]
+        pm = tdict.get(patch, {}).get("pm", (0, 0))
         field = [(rnd.uniform(2, T - 3), rnd.uniform(2, T - 3), rnd.choice([2800, 3500, 4500, 6000, 9000]), 0.05 + 0.4 * rnd.random() ** 4)
-                 for _ in range(8)]
+                 for _ in range(6)]
         fields_norm = {temp: max(bb(b["center_um"], temp) for b in blist) for temp in {s[2] for s in field}}
-        sheet = [[0] * (T * COLS) for _ in range(T * ROWS)]
-        tiles = []
-        for b, r in zip(blist, rel):
-            lam = b["center_um"]
-            img = [[3 + 2.5 * (lam / 5) ** 4 + rnd.gauss(0, 0.6 + 0.4 * lam / 5) for _ in range(T)] for _ in range(T)]  # sky gets brighter (thermal zodi) at long λ
-            for x, y, temp, fl in field:
-                add_psf(img, x, y, 60 * fl * bb(lam, temp) / fields_norm[temp])
+        epochs = []
+        for k, mjd in enumerate(mjds):
+            var = variability(spec, mjd, k, rnd)
+            years = (mjd - mjds[0]) / 365.25                 # tile is centered on the object at its first date
             c = (T - 1) / 2
-            if ext:
-                s = ext
-                for j in range(T):
-                    for i in range(T):
-                        img[j][i] += 50 * r * math.exp(-((i - c) ** 2 / 1.6 + (j - c) ** 2) / (2 * s * s))
-            add_psf(img, c, c, 90 * r, 0.9)
-            tiles.append(img)
-        for b, img in zip(blist, tiles):
-            ox, oy = b["channel"] * T, (b["detector"] - 1) * T
-            for j, row in enumerate(stretch(img, soft=6, peak=110)):
-                sheet[oy + j][ox:ox + T] = row
-        png_gray(ROOT / "dome" / "cubes" / f"{pid}.png", sheet)
-        pois.append({"id": pid, "name": name, "type": typ, "ra": ra, "dec": dec, "size": size, "blurb": blurb,
-                     "patch": patch, "spectrum_model": spec, "cube": f"dome/cubes/{pid}.png",
-                     "spectrum": [round(v, 4) for v in rel]})
+            dx, dy = -pm[0] * years * BOOST / PIX, -pm[1] * years * BOOST / PIX
+            sheet = [[0] * (T * COLS) for _ in range(T * ROWS)]
+            for b, r in zip(blist, rel):
+                lam = b["center_um"]
+                img = [[3 + 2.5 * (lam / 5) ** 4 + rnd.gauss(0, 0.45 + 0.3 * lam / 5) for _ in range(T)] for _ in range(T)]
+                for x, y, temp, fl in field:
+                    add_psf(img, x, y, 60 * fl * bb(lam, temp) / fields_norm[temp])
+                if ext:
+                    s2 = 2 * ext * ext
+                    for j in range(T):
+                        for i in range(T):
+                            img[j][i] += 50 * r * math.exp(-((i - c) ** 2 / 1.6 + (j - c) ** 2) / s2)
+                add_psf(img, c + dx, c + dy, 90 * r * var, 0.9)
+                x0, y0 = b["channel"] * T, (b["detector"] - 1) * T
+                for j, row in enumerate(stretch(img, soft=6, peak=110)):
+                    sheet[y0 + j][x0:x0 + T] = row
+            path = f"dome/cubes/{pid}/e{k:02d}.png"
+            png_gray(ROOT / path, sheet)
+            epochs.append({"mjd": mjd, "cube": path, "brightness": round(var, 3)})
+        pois.append({"id": pid, "name": name, "category": cat, "type": typ, "ra": ra, "dec": dec, "size": size,
+                     "blurb": blurb, "patch": patch, "spectrum_model": spec,
+                     "spectrum": [round(v, 4) for v in rel], "epochs": epochs})
     (ROOT / "dome" / "poi.json").write_text(json.dumps({
         "simulated": True,
+        "categories": CATEGORIES,
         "cube_layout": {"tile_px": T, "columns": COLS, "rows": ROWS,
                         "order": "row = detector 1..6 (short to long wavelength), column = channel 0..16 within that detector",
                         "tile_arcsec": round(T * PIX)},
         "spectrum_unit": "relative flux density, max = 1 (cartoon shapes, not real measurements)",
         "pois": pois}, indent=1) + "\n")
-    print(f"dome     {len(pois)} points of interest, {len(blist)} bands each")
+    n_ep = sum(len(p["epochs"]) for p in pois)
+    print(f"dome     {len(pois)} points of interest, {n_ep} dated 102-band cubes")
 
 # ----------------------------------------------------------------
 
 if __name__ == "__main__":
+    import shutil
     blist = bands()
     (ROOT / "dome").mkdir(parents=True, exist_ok=True)
+    shutil.rmtree(ROOT / "dome" / "cubes", ignore_errors=True)     # cubes are fully regenerated
     (ROOT / "dome" / "bands.json").write_text(json.dumps({
         "note": "Approximate SPHEREx bands for testing: 6 detectors x 17 channels, 0.75-5.0 µm. Check against the official band list.",
         "bands": blist}, indent=1) + "\n")
-    for t in TARGETS:
-        make_target(t)
-    make_dome(blist)
+    patches = {t["id"]: make_target(t) for t in TARGETS}
+    make_dome(blist, patches)

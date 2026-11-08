@@ -1,19 +1,23 @@
-// Sky Dome: stand in an open field and look around the SPHEREx sky.
+// Sky Dome: float inside the sky and look around the SPHEREx sky in every direction (full 360°).
 //
-//   dome.html                          open at the horizon
-//   dome.html?poi=rdra                 fly to a point of interest from data/dome/poi.json
-//   dome.html?ra=133.79&dec=-7.24&name=WISE+0855   fly to any coordinates (used by the Viewer)
+//   dome.html                                     open on a wide view of Orion
+//   dome.html?poi=rdra                            fly to a point of interest from data/dome/poi.json
+//   dome.html?ra=133.79&dec=-7.24&name=WISE+0855  fly to any coordinates (used by the Viewer)
+//   extra:  &band=40  &date=2026-03-14  &show=galaxy,white-dwarf
+//   testing: &stress=20000 (add fake points)  &debug (frame times)  &cpu (force the slow fallback)
 //
-// Drawn on a 2D canvas with a stereographic projection (wide views without stretching).
-// Background stars and the Milky Way are illustrative; point-of-interest positions are real.
-// The wavelength bar switches the whole sky between SPHEREx's 102 bands.
+// Speed: the sky, Milky Way and ~30k stars are drawn by the graphics card (WebGL) and only
+// when the view changes. Points of interest are drawn on a 2D layer on top, using a spatial index so
+// only the ones in view are touched, with a cap on dots and labels when there are many.
 
 const D2R = Math.PI / 180, R2D = 180 / Math.PI;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const Q = new URLSearchParams(location.search);
+const DEBUG = Q.has('debug');
 const DET_COLORS = ['#7aa2ff', '#7cc4ff', '#7be0c8', '#c8e07b', '#ffc857', '#ff8f6b'];
-const COMPASS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+const MAX_DOTS = 1500, MAX_LABELS = 45;
 
 // Which spectral features to point out on each kind of spectrum (wavelengths in µm).
 const FEATURES = {
@@ -29,40 +33,41 @@ const FEATURES = {
   'galaxy': [[1.6, 'stellar bump']],
 };
 
+const FALLBACK_CATS = { star: { label: 'Stars', color: '#ffd27a', shape: 'circle' } };
+
 // ---------------------------------------------------------------- state
 
 const S = {
-  lat: 35 * D2R,          // observer latitude
-  lst: 0,                 // local sidereal time (radians): turns the sky
-  az: Math.PI, alt: 20 * D2R, fov: 100 * D2R,   // camera: facing south, a bit up
+  // The view frame is fixed to the sky: celestial north is up, and turning left/right moves along Right Ascension.
+  lat: 90 * D2R, lst: 0,
+  az: Math.PI - 85 * D2R, alt: 0, fov: 100 * D2R, // camera (starts on Orion)
   band: 40, allBands: true,
-  ground: true, labels: true, grid: false,
-  pois: [], bands: [], layout: null,
-  selected: null,         // a POI, or { custom: true, ra, dec, name }
-  hover: null,
-  flight: null,           // running fly-to animation
-  blinkTimer: null,
-  dirtyBg: true,
+  dates: [], dateIdx: null,                       // null = each object's latest image
+  labels: true, grid: false,
+  pois: [], cats: FALLBACK_CATS, bands: [], layout: null,
+  shown: new Set(), search: '', onlyPatch: false,
+  selected: null, hover: null, flight: null,
+  bandTimer: null, dateTimer: null,
+  dirtySky: true, dirtyOverlay: true,
 };
 
 const $ = (s) => document.querySelector(s);
 const dome = $('#dome');
-const canvas = $('#dome-sky');
-const ctx = canvas.getContext('2d');
-const bg = document.createElement('canvas');      // low-res sky + ground, scaled up
-const bgx = bg.getContext('2d');
-let W = 0, H = 0, DPR = 1, F = 1;                // canvas size and projection scale
-let CX = 0, CY = 0;                               // screen point the camera looks at (moves aside for the panel)
+const overlay = $('#dome-sky');
+const octx = overlay.getContext('2d');
+const panel = $('#poi-panel');
+const filterPanel = $('#filter-panel');
+let W = 0, H = 0, DPR = 1, F = 1, CX = 0, CY = 0;
 
 // ---------------------------------------------------------------- vector math
 
-function eqVec(ra, dec) {   // degrees -> unit vector (equatorial)
+function eqVec(ra, dec) {
   const a = ra * D2R, d = dec * D2R;
   return [Math.cos(d) * Math.cos(a), Math.cos(d) * Math.sin(a), Math.sin(d)];
 }
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 
-// Equatorial -> horizontal (x = east, y = north, z = up) for the current latitude and sidereal time.
+// Equatorial -> view frame. With lat = 90° and lst = 0 this is just the sky's own frame (z = celestial north).
 let M = null;
 function updateMatrix() {
   const st = Math.sin(S.lst), ct = Math.cos(S.lst), sp = Math.sin(S.lat), cp = Math.cos(S.lat);
@@ -74,7 +79,6 @@ const toEq = (h) => [M[0][0] * h[0] + M[1][0] * h[1] + M[2][0] * h[2],
                      M[0][2] * h[0] + M[1][2] * h[1] + M[2][2] * h[2]];
 const horAltAz = (h) => [Math.asin(clamp(h[2], -1, 1)), Math.atan2(h[0], h[1])];
 
-// Camera basis in the horizontal frame.
 let CF, CR, CU;
 function updateCamera() {
   const ca = Math.cos(S.alt), sa = Math.sin(S.alt), cz = Math.cos(S.az), sz = Math.sin(S.az);
@@ -82,14 +86,15 @@ function updateCamera() {
   CR = [cz, -sz, 0];
   CU = [CR[1] * CF[2] - CR[2] * CF[1], CR[2] * CF[0] - CR[0] * CF[2], CR[0] * CF[1] - CR[1] * CF[0]];
   F = W / (4 * Math.tan(S.fov / 4));
-  // keep the target in the part of the sky the info panel doesn't cover
-  const open = !panel.hidden;
+  // keep the target in the part of the sky the side panels don't cover
   const narrow = W < 700;
-  CX = W / 2 - (open && !narrow ? Math.min(380, W * 0.35) / 2 : 0);
-  CY = H / 2 - (open && narrow ? H * 0.22 : 0);
+  const right = !panel.hidden && !narrow ? Math.min(380, W * 0.35) : 0;
+  const left = !filterPanel.hidden && !narrow ? Math.min(330, W * 0.3) : 0;
+  CX = W / 2 + (left - right) / 2;
+  CY = H / 2 - (!panel.hidden && narrow ? H * 0.22 : 0);
 }
 
-// Horizontal direction -> screen. Returns null when behind the viewer.
+// Stereographic projection: horizontal direction -> screen point (CSS px), null if behind you.
 function project(h) {
   const z = dot(h, CF);
   if (z < -0.3) return null;
@@ -101,20 +106,12 @@ function unproject(px, py) {
   const x = 2 * u / (1 + s), y = 2 * v / (1 + s), z = (1 - s) / (1 + s);
   return [x * CR[0] + y * CU[0] + z * CF[0], x * CR[1] + y * CU[1] + z * CF[1], x * CR[2] + y * CU[2] + z * CF[2]];
 }
-
-// Treeline: horizon height (radians) at azimuth az.
-function horizonAt(az) {
-  let h = 0.5 + 0.6 * Math.sin(az * 3 + 1) * Math.sin(az * 7 + 2) + 0.4 * Math.sin(az * 13);
-  for (const [c, w, ht] of TREES) {
-    let d = Math.abs(((az - c + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-    if (d < w) h += ht * Math.sqrt(1 - (d / w) ** 2) * (0.85 + 0.15 * Math.sin(az * 200));
-  }
-  return Math.max(0, h) * D2R;
+function viewRadius() {   // angle from view center to the farthest screen corner
+  const r = Math.hypot(Math.max(CX, W - CX), Math.max(CY, H - CY));
+  return 2 * Math.atan(r / (2 * F));
 }
-const TREES = [[0.3, 0.05, 4], [0.38, 0.03, 3], [1.9, 0.08, 3.5], [2.05, 0.04, 5], [3.4, 0.06, 2.5],
-               [4.4, 0.05, 4.5], [4.5, 0.035, 3], [5.6, 0.09, 3]].map(([c, w, h]) => [c, w, h]);
 
-// ---------------------------------------------------------------- wavelength
+// ---------------------------------------------------------------- wavelength + date helpers
 
 function lambda() { return S.allBands ? null : S.bands[S.band].center_um; }
 
@@ -123,299 +120,535 @@ function bb(lam, T) {
   return x > 700 ? 0 : 1 / (lam ** 3 * (Math.exp(x) - 1));
 }
 
-function bandFactor(spectrum) {          // brightness of a POI in the chosen band (0..1)
-  if (!spectrum) return 1;
-  if (S.allBands) return spectrum.reduce((a, b) => a + b, 0) / spectrum.length / Math.max(...spectrum) * 1.4;
-  return spectrum[S.band];
+function bandFactor(poi) {
+  const sp = poi.spectrum;
+  if (!sp) return 0.8;
+  if (S.allBands) return poi._mean;
+  return sp[S.band];
 }
+
+function currentMjd() { return S.dateIdx === null ? Infinity : S.dates[S.dateIdx]; }
+
+// The object's image for the chosen date: the latest one taken on or before it.
+function epochOf(poi) {
+  const eps = poi.epochs;
+  if (!eps?.length) return null;
+  const t = currentMjd();
+  let i = -1;
+  for (let k = 0; k < eps.length; k++) if (eps[k].mjd <= t + 0.5) i = k;
+  return i < 0 ? { i: 0, ep: eps[0], before: true } : { i, ep: eps[i], before: false };
+}
+
+function iso(mjd) { return mjdToDate(mjd); }
 
 // ---------------------------------------------------------------- background stars (illustrative)
 
 const NGP = eqVec(192.85948, 27.12825), GC = eqVec(266.4168, -29.0078), NEP = eqVec(270, 66.5607);
-const STARS = (() => {
+const TEMPS = [3000, 3600, 4500, 5800, 7500, 11000, 20000];
+const TEMP_RGB = [[255, 190, 150], [255, 210, 170], [255, 230, 200], [255, 248, 235], [235, 240, 255], [205, 220, 255], [185, 205, 255]];
+const BAND_F = new Float32Array(7).fill(1);        // brightness of each star color in the chosen band
+
+function makeStars(n) {
   let s = 12345;
   const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const out = [];
-  while (out.length < 12000) {
+  const out = new Float32Array(n * 5);
+  let k = 0;
+  while (k < n) {
     const z = rand() * 2 - 1, t = rand() * Math.PI * 2, r = Math.sqrt(1 - z * z);
     const v = [r * Math.cos(t), r * Math.sin(t), z];
     const b = Math.asin(dot(v, NGP));
-    if (rand() > 0.3 + 0.7 * Math.exp(-(((b / 0.25)) ** 2))) continue;     // crowd toward the Milky Way
-    // the first 3200 are naked-eye stars; the rest are faint ones that appear as you zoom in
-    const mag = out.length < 3200 ? 6.6 - 5.6 * rand() ** 3.5 : 6.6 + 3 * rand() ** 0.5;
-    const T = [3000, 3600, 4500, 5800, 7500, 11000, 20000][Math.floor(rand() ** 1.4 * 7)];
-    out.push({ v, mag, T, f: 1, tw: rand() * 6.28 });
+    if (rand() > 0.3 + 0.7 * Math.exp(-((b / 0.25) ** 2))) continue;   // crowd toward the Milky Way
+    const mag = k < 3200 ? 6.6 - 5.6 * rand() ** 3.5 : 6.6 + 3 * rand() ** 0.5;
+    out.set([v[0], v[1], v[2], mag, Math.floor(rand() ** 1.4 * 7)], k * 5);
+    k++;
   }
   return out;
-})();
-const STAR_RGB = { 3000: '255,190,150', 3600: '255,210,170', 4500: '255,230,200', 5800: '255,248,235',
-                   7500: '235,240,255', 11000: '205,220,255', 20000: '185,205,255' };
-
-function updateStarBand() {
-  const lam = lambda();
-  const norm = {};
-  for (const T of Object.keys(STAR_RGB)) norm[T] = Math.max(...S.bands.map(b => bb(b.center_um, +T)));
-  for (const st of STARS) st.f = lam ? Math.pow(bb(lam, st.T) / norm[st.T], 0.6) : 1;
 }
 
-// ---------------------------------------------------------------- sky + ground (low-res, per pixel)
-
-const BG_SCALE = 3;
-function renderBackground() {
-  const w = bg.width, h = bg.height;
-  const img = bgx.createImageData(w, h), d = img.data;
+function updateBandFactors() {
   const lam = lambda();
-  const ln = lam ? (lam - 0.75) / 4.25 : 0.5;          // 0 at 0.75 µm, 1 at 5 µm
-  const mwGain = 0.75 + 0.5 * ln;                      // dust hides less at long wavelengths
-  const zodiGain = lam ? 0.15 + 1.4 * Math.max(0, ln - 0.55) ** 1.5 * 3 : 0.35;   // zodiacal glow rises past ~3.5 µm
-  for (let j = 0; j < h; j++) {
-    for (let i = 0; i < w; i++) {
-      const hv = unproject((i + 0.5) * BG_SCALE, (j + 0.5) * BG_SCALE);
-      const [alt, az] = horAltAz(hv);
-      const p = (j * w + i) * 4;
-      if (S.ground && alt < horizonAt(az)) {
-        // ground: dark field, a little lighter toward the horizon
-        const g = clamp(1 + alt / 0.5, 0, 1);
-        const n = Math.sin(az * 90 + alt * 300) * Math.sin(az * 37 - alt * 170);
-        d[p] = 6 + 10 * g + n * 2; d[p + 1] = 13 + 20 * g + n * 3; d[p + 2] = 9 + 12 * g; d[p + 3] = 255;
-        if (alt > horizonAt(az) - 0.012 && alt > 0.001) { d[p] = 3; d[p + 1] = 6; d[p + 2] = 5; }   // tree edge
-        continue;
-      }
-      const e = toEq(hv);
-      const b = Math.asin(clamp(dot(e, NGP), -1, 1));
-      const gc = Math.acos(clamp(dot(e, GC), -1, 1));
-      const mott = 0.75 + 0.25 * Math.sin(e[0] * 23 + e[1] * 9) * Math.sin(e[1] * 17 - e[2] * 29) +
-                   0.15 * Math.sin(e[0] * 61 - e[2] * 47);
-      const dust = 1 - 0.55 * Math.exp(-(((b / 0.03)) ** 2)) * (1 - ln);   // dark lane, fades in the infrared
-      let mw = (0.55 * Math.exp(-(((b / 0.17)) ** 2)) + 0.9 * Math.exp(-(((gc / 0.45)) ** 2))) * mott * dust * mwGain;
-      const beta = Math.asin(clamp(dot(e, NEP), -1, 1));
-      const zodi = zodiGain * 0.35 * Math.exp(-(((beta / 0.45)) ** 2));
-      const glow = Math.exp(-Math.max(alt, 0) / 0.18);              // brighter toward the horizon
-      d[p]     = clamp(2 + 14 * glow + 70 * mw + 60 * zodi, 0, 255);
-      d[p + 1] = clamp(4 + 22 * glow + 72 * mw + 45 * zodi, 0, 255);
-      d[p + 2] = clamp(10 + 40 * glow + 90 * mw + 30 * zodi, 0, 255);
-      d[p + 3] = 255;
+  TEMPS.forEach((T, i) => {
+    BAND_F[i] = lam ? Math.pow(bb(lam, T) / Math.max(...S.bands.map(b => bb(b.center_um, T))), 0.6) : 1;
+  });
+}
+
+function waveParams() {
+  const lam = lambda();
+  const ln = lam ? (lam - 0.75) / 4.25 : 0.5;
+  return [ln, 0.75 + 0.5 * ln, lam ? 0.15 + 1.4 * Math.max(0, ln - 0.55) ** 1.5 * 3 : 0.35];
+}
+
+const limitMag = () => clamp(6.6 + 2.2 * Math.log2((90 * D2R) / S.fov), 6.6, 9.6);
+const zoomBoost = () => clamp(Math.sqrt((60 * D2R) / S.fov), 0.8, 3);
+
+// ---------------------------------------------------------------- GPU sky (WebGL)
+
+const GLSL_COMMON = `
+uniform mat3 uM; uniform vec3 uR; uniform vec3 uU; uniform vec3 uFw;
+uniform vec2 uC; uniform float uF;`;
+
+const SKY_VS = `attribute vec2 aP; void main() { gl_Position = vec4(aP, 0.0, 1.0); }`;
+const SKY_FS = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+${GLSL_COMMON}
+uniform vec3 uNGP; uniform vec3 uGC; uniform vec3 uNEP; uniform vec3 uWave;
+float sq(float x) { return x * x; }
+void main() {
+  vec2 p = gl_FragCoord.xy;
+  float u = (p.x - uC.x) / (2.0 * uF), v = (p.y - uC.y) / (2.0 * uF), s = u * u + v * v;
+  vec3 hv = (2.0 * u / (1.0 + s)) * uR + (2.0 * v / (1.0 + s)) * uU + ((1.0 - s) / (1.0 + s)) * uFw;
+  vec3 e = hv * uM;   // transpose(M) * hv: back to equatorial
+  float b = asin(clamp(dot(e, uNGP), -1.0, 1.0));
+  float gc = acos(clamp(dot(e, uGC), -1.0, 1.0));
+  float mott = 0.75 + 0.25 * sin(e.x * 23.0 + e.y * 9.0) * sin(e.y * 17.0 - e.z * 29.0) + 0.15 * sin(e.x * 61.0 - e.z * 47.0);
+  float dust = 1.0 - 0.55 * exp(-sq(b / 0.03)) * (1.0 - uWave.x);
+  float mw = (0.55 * exp(-sq(b / 0.17)) + 0.9 * exp(-sq(gc / 0.45))) * mott * dust * uWave.y;
+  float beta = asin(clamp(dot(e, uNEP), -1.0, 1.0));
+  float zodi = uWave.z * 0.35 * exp(-sq(beta / 0.45));
+  vec3 c = vec3(2.0 + 70.0 * mw + 60.0 * zodi,
+                4.0 + 72.0 * mw + 45.0 * zodi,
+                9.0 + 90.0 * mw + 30.0 * zodi) / 255.0;
+  gl_FragColor = vec4(c, 1.0);
+}`;
+
+const STAR_VS = `
+precision highp float;
+${GLSL_COMMON}
+attribute vec3 aV; attribute vec2 aMT;
+uniform vec2 uRes; uniform float uLimit; uniform float uZoom; uniform float uDpr;
+uniform float uBandF[7]; uniform vec3 uCol[7];
+varying vec3 vCol; varying float vA;
+void main() {
+  vA = 0.0; vCol = vec3(0.0); gl_PointSize = 0.0; gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+  if (aMT.x > uLimit) return;
+  vec3 h = uM * aV;
+  float z = dot(h, uFw);
+  if (z < -0.3) return;
+  float k = 2.0 * uF / (1.0 + z);
+  vec2 p = uC + k * vec2(dot(h, uR), dot(h, uU));
+  gl_Position = vec4(p / uRes * 2.0 - 1.0, 0.0, 1.0);
+  float f = 1.0; vec3 col = vec3(1.0);
+  for (int i = 0; i < 7; i++) { if (float(i) == aMT.y) { f = uBandF[i]; col = uCol[i]; } }
+  vA = clamp((uLimit + 0.4 - aMT.x) / 5.5, 0.12, 1.0) * f;
+  float r = max(0.6, (uLimit + 0.2 - aMT.x) * 0.42 * uZoom * (0.6 + 0.4 * f));
+  gl_PointSize = 2.0 * r * uDpr + 2.0;
+  vCol = col;
+}`;
+const STAR_FS = `
+precision mediump float;
+varying vec3 vCol; varying float vA;
+void main() {
+  float d = length(gl_PointCoord - 0.5) * 2.0;
+  float a = vA * (1.0 - smoothstep(0.35, 1.0, d));
+  gl_FragColor = vec4(vCol * a, a);
+}`;
+
+function initGL(canvas) {
+  if (Q.has('cpu')) return null;
+  const gl = canvas.getContext('webgl', { antialias: false, alpha: false, preserveDrawingBuffer: false });
+  if (!gl) return null;
+  const compile = (type, src) => {
+    const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+    return sh;
+  };
+  const program = (vs, fs) => {
+    const p = gl.createProgram();
+    gl.attachShader(p, compile(gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    const u = {};
+    const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+    for (let i = 0; i < n; i++) {
+      const name = gl.getActiveUniform(p, i).name.replace('[0]', '');
+      u[name] = gl.getUniformLocation(p, name);
     }
-  }
-  bgx.putImageData(img, 0, 0);
-  S.dirtyBg = false;
-}
+    return { p, u };
+  };
+  let sky, stars;
+  try { sky = program(SKY_VS, SKY_FS); stars = program(STAR_VS, STAR_FS); }
+  catch (err) { console.warn('WebGL shaders failed, using the slower fallback.', err); return null; }
 
-// ---------------------------------------------------------------- drawing
+  const quad = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const starData = makeStars(30000);
+  const starBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, starBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, starData, gl.STATIC_DRAW);
+  const cols = new Float32Array(TEMP_RGB.flat().map(v => v / 255));
 
-const poiScreen = [];   // [{poi, x, y, r}] for clicking
-
-function typeColor(t) {
-  t = t.toLowerCase();
-  if (t.includes('dwarf')) return '#ff8f6b';
-  if (t.includes('nebula') || t.includes('cloud') || t.includes('remnant')) return '#ff7ac8';
-  if (t.includes('galax') || t.includes('field') || t.includes('center')) return '#b49cff';
-  if (t.includes('variable') || t.includes('young')) return '#7be0c8';
-  return '#ffd27a';
-}
-
-function draw(now) {
-  updateCamera();
-  if (S.dirtyBg) renderBackground();
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(bg, 0, 0, W, H);
-
-  // stars
-  const zoom = clamp(Math.sqrt((60 * D2R) / S.fov), 0.8, 3);
-  const limit = clamp(6.6 + 2.2 * Math.log2((90 * D2R) / S.fov), 6.6, 9.6);   // zooming in reveals fainter stars
-  for (const st of STARS) {
-    if (st.mag > limit) continue;
-    const h = toHor(st.v);
-    const alt = Math.asin(h[2]);
-    if (S.ground && alt < horizonAt(Math.atan2(h[0], h[1]))) continue;
-    const p = project(h);
-    if (!p || p[0] < -5 || p[1] < -5 || p[0] > W + 5 || p[1] > H + 5) continue;
-    const ext = clamp((alt * R2D + 2) / 12, 0.15, 1);                    // dimmer near the horizon
-    const a = clamp((limit + 0.4 - st.mag) / 5.5, 0.12, 1) * st.f * ext * (0.9 + 0.1 * Math.sin(now / 700 + st.tw));
-    if (a < 0.03) continue;
-    const r = Math.max(0.6, (limit + 0.2 - st.mag) * 0.42 * zoom * (0.6 + 0.4 * st.f));
-    ctx.fillStyle = `rgba(${STAR_RGB[st.T]},${a})`;
-    ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, 6.283); ctx.fill();
+  function common(u) {
+    // mat3 is column-major in GLSL: column j = (M[0][j], M[1][j], M[2][j]) so that uM * eq = M · eq
+    gl.uniformMatrix3fv(u.uM, false, new Float32Array([M[0][0], M[1][0], M[2][0], M[0][1], M[1][1], M[2][1], M[0][2], M[1][2], M[2][2]]));
+    gl.uniform3fv(u.uR, CR); gl.uniform3fv(u.uU, CU); gl.uniform3fv(u.uFw, CF);
+    gl.uniform2f(u.uC, CX * DPR, (H - CY) * DPR);
+    gl.uniform1f(u.uF, F * DPR);
   }
 
+  return {
+    kind: 'webgl',
+    resize() { canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR); gl.viewport(0, 0, canvas.width, canvas.height); },
+    render() {
+      gl.disable(gl.BLEND);
+      gl.useProgram(sky.p);
+      common(sky.u);
+      gl.uniform3fv(sky.u.uNGP, NGP); gl.uniform3fv(sky.u.uGC, GC); gl.uniform3fv(sky.u.uNEP, NEP);
+      gl.uniform3fv(sky.u.uWave, waveParams());
+      gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+      const aP = gl.getAttribLocation(sky.p, 'aP');
+      gl.enableVertexAttribArray(aP);
+      gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.disableVertexAttribArray(aP);
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.useProgram(stars.p);
+      common(stars.u);
+      gl.uniform2f(stars.u.uRes, canvas.width, canvas.height);
+      gl.uniform1f(stars.u.uLimit, limitMag());
+      gl.uniform1f(stars.u.uZoom, zoomBoost());
+      gl.uniform1f(stars.u.uDpr, DPR);
+      gl.uniform1fv(stars.u.uBandF, BAND_F);
+      gl.uniform3fv(stars.u.uCol, cols);
+      gl.bindBuffer(gl.ARRAY_BUFFER, starBuf);
+      const aV = gl.getAttribLocation(stars.p, 'aV'), aMT = gl.getAttribLocation(stars.p, 'aMT');
+      gl.enableVertexAttribArray(aV); gl.enableVertexAttribArray(aMT);
+      gl.vertexAttribPointer(aV, 3, gl.FLOAT, false, 20, 0);
+      gl.vertexAttribPointer(aMT, 2, gl.FLOAT, false, 20, 12);
+      gl.drawArrays(gl.POINTS, 0, starData.length / 5);
+      gl.disableVertexAttribArray(aV); gl.disableVertexAttribArray(aMT);
+    },
+  };
+}
+
+// ---------------------------------------------------------------- CPU sky (fallback when WebGL is missing)
+
+function initCPU(canvas) {
+  const ctx = canvas.getContext('2d');
+  const SCALE = 5;
+  const bg = document.createElement('canvas'), bgx = bg.getContext('2d');
+  const stars = makeStars(4000);
+  return {
+    kind: 'cpu',
+    resize() {
+      canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+      bg.width = Math.ceil(W / SCALE); bg.height = Math.ceil(H / SCALE);
+    },
+    render() {
+      const w = bg.width, h = bg.height, img = bgx.createImageData(w, h), d = img.data;
+      const [ln, mwGain, zodiGain] = waveParams();
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+        const hv = unproject((i + 0.5) * SCALE, (j + 0.5) * SCALE);
+        const p = (j * w + i) * 4;
+        d[p + 3] = 255;
+        const e = toEq(hv);
+        const b = Math.asin(clamp(dot(e, NGP), -1, 1)), gc = Math.acos(clamp(dot(e, GC), -1, 1));
+        const dust = 1 - 0.55 * Math.exp(-((b / 0.03) ** 2)) * (1 - ln);
+        const mw = (0.55 * Math.exp(-((b / 0.17) ** 2)) + 0.9 * Math.exp(-((gc / 0.45) ** 2))) * dust * mwGain;
+        const zodi = zodiGain * 0.35 * Math.exp(-((Math.asin(clamp(dot(e, NEP), -1, 1)) / 0.45) ** 2));
+        d[p] = 2 + 70 * mw + 60 * zodi; d[p + 1] = 4 + 72 * mw + 45 * zodi; d[p + 2] = 9 + 90 * mw + 30 * zodi;
+      }
+      bgx.putImageData(img, 0, 0);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.drawImage(bg, 0, 0, W, H);
+      const lim = limitMag(), zoom = zoomBoost();
+      for (let k = 0; k < stars.length; k += 5) {
+        const mag = stars[k + 3];
+        if (mag > lim) continue;
+        const h = toHor([stars[k], stars[k + 1], stars[k + 2]]);
+        const p = project(h);
+        if (!p || p[0] < 0 || p[1] < 0 || p[0] > W || p[1] > H) continue;
+        const ti = stars[k + 4], f = BAND_F[ti];
+        const a = clamp((lim + 0.4 - mag) / 5.5, 0.12, 1) * f;
+        ctx.fillStyle = `rgba(${TEMP_RGB[ti].join()},${a})`;
+        ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(0.6, (lim + 0.2 - mag) * 0.42 * zoom), 0, 6.283); ctx.fill();
+      }
+    },
+  };
+}
+
+const sky = initGL($('#dome-gl')) || initCPU($('#dome-gl'));
+
+// ---------------------------------------------------------------- points of interest: index + filter
+
+// Spatial index: points are grouped into cells of the unit sphere so we only look at cells in view.
+let CELLS = [];
+function buildIndex() {
+  const SZ = 0.125, map = new Map();
+  for (const p of S.pois) {
+    const key = p.vec.map(c => Math.floor((c + 1) / SZ)).join();
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(p);
+  }
+  CELLS = [...map.values()].map(items => {
+    const c = [0, 0, 0];
+    for (const p of items) { c[0] += p.vec[0]; c[1] += p.vec[1]; c[2] += p.vec[2]; }
+    const n = Math.hypot(...c) || 1;
+    c[0] /= n; c[1] /= n; c[2] /= n;
+    let r = 0;
+    for (const p of items) r = Math.max(r, Math.acos(clamp(dot(c, p.vec), -1, 1)));
+    items.sort((a, b) => b.size - a.size);
+    return { c, r, items };
+  });
+}
+
+function passesFilter(p) {
+  if (!S.shown.has(p.category)) return false;
+  if (S.onlyPatch && !p.patch) return false;
+  if (S.search && !p._search.includes(S.search)) return false;
+  return true;
+}
+
+function visiblePois() {
+  const fEq = toEq(CF), view = viewRadius() + 0.05;
+  const out = [];
+  for (const cell of CELLS) {
+    if (Math.acos(clamp(dot(cell.c, fEq), -1, 1)) - cell.r > view) continue;
+    for (const p of cell.items) if (passesFilter(p) || p === S.selected) out.push(p);
+  }
+  if (out.length > MAX_DOTS) {
+    out.sort((a, b) => b.size - a.size);
+    out.length = MAX_DOTS;
+    if (S.selected && !S.selected.custom && !out.includes(S.selected)) out.push(S.selected);
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------- drawing the overlay
+
+const SPRITES = {};
+function glowSprite(color) {          // a soft glow per color, made once and reused
+  if (SPRITES[color]) return SPRITES[color];
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d').createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, color + 'aa'); g.addColorStop(1, color + '00');
+  const x = c.getContext('2d'); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+  return (SPRITES[color] = c);
+}
+
+// Marker shapes: each type has its own shape, so color isn't the only clue.
+function shapePath(ctx, shape, x, y, r) {
+  ctx.beginPath();
+  switch (shape) {
+    case 'diamond': ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y); ctx.closePath(); break;
+    case 'square': ctx.rect(x - r * 0.8, y - r * 0.8, r * 1.6, r * 1.6); break;
+    case 'triangle': ctx.moveTo(x, y - r); ctx.lineTo(x + r * 0.95, y + r * 0.7); ctx.lineTo(x - r * 0.95, y + r * 0.7); ctx.closePath(); break;
+    case 'hexagon': for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; ctx[i ? 'lineTo' : 'moveTo'](x + r * Math.cos(a), y + r * Math.sin(a)); } ctx.closePath(); break;
+    case 'ellipse': ctx.ellipse(x, y, r * 1.25, r * 0.7, -0.5, 0, 6.283); break;
+    case 'cross': ctx.moveTo(x - r, y); ctx.lineTo(x + r, y); ctx.moveTo(x, y - r); ctx.lineTo(x, y + r); ctx.arc(x, y, r * 0.55, 0, 6.283); break;
+    case 'ring': ctx.arc(x, y, r, 0, 6.283); ctx.moveTo(x + r * 1.5, y); ctx.ellipse(x, y, r * 1.5, r * 0.45, -0.3, 0, 6.283); break;
+    default: ctx.arc(x, y, r, 0, 6.283);
+  }
+}
+
+function catOf(p) { return S.cats[p.category] || { color: '#ffd27a', shape: 'circle', label: p.category }; }
+
+const poiScreen = [];
+function drawOverlay(now) {
+  octx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  octx.clearRect(0, 0, W, H);
   if (S.grid) drawGrid();
-  drawCompass();
+  drawPoles();
   drawPois(now);
   if (S.selected?.custom) drawCustomTarget(now);
-  updateStatus();
 }
 
 function drawGrid() {
-  ctx.strokeStyle = 'rgba(124,196,255,0.18)';
-  ctx.lineWidth = 1;
-  for (const altDeg of [15, 30, 45, 60, 75]) {
-    ctx.beginPath();
+  octx.strokeStyle = 'rgba(124,196,255,0.18)';
+  octx.lineWidth = 1;
+  const line = (pts) => {
+    octx.beginPath();
     let pen = false;
-    for (let a = 0; a <= 360; a += 3) {
-      const h = [Math.cos(altDeg * D2R) * Math.sin(a * D2R), Math.cos(altDeg * D2R) * Math.cos(a * D2R), Math.sin(altDeg * D2R)];
+    for (const h of pts) {
       const p = project(h);
       if (!p) { pen = false; continue; }
-      pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); pen = true;
+      pen ? octx.lineTo(p[0], p[1]) : octx.moveTo(p[0], p[1]); pen = true;
     }
-    ctx.stroke();
-  }
-  for (let a = 0; a < 360; a += 45) {
-    ctx.beginPath();
-    let pen = false;
-    for (let altDeg = 0; altDeg <= 88; altDeg += 4) {
-      const h = [Math.cos(altDeg * D2R) * Math.sin(a * D2R), Math.cos(altDeg * D2R) * Math.cos(a * D2R), Math.sin(altDeg * D2R)];
-      const p = project(h);
-      if (!p) { pen = false; continue; }
-      pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); pen = true;
-    }
-    ctx.stroke();
-  }
+    octx.stroke();
+  };
+  const dir = (a, al) => [Math.cos(al * D2R) * Math.sin(a * D2R), Math.cos(al * D2R) * Math.cos(a * D2R), Math.sin(al * D2R)];
+  for (const al of [-60, -30, 0, 30, 60]) line(Array.from({ length: 121 }, (_, i) => dir(i * 3, al)));     // declination circles
+  for (let a = 0; a < 360; a += 30) line(Array.from({ length: 45 }, (_, i) => dir(a, -88 + i * 4)));   // RA lines, every 2 hours
 }
 
-function drawCompass() {
-  ctx.font = '700 14px "Atkinson Hyperlegible Next", sans-serif';
-  ctx.textAlign = 'center';
-  for (let i = 0; i < 8; i++) {
-    const az = i * 45 * D2R;
-    const altL = horizonAt(az) + 1.5 * D2R;
-    const p = project([Math.cos(altL) * Math.sin(az), Math.cos(altL) * Math.cos(az), Math.sin(altL)]);
+function drawPoles() {
+  octx.font = '700 12px "Atkinson Hyperlegible Next", sans-serif';
+  octx.textAlign = 'center';
+  for (const [v, name] of [[[0, 0, 1], 'North celestial pole'], [[0, 0, -1], 'South celestial pole']]) {
+    const p = project(toHor(v));
     if (!p || p[0] < 0 || p[0] > W || p[1] < 0 || p[1] > H) continue;
-    ctx.fillStyle = i % 2 ? 'rgba(154,166,191,0.7)' : 'rgba(255,200,87,0.95)';
-    ctx.fillText(COMPASS[i], p[0], p[1]);
+    octx.strokeStyle = 'rgba(255,200,87,0.8)'; octx.lineWidth = 1.5;
+    octx.beginPath(); octx.moveTo(p[0] - 8, p[1]); octx.lineTo(p[0] + 8, p[1]); octx.moveTo(p[0], p[1] - 8); octx.lineTo(p[0], p[1] + 8); octx.stroke();
+    octx.fillStyle = 'rgba(255,200,87,0.9)';
+    octx.fillText(name, p[0], p[1] + 22);
   }
-}
-
-function poiAltOk(h) {
-  return !S.ground || Math.asin(h[2]) > horizonAt(Math.atan2(h[0], h[1])) - 0.5 * D2R;
 }
 
 function drawPois(now) {
   poiScreen.length = 0;
   const zoom = clamp(Math.sqrt((60 * D2R) / S.fov), 0.8, 2.6);
-  ctx.textAlign = 'left';
-  for (const poi of S.pois) {
+  const placed = [];                                    // label boxes already used
+  const labelQueue = [];
+  const onScreen = [];
+  for (const poi of visiblePois()) {
     const h = toHor(poi.vec);
-    if (!poiAltOk(h)) continue;
     const p = project(h);
     if (!p || p[0] < -40 || p[1] < -40 || p[0] > W + 40 || p[1] > H + 40) continue;
-    const f = clamp(bandFactor(poi.spectrum), 0, 1);
-    const base = (3 + poi.size * 1.8) * zoom;
-    const r = base * (0.35 + 0.65 * Math.sqrt(f));
-    const col = typeColor(poi.type);
+    onScreen.push([poi, p]);
+  }
+  // Level of detail: with lots on screen, small objects become plain dots, one batch per color.
+  const busy = onScreen.length > 250;
+  const batches = {};
+  for (const [poi, p] of onScreen) {
+    if (!busy || poi.size >= 3 || poi === S.selected || poi === S.hover) continue;
+    const col = catOf(poi).color;
+    (batches[col] ||= []).push(p);
+    poiScreen.push({ poi, x: p[0], y: p[1], r: 7 });
+  }
+  for (const [col, pts] of Object.entries(batches)) {
+    octx.fillStyle = col;
+    octx.beginPath();
+    for (const [x, y] of pts) { octx.moveTo(x + 2.5, y); octx.arc(x, y, 2.5, 0, 6.283); }
+    octx.fill();
+  }
+  for (const [poi, p] of onScreen) {
+    if (busy && poi.size < 3 && poi !== S.selected && poi !== S.hover) continue;
+    const ep = epochOf(poi);
+    const f = clamp(bandFactor(poi) * (ep ? ep.ep.brightness : 1), 0, 1.3);
+    const cat = catOf(poi);
+    const r = (3 + poi.size * 1.8) * zoom * (0.35 + 0.65 * Math.sqrt(f));
     const sel = S.selected === poi, hov = S.hover === poi;
-    const pulse = 1 + 0.15 * Math.sin(now / 350);
-
-    const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], r * 3.2);
-    g.addColorStop(0, col + 'aa'); g.addColorStop(1, col + '00');
-    ctx.globalAlpha = 0.35 + 0.65 * f;
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(p[0], p[1], r * 3.2, 0, 6.283); ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1.5, r * 0.45), 0, 6.283); ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = col;
-    ctx.lineWidth = sel ? 2.5 : 1.5;
-    ctx.beginPath(); ctx.arc(p[0], p[1], (r + 5) * (sel ? pulse : 1), 0, 6.283); ctx.stroke();
+    const notYet = ep?.before;                          // chosen date is before its first image
+    octx.globalAlpha = notYet ? 0.25 : 0.35 + 0.5 * Math.min(f, 1);
+    const R = r * 3.2;
+    octx.drawImage(glowSprite(cat.color), p[0] - R, p[1] - R, R * 2, R * 2);
+    octx.globalAlpha = notYet ? 0.4 : 1;
+    octx.fillStyle = '#fff';
+    octx.beginPath(); octx.arc(p[0], p[1], Math.max(1.3, r * 0.4), 0, 6.283); octx.fill();
+    octx.strokeStyle = cat.color;
+    octx.lineWidth = sel ? 2.5 : 1.6;
+    if (cat.shape === 'dashed' || notYet) octx.setLineDash([4, 3]);
+    shapePath(octx, cat.shape, p[0], p[1], (r + 5) * (sel ? 1 + 0.15 * Math.sin(now / 350) : 1));
+    octx.stroke();
+    octx.setLineDash([]);
     if (sel || hov) {
-      ctx.strokeStyle = '#ffc857';
-      ctx.beginPath(); ctx.arc(p[0], p[1], r + 11, 0, 6.283); ctx.stroke();
+      octx.strokeStyle = '#ffc857';
+      octx.beginPath(); octx.arc(p[0], p[1], r + 12, 0, 6.283); octx.stroke();
     }
+    octx.globalAlpha = 1;
     poiScreen.push({ poi, x: p[0], y: p[1], r: r + 10 });
-
-    if (S.labels && (sel || hov || poi.size >= 4 || S.fov < 70 * D2R)) {
-      ctx.font = `${sel ? 700 : 400} 13px "Atkinson Hyperlegible Next", sans-serif`;
-      ctx.fillStyle = '#000a';
-      const tx = p[0] + r + 9, ty = p[1] + 4;
-      ctx.fillText(poi.name, tx + 1, ty + 1);
-      ctx.fillStyle = sel ? '#ffc857' : '#e8ecf6';
-      ctx.fillText(poi.name, tx, ty);
-    }
+    const few = onScreen.length <= 40;                  // e.g. after filtering: name everything
+    if (S.labels && (sel || hov || few || poi.size >= 4 || S.fov < 70 * D2R)) labelQueue.push({ poi, x: p[0] + r + 9, y: p[1] + 4, sel, hov });
+  }
+  // labels: selected and hovered first, then biggest; skip any that would overlap
+  labelQueue.sort((a, b) => (b.sel - a.sel) || (b.hov - a.hov) || (b.poi.size - a.poi.size));
+  let n = 0;
+  for (const L of labelQueue) {
+    if (n >= MAX_LABELS && !L.sel && !L.hov) break;
+    octx.font = `${L.sel ? 700 : 400} 13px "Atkinson Hyperlegible Next", sans-serif`;
+    const w = octx.measureText(L.poi.name).width;
+    const box = [L.x - 2, L.y - 12, w + 4, 16];
+    if (!L.sel && !L.hov && placed.some(b => box[0] < b[0] + b[2] && b[0] < box[0] + box[2] && box[1] < b[1] + b[3] && b[1] < box[1] + box[3])) continue;
+    placed.push(box);
+    octx.fillStyle = '#000a'; octx.fillText(L.poi.name, L.x + 1, L.y + 1);
+    octx.fillStyle = L.sel ? '#ffc857' : '#e8ecf6'; octx.fillText(L.poi.name, L.x, L.y);
+    n++;
   }
 }
 
 function drawCustomTarget(now) {
-  const t = S.selected;
-  const h = toHor(t.vec);
-  const p = project(h);
+  const t = S.selected, p = project(toHor(t.vec));
   if (!p) return;
   const r = 14 + 2 * Math.sin(now / 300);
-  ctx.strokeStyle = '#ffc857'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, 6.283); ctx.stroke();
+  octx.strokeStyle = '#ffc857'; octx.lineWidth = 2;
+  octx.beginPath(); octx.arc(p[0], p[1], r, 0, 6.283); octx.stroke();
   for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-    ctx.beginPath(); ctx.moveTo(p[0] + dx * (r + 4), p[1] + dy * (r + 4)); ctx.lineTo(p[0] + dx * (r + 14), p[1] + dy * (r + 14)); ctx.stroke();
+    octx.beginPath(); octx.moveTo(p[0] + dx * (r + 4), p[1] + dy * (r + 4)); octx.lineTo(p[0] + dx * (r + 14), p[1] + dy * (r + 14)); octx.stroke();
   }
-  ctx.font = '700 13px "Atkinson Hyperlegible Next", sans-serif';
-  ctx.fillStyle = '#ffc857'; ctx.textAlign = 'left';
-  ctx.fillText(t.name, p[0] + r + 18, p[1] + 4);
+  octx.font = '700 13px "Atkinson Hyperlegible Next", sans-serif';
+  octx.fillStyle = '#ffc857'; octx.textAlign = 'left';
+  octx.fillText(t.name, p[0] + r + 18, p[1] + 4);
 }
 
 function updateStatus() {
-  const facing = COMPASS[Math.round((((S.az * R2D) % 360) + 360) % 360 / 45) % 8];
+  const e = toEq(CF);
+  const ra = ((Math.atan2(e[1], e[0]) * R2D) + 360) % 360, dec = Math.asin(clamp(e[2], -1, 1)) * R2D;
   $('#dome-status').innerHTML =
-    `<strong>Field at ${Math.abs(Math.round(S.lat * R2D))}°${S.lat >= 0 ? 'N' : 'S'}</strong><br>` +
-    `Facing ${facing}, ${Math.round(S.alt * R2D)}° up · ${Math.round(S.fov * R2D)}° view`;
+    `<strong>Looking at RA ${formatRA(ra).slice(0, 6)}, Dec ${formatDec(dec).slice(0, 4)}</strong><br>` +
+    `${Math.round(S.fov * R2D)}° wide view · full 360° sky`;
 }
 
-// ---------------------------------------------------------------- loop
+// ---------------------------------------------------------------- loop: redraw only what changed
 
-let lastKey = '';
+let lastKey = '', lastStatus = '';
+const perf = { sky: 0, ov: 0, n: 0 };
 function frame(now) {
   if (S.flight) stepFlight(now);
-  const key = [S.az, S.alt, S.fov, S.lst, S.lat, S.ground, S.allBands, S.band, W, H, panel.hidden].join();
-  if (key !== lastKey) { S.dirtyBg = true; lastKey = key; }
-  draw(now);
+  const key = [S.az, S.alt, S.fov, S.allBands, S.band, W, H, panel.hidden, filterPanel.hidden].join();
+  if (key !== lastKey) { lastKey = key; S.dirtySky = true; S.dirtyOverlay = true; }
+  if (S.dirtySky || S.dirtyOverlay || S.selected) updateCamera();
+  if (S.dirtySky) {
+    const t = performance.now();
+    sky.render();
+    perf.sky = performance.now() - t;
+    S.dirtySky = false;
+  }
+  if (S.dirtyOverlay || S.selected) {                 // the selected marker pulses
+    const t = performance.now();
+    drawOverlay(now);
+    perf.ov = performance.now() - t;
+    S.dirtyOverlay = false;
+    const st = [Math.round(S.az * R2D * 4), Math.round(S.alt * R2D * 4), Math.round(S.fov * R2D)].join();
+    if (st !== lastStatus) { lastStatus = st; updateStatus(); }
+  }
+  if (DEBUG && ++perf.n % 15 === 0) {
+    $('#dome-debug').textContent = `${sky.kind} · sky ${perf.sky.toFixed(1)} ms · markers ${perf.ov.toFixed(1)} ms · ${S.pois.length} points`;
+  }
   requestAnimationFrame(frame);
 }
 
 function resize() {
   DPR = Math.min(devicePixelRatio || 1, 2);
   W = dome.clientWidth; H = dome.clientHeight;
-  canvas.width = W * DPR; canvas.height = H * DPR;
-  bg.width = Math.ceil(W / BG_SCALE); bg.height = Math.ceil(H / BG_SCALE);
-  S.dirtyBg = true;
+  overlay.width = Math.round(W * DPR); overlay.height = Math.round(H * DPR);
+  updateCamera();
+  sky.resize();
+  S.dirtySky = S.dirtyOverlay = true;
+  if (!panel.hidden) drawSpectrum();
 }
 
 // ---------------------------------------------------------------- flying
 
-// Pick where to stand and what time it is, so the target is high in the sky.
-function skyFor(ra, dec) {
-  let lat = S.lat * R2D;
-  if (90 - Math.abs(lat - dec) < 30) lat = clamp(dec + (dec >= 0 ? -30 : 30), -60, 60);   // move north or south
-  return { lat: lat * D2R, lst: ra * D2R };      // sidereal time = RA puts it due south/north, highest point
-}
-
 function wrapPi(a) { return ((a + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; }
 
-function flyTo(target, { fromGround = false } = {}) {
-  const sky = skyFor(target.ra, target.dec);
+function flyTo(target, { fromWide = false } = {}) {
   const vec = eqVec(target.ra, target.dec);
-  if (fromGround) {               // stand in the field first, then look up
-    S.lat = sky.lat; S.lst = sky.lst; updateMatrix();
-    const [, az] = horAltAz(toHor(vec));
-    S.az = az + 150 * D2R; S.alt = 3 * D2R; S.fov = 100 * D2R;
+  if (fromWide) {                 // arriving from a link: start zoomed out, facing away, then swing round
+    const [alt, az] = horAltAz(toHor(vec));
+    S.az = az + 150 * D2R; S.alt = clamp(-alt * 0.3, -60 * D2R, 60 * D2R); S.fov = 110 * D2R;
   }
   const endFov = target.fov ? clamp(target.fov * 30, 6, 30) * D2R : 14 * D2R;
-  S.flight = { t0: performance.now(), dur: REDUCED ? 1 : (fromGround ? 4200 : 3000), vec,
-               from: { az: S.az, alt: S.alt, fov: S.fov, lat: S.lat, lst: S.lst },
-               to: { lat: sky.lat, lst: S.lst + wrapPi(sky.lst - S.lst), fov: endFov }, fromGround };
+  S.flight = { t0: performance.now(), dur: REDUCED ? 1 : (fromWide ? 4000 : 2800), vec,
+               from: { az: S.az, alt: S.alt, fov: S.fov }, to: { fov: endFov } };
 }
 
 function stepFlight(now) {
   const fl = S.flight;
   const t = clamp((now - fl.t0) / fl.dur, 0, 1);
-  if (fl.horizon) {                                         // "Horizon" button: tilt back down, zoom out
+  if (fl.horizon) {
     const e = ease(t);
-    S.alt = fl.from.alt + (15 * D2R - fl.from.alt) * e;
-    S.fov = fl.from.fov + (100 * D2R - fl.from.fov) * e;
+    S.fov = fl.from.fov + (100 * D2R - fl.from.fov) * e;      // "Wide view": zoom back out
     if (t >= 1) S.flight = null;
     return;
   }
-  const turn = ease(clamp(t / 0.7, 0, 1));                  // first 70%: turn and look up
-  const zoomT = ease(clamp((t - 0.45) / 0.55, 0, 1));       // last 55%: zoom in
-  S.lat = fl.from.lat + (fl.to.lat - fl.from.lat) * turn;
-  S.lst = fl.from.lst + (fl.to.lst - fl.from.lst) * turn;
-  updateMatrix();
+  const turn = ease(clamp(t / 0.7, 0, 1));
+  const zoomT = ease(clamp((t - 0.45) / 0.55, 0, 1));
   const [tAlt, tAz] = horAltAz(toHor(fl.vec));
   S.az = fl.from.az + wrapPi(tAz - fl.from.az) * turn;
   S.alt = fl.from.alt + (tAlt - fl.from.alt) * turn;
@@ -424,17 +657,57 @@ function stepFlight(now) {
   if (t >= 1) S.flight = null;
 }
 
-// ---------------------------------------------------------------- point-of-interest panel
+// ---------------------------------------------------------------- shareable address
 
-const panel = $('#poi-panel');
-let cubeImg = null, stackedTile = null, bandCanvas = null;
+function updateUrl() {
+  const q = new URLSearchParams();
+  if (S.selected && !S.selected.custom) q.set('poi', S.selected.id);
+  if (S.selected?.custom) { q.set('ra', S.selected.ra.toFixed(5)); q.set('dec', S.selected.dec.toFixed(5)); q.set('name', S.selected.name); }
+  if (!S.allBands) q.set('band', S.band + 1);           // 1..102, same as on screen
+  if (S.dateIdx !== null) q.set('date', iso(S.dates[S.dateIdx]));
+  const all = Object.keys(S.cats);
+  if (S.shown.size !== all.length) q.set('show', [...S.shown].join(','));
+  if (Q.has('stress')) q.set('stress', Q.get('stress'));
+  if (DEBUG) q.set('debug', '');
+  history.replaceState(null, '', `dome.html${q.toString() ? '?' + q : ''}`);
+}
+
+// ---------------------------------------------------------------- image cache (dated 102-band cubes)
+
+const IMG = new Map();
+function cube(url) {
+  if (!IMG.has(url)) IMG.set(url, loadImage(`data/${url}`).catch(() => null));
+  return IMG.get(url);
+}
+const STACKED = new Map();
+function stacked(url, img) {          // all 102 tiles averaged: "all bands added together"
+  if (STACKED.has(url)) return STACKED.get(url);
+  const T = S.layout.tile_px;
+  const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const cx = c.getContext('2d'); cx.drawImage(img, 0, 0);
+  const all = cx.getImageData(0, 0, c.width, c.height).data;
+  const out = new ImageData(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    let s = 0;
+    for (let r = 0; r < 6; r++) for (let k = 0; k < 17; k++) s += all[((r * T + y) * c.width + k * T + x) * 4];
+    const p = (y * T + x) * 4;
+    out.data[p] = out.data[p + 1] = out.data[p + 2] = Math.min(255, s / 102 * 1.3); out.data[p + 3] = 255;
+  }
+  const t = document.createElement('canvas'); t.width = T; t.height = T;
+  t.getContext('2d').putImageData(out, 0, 0);
+  STACKED.set(url, t);
+  return t;
+}
+
+// ---------------------------------------------------------------- point-of-interest panel
 
 function selectPoi(poi, { fly = true } = {}) {
   S.selected = poi;
   if (fly) flyTo(poi);
-  history.replaceState(null, '', `?poi=${poi.id}`);
-  $('#fly-to').value = poi.id;
+  updateUrl();
   renderPanel();
+  renderObjList();
+  S.dirtyOverlay = true;
 }
 
 function selectCustom(ra, dec, name, fov) {
@@ -442,57 +715,70 @@ function selectCustom(ra, dec, name, fov) {
   renderPanel();
 }
 
+function closePanel() {
+  stopDateBlink();
+  S.selected = null; panel.hidden = true; updateUrl(); renderObjList(); S.dirtyOverlay = true;
+}
+
 function renderPanel() {
   const t = S.selected;
   if (!t) { panel.hidden = true; return; }
   panel.hidden = false;
-  if (t.custom) {
+  const close = `<button class="close" type="button" aria-label="Close">✕</button>`;
+  const copy = `<button type="button" data-copy>Copy link</button>`;
+  if (t.custom || !t.spectrum) {
+    const viewer = viewerUrl({ ra: t.ra, dec: t.dec, fov: t.fov || 0.25, name: t.name });
     panel.innerHTML = `
-      <header><div><span class="pill pill-brand">Your target</span><h2 id="poi-name"></h2></div>
-        <button class="close" type="button" aria-label="Close">✕</button></header>
+      <header><div><span class="pill pill-brand">${t.custom ? 'Your target' : 'Test point'}</span><h2 id="poi-name"></h2></div>${close}</header>
       <p class="mono small muted">${formatRA(t.ra)} · ${formatDec(t.dec)}</p>
-      <p class="blurb">No 102-band data for this exact spot yet. When SPHEREx spectra are added for it, they'll show here.</p>
-      <div class="poi-actions">
-        <a class="btn primary" href="${viewerUrl({ ra: t.ra, dec: t.dec, fov: t.fov || 0.25, name: t.name })}">Open in Viewer</a>
-        <button type="button" data-copy>Copy link</button>
-      </div>`;
+      <p class="blurb">${t.custom ? 'No 102-band data for this exact spot yet. When SPHEREx spectra are added for it, they’ll show here.' : 'A made-up point added to test speed with lots of data.'}</p>
+      <div class="poi-actions"><a class="btn primary" href="${viewer}">Open in Viewer</a>${copy}</div>`;
     panel.querySelector('#poi-name').textContent = t.name;
     wirePanelCommon();
     return;
   }
+  const cat = catOf(t);
   panel.innerHTML = `
-    <header><div><span class="pill" style="color:${typeColor(t.type)};border-color:${typeColor(t.type)}66">${t.type}</span>
-      <h2 id="poi-name"></h2></div>
-      <button class="close" type="button" aria-label="Close">✕</button></header>
+    <header><div><span class="pill" style="color:${cat.color};border-color:${cat.color}66">${t.type}</span>
+      <h2 id="poi-name"></h2></div>${close}</header>
     <p class="mono small muted">${formatRA(t.ra)} · ${formatDec(t.dec)}</p>
     <p class="blurb"></p>
     <h3>Seen in 102 infrared bands</h3>
-    <div class="band-view"><canvas id="band-canvas" width="240" height="240"></canvas>
+    <div class="band-view"><canvas id="band-canvas" width="240" height="240" role="img" aria-label=""></canvas>
       <span class="badge badge-warn">Simulated</span>
       <span class="badge badge-date mono" id="band-badge"></span></div>
     <div class="band-caption"><span id="band-cap"></span>
       <label class="check small"><input type="checkbox" id="false-color" checked> False color</label></div>
+
+    <h3>Dates <span class="muted" style="text-transform:none;letter-spacing:0" id="date-count"></span></h3>
+    <div class="dates">
+      <div class="date-chips" id="date-chips" role="group" aria-label="Observation dates"></div>
+      <div class="date-ctrl">
+        <button type="button" id="ep-prev" aria-label="Earlier date">◀</button>
+        <button type="button" id="ep-next" aria-label="Later date">▶</button>
+        <button type="button" id="ep-blink" aria-pressed="false">▶ Sweep this object's dates</button>
+      </div>
+      <canvas class="lightcurve" id="lightcurve" aria-label="Brightness at each date"></canvas>
+    </div>
+
     <h3>All bands at once <span class="muted" style="text-transform:none;letter-spacing:0">(click one)</span></h3>
-    <div class="band-grid" id="band-grid"><img alt="Grid of 102 small images, one per band" src="data/${t.cube}"><div class="hl" id="band-hl"></div></div>
+    <div class="band-grid" id="band-grid"><img alt="Grid of 102 small images, one per band, for the chosen date"><div class="hl" id="band-hl"></div></div>
     <h3>Spectrum <span class="muted" style="text-transform:none;letter-spacing:0">(click to pick a band)</span></h3>
     <canvas class="spec-chart" id="spec-chart"></canvas>
     <p class="muted small" style="margin:6px 0 0">Brightness at each wavelength. Dips and bumps reveal molecules like water, methane and ices.</p>
     <div class="poi-actions">
       ${t.patch ? `<a class="btn primary" href="${viewerUrl({ ra: t.ra, dec: t.dec, fov: 0.25, name: t.name })}">Open in Viewer</a>` : ''}
-      <button type="button" data-copy>Copy link</button>
+      ${copy}
     </div>`;
   panel.querySelector('#poi-name').textContent = t.name;
   panel.querySelector('.blurb').textContent = t.blurb;
   wirePanelCommon();
 
-  bandCanvas = panel.querySelector('#band-canvas');
   panel.querySelector('#false-color').addEventListener('change', drawBandTile);
   const grid = panel.querySelector('#band-grid');
   grid.addEventListener('click', (e) => {
     const r = grid.getBoundingClientRect();
-    const col = clamp(Math.floor((e.clientX - r.left) / r.width * 17), 0, 16);
-    const row = clamp(Math.floor((e.clientY - r.top) / r.height * 6), 0, 5);
-    setBand(row * 17 + col);
+    setBand(clamp(Math.floor((e.clientY - r.top) / r.height * 6), 0, 5) * 17 + clamp(Math.floor((e.clientX - r.left) / r.width * 17), 0, 16));
   });
   const chart = panel.querySelector('#spec-chart');
   chart.addEventListener('click', (e) => {
@@ -502,21 +788,28 @@ function renderPanel() {
     S.bands.forEach((b, i) => { if (Math.abs(b.center_um - lam) < Math.abs(S.bands[best].center_um - lam)) best = i; });
     setBand(best);
   });
-
-  cubeImg = null; stackedTile = null;
-  loadImage(`data/${t.cube}`).then(img => {
-    if (S.selected !== t) return;
-    cubeImg = img;
-    stackedTile = makeStacked(img);
-    updatePanelBand();
+  panel.querySelector('#ep-prev').addEventListener('click', () => stepEpoch(-1));
+  panel.querySelector('#ep-next').addEventListener('click', () => stepEpoch(1));
+  panel.querySelector('#ep-blink').addEventListener('click', () => toggleDateBlink());
+  const lc = panel.querySelector('#lightcurve');
+  lc.addEventListener('click', (e) => {
+    const r = lc.getBoundingClientRect(), eps = t.epochs;
+    const x = (e.clientX - r.left) / r.width;
+    const m0 = eps[0].mjd, m1 = eps.at(-1).mjd || m0 + 1;
+    let best = 0;
+    eps.forEach((ep, i) => { if (Math.abs((ep.mjd - m0) / (m1 - m0 || 1) - x) < Math.abs((eps[best].mjd - m0) / (m1 - m0 || 1) - x)) best = i; });
+    goToEpoch(best);
   });
+
+  panel.querySelector('#date-count').textContent = `(observed ${t.epochs.length} time${t.epochs.length === 1 ? '' : 's'})`;
+  t.epochs.forEach(ep => cube(ep.cube));             // preload every date for smooth sweeping
+  renderDateChips();
   updatePanelBand();
+  drawSpectrum();
 }
 
 function wirePanelCommon() {
-  panel.querySelector('.close').addEventListener('click', () => {
-    S.selected = null; panel.hidden = true; history.replaceState(null, '', 'dome.html'); $('#fly-to').value = '';
-  });
+  panel.querySelector('.close').addEventListener('click', closePanel);
   panel.querySelector('[data-copy]').addEventListener('click', async (e) => {
     try { await navigator.clipboard.writeText(location.href); e.target.textContent = 'Link copied'; }
     catch { e.target.textContent = 'Copy failed'; }
@@ -524,22 +817,22 @@ function wirePanelCommon() {
   });
 }
 
-// Average all 102 tiles: what the object looks like with every band added together.
-function makeStacked(img) {
-  const T = S.layout.tile_px;
-  const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
-  const cx = c.getContext('2d'); cx.drawImage(img, 0, 0);
-  const all = cx.getImageData(0, 0, c.width, c.height).data;
-  const out = new ImageData(T, T);
-  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
-    let s = 0;
-    for (let r = 0; r < 6; r++) for (let k = 0; k < 17; k++) s += all[((r * T + y) * c.width + k * T + x) * 4];
-    const v = Math.min(255, s / 102 * 1.3);
-    const p = (y * T + x) * 4; out.data[p] = out.data[p + 1] = out.data[p + 2] = v; out.data[p + 3] = 255;
-  }
-  const t = document.createElement('canvas'); t.width = T; t.height = T;
-  t.getContext('2d').putImageData(out, 0, 0);
-  return t;
+function renderDateChips() {
+  const t = S.selected, box = panel.querySelector('#date-chips');
+  if (!box || !t?.epochs) return;
+  const cur = epochOf(t);
+  box.innerHTML = '';
+  t.epochs.forEach((ep, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = mjdToShort(ep.mjd);
+    b.title = iso(ep.mjd);
+    b.setAttribute('aria-label', `Show ${iso(ep.mjd)}`);
+    b.setAttribute('aria-current', String(!cur.before && cur.i === i));
+    b.addEventListener('click', () => goToEpoch(i));
+    box.append(b);
+  });
+  drawLightcurve();
 }
 
 // False color: blue for the shortest SPHEREx wavelengths, red for the longest.
@@ -553,36 +846,47 @@ function bandRGB(i) {
   return stops.at(-1)[1];
 }
 
-function drawBandTile() {
-  if (!bandCanvas) return;
-  const c = bandCanvas.getContext('2d');
+async function drawBandTile() {
+  const t = S.selected, canvas = panel.querySelector('#band-canvas');
+  if (!canvas || !t?.epochs) return;
+  const cur = epochOf(t), url = cur.ep.cube;
+  const img = await cube(url);
+  if (S.selected !== t || epochOf(t).ep.cube !== url) return;   // something changed while loading
+  const c = canvas.getContext('2d');
   c.imageSmoothingEnabled = false;
   c.fillStyle = '#000'; c.fillRect(0, 0, 240, 240);
-  if (!cubeImg) return;
+  if (!img) return;
   const T = S.layout.tile_px;
-  if (S.allBands) c.drawImage(stackedTile, 0, 0, 240, 240);
+  if (S.allBands) c.drawImage(stacked(url, img), 0, 0, 240, 240);
   else {
     const b = S.bands[S.band];
-    c.drawImage(cubeImg, b.channel * T, (b.detector - 1) * T, T, T, 0, 0, 240, 240);
+    c.drawImage(img, b.channel * T, (b.detector - 1) * T, T, T, 0, 0, 240, 240);
+    if (panel.querySelector('#false-color')?.checked) {
+      c.globalCompositeOperation = 'multiply';
+      c.fillStyle = `rgb(${bandRGB(S.band).join()})`;
+      c.fillRect(0, 0, 240, 240);
+      c.globalCompositeOperation = 'source-over';
+    }
   }
-  if (panel.querySelector('#false-color')?.checked && !S.allBands) {
-    c.globalCompositeOperation = 'multiply';
-    c.fillStyle = `rgb(${bandRGB(S.band).join()})`;
-    c.fillRect(0, 0, 240, 240);
-    c.globalCompositeOperation = 'source-over';
-  }
+  if (cur.before) { c.fillStyle = '#000a'; c.fillRect(0, 0, 240, 240); }
+  canvas.setAttribute('aria-label', `${t.name} on ${iso(cur.ep.mjd)}, ${S.allBands ? 'all bands' : S.bands[S.band].center_um.toFixed(2) + ' micrometers'}`);
+  const gridImg = panel.querySelector('#band-grid img');
+  if (gridImg.getAttribute('src') !== `data/${url}`) gridImg.src = `data/${url}`;
+}
+
+function sizeCanvas(c) {
+  const r = c.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+  if (c.width !== Math.round(r.width * dpr)) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
+  const x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return [x, r.width, r.height];
 }
 
 function drawSpectrum() {
-  const chart = panel.querySelector('#spec-chart');
-  const t = S.selected;
+  const chart = panel.querySelector('#spec-chart'), t = S.selected;
   if (!chart || !t?.spectrum) return;
-  const r = chart.getBoundingClientRect();
-  const dpr = Math.min(devicePixelRatio || 1, 2);
-  chart.width = r.width * dpr; chart.height = r.height * dpr;
-  const c = chart.getContext('2d');
-  c.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const w = r.width, h = r.height, L = 30, B = 22, Tp = 18;
+  const [c, w, h] = sizeCanvas(chart);
+  c.clearRect(0, 0, w, h);
+  const L = 30, B = 22, Tp = 18;
   const X = (lam) => L + (lam - 0.7) / 4.4 * (w - L - 10);
   const Y = (v) => h - B - v * (h - B - Tp);
   c.strokeStyle = '#33405f'; c.fillStyle = '#9aa6bf'; c.font = '11px "Atkinson Hyperlegible Mono", monospace'; c.textAlign = 'center';
@@ -592,7 +896,7 @@ function drawSpectrum() {
   }
   c.beginPath(); c.moveTo(L, h - B); c.lineTo(w - 8, h - B); c.stroke();
   (FEATURES[t.spectrum_model] || []).forEach(([lam, name], i, all) => {
-    const crowded = i > 0 && X(lam) - X(all[i - 1][0]) < 40;      // drop the label lower if it would overlap
+    const crowded = i > 0 && X(lam) - X(all[i - 1][0]) < 40;
     c.strokeStyle = '#ffffff22'; c.setLineDash([3, 3]);
     c.beginPath(); c.moveTo(X(lam), Tp - 4); c.lineTo(X(lam), h - B); c.stroke(); c.setLineDash([]);
     c.fillStyle = '#c9d2e6'; c.fillText(name, X(lam), crowded ? 24 : 11);
@@ -610,18 +914,44 @@ function drawSpectrum() {
   }
 }
 
+function drawLightcurve() {
+  const lc = panel.querySelector('#lightcurve'), t = S.selected;
+  if (!lc || !t?.epochs) return;
+  const [c, w, h] = sizeCanvas(lc);
+  c.clearRect(0, 0, w, h);
+  const eps = t.epochs, m0 = eps[0].mjd, m1 = eps.at(-1).mjd;
+  const bmax = Math.max(...eps.map(e => e.brightness), 1);
+  const X = (m) => 12 + (m1 > m0 ? (m - m0) / (m1 - m0) : 0.5) * (w - 24);
+  const Y = (v) => h - 12 - v / bmax * (h - 24);
+  c.strokeStyle = '#7cc4ff88'; c.lineWidth = 1.5;
+  c.beginPath(); eps.forEach((e, i) => c[i ? 'lineTo' : 'moveTo'](X(e.mjd), Y(e.brightness))); c.stroke();
+  const cur = epochOf(t);
+  eps.forEach((e, i) => {
+    const on = !cur.before && cur.i === i;
+    c.fillStyle = on ? '#ffc857' : '#7cc4ff';
+    c.beginPath(); c.arc(X(e.mjd), Y(e.brightness), on ? 5 : 3, 0, 6.283); c.fill();
+  });
+  c.fillStyle = '#9aa6bf'; c.font = '10px "Atkinson Hyperlegible Mono", monospace';
+  c.textAlign = 'left'; c.fillText(iso(m0), 4, h - 2);
+  c.textAlign = 'right'; c.fillText(iso(m1), w - 4, h - 2);
+  c.textAlign = 'left'; c.fillText('brightness', 4, 10);
+}
+
 function updatePanelBand() {
   const t = S.selected;
-  if (!t || t.custom || panel.hidden) return;
+  if (!t || t.custom || !t.spectrum || panel.hidden) return;
   const b = S.bands[S.band];
+  const cur = epochOf(t);
   const hl = panel.querySelector('#band-hl');
   hl.hidden = S.allBands;
   hl.style.left = `${b.channel / 17 * 100}%`; hl.style.top = `${(b.detector - 1) / 6 * 100}%`;
   hl.style.width = `${100 / 17}%`; hl.style.height = `${100 / 6}%`;
-  panel.querySelector('#band-badge').textContent = S.allBands ? 'All 102 bands' : `${b.center_um.toFixed(2)} µm`;
-  panel.querySelector('#band-cap').textContent = S.allBands
-    ? 'All bands added together'
-    : `Band ${S.band + 1} of 102 · detector ${b.detector} · ${Math.round(t.spectrum[S.band] * 100)}% bright`;
+  panel.querySelector('#band-badge').textContent =
+    `${iso(cur.ep.mjd)} · ${S.allBands ? 'all bands' : b.center_um.toFixed(2) + ' µm'}`;
+  panel.querySelector('#band-cap').textContent = cur.before
+    ? `Not observed yet on this date. First image: ${iso(t.epochs[0].mjd)}`
+    : S.allBands ? 'All bands added together'
+    : `Band ${S.band + 1} of 102 · detector ${b.detector} · ${Math.round(t.spectrum[S.band] * cur.ep.brightness * 100)}% bright`;
   drawBandTile();
   drawSpectrum();
 }
@@ -639,17 +969,18 @@ function syncWave() {
   const b = S.bands[S.band];
   $('#band').value = S.band;
   $('#all-bands').setAttribute('aria-pressed', String(S.allBands));
-  $('#wave-bar').classList.toggle('all-bands', S.allBands);
+  $('#band-row').classList.toggle('all-bands', S.allBands);
   $('#wave-read').textContent = S.allBands
     ? 'All 102 bands · 0.75–5.0 µm'
     : `${b.center_um.toFixed(2)} µm · band ${S.band + 1}/102 · detector ${b.detector}`;
-  updateStarBand();
+  updateBandFactors();
   updatePanelBand();
-  S.dirtyBg = true;
+  S.dirtySky = S.dirtyOverlay = true;
+  if (!S.bandTimer) updateUrl();
 }
 
 function stopBandBlink() {
-  clearInterval(S.blinkTimer); S.blinkTimer = null;
+  clearInterval(S.bandTimer); S.bandTimer = null;
   $('#band-blink').setAttribute('aria-pressed', 'false');
   $('#band-blink').textContent = '▶ Sweep bands';
 }
@@ -657,12 +988,154 @@ function stopBandBlink() {
 $('#band').addEventListener('input', (e) => setBand(+e.target.value));
 $('#all-bands').addEventListener('click', () => { stopBandBlink(); S.allBands = !S.allBands; syncWave(); });
 $('#band-blink').addEventListener('click', () => {
-  if (S.blinkTimer) return stopBandBlink();
+  if (S.bandTimer) { stopBandBlink(); updateUrl(); return; }
+  stopDateBlink();
   if (S.allBands) setBand(0);
   $('#band-blink').setAttribute('aria-pressed', 'true');
   $('#band-blink').textContent = '❚❚ Pause';
-  S.blinkTimer = setInterval(() => setBand((S.band + 1) % 102, { keepBlink: true }), 160);
+  S.bandTimer = setInterval(() => setBand((S.band + 1) % 102, { keepBlink: true }), 160);
 });
+
+// ---------------------------------------------------------------- date bar
+
+function setDateIdx(i, { keepBlink = false } = {}) {
+  if (!keepBlink) stopDateBlink();
+  S.dateIdx = i === null ? null : clamp(i, 0, S.dates.length - 1);
+  syncDate();
+}
+
+function syncDate() {
+  const latest = S.dateIdx === null;
+  $('#date').value = latest ? S.dates.length - 1 : S.dateIdx;
+  $('#latest').setAttribute('aria-pressed', String(latest));
+  $('#date-row').classList.toggle('latest', latest);
+  if (latest) $('#date-read').textContent = `Latest image of each object (to ${iso(S.dates.at(-1))})`;
+  else {
+    const m = S.dates[S.dateIdx];
+    const seen = S.pois.filter(p => p.epochs?.length && p.epochs[0].mjd <= m + 0.5).length;
+    $('#date-read').textContent = `${iso(m)} · ${seen} of ${S.pois.length} observed by then`;
+  }
+  renderDateChips();
+  updatePanelBand();
+  S.dirtyOverlay = true;
+  if (!S.dateTimer) updateUrl();
+}
+
+// Step through the selected object's own dates (or every survey date if nothing is selected).
+function goToEpoch(i, opts) {
+  const t = S.selected;
+  if (!t?.epochs) return;
+  const m = t.epochs[clamp(i, 0, t.epochs.length - 1)].mjd;
+  setDateIdx(S.dates.findIndex(d => Math.abs(d - m) < 0.5), opts);
+}
+function stepEpoch(d, opts) {
+  const t = S.selected;
+  if (t?.epochs) {
+    const cur = epochOf(t);
+    const n = t.epochs.length;
+    goToEpoch(cur.before ? 0 : (cur.i + d + n) % n, opts);
+  } else {
+    const n = S.dates.length;
+    setDateIdx(S.dateIdx === null ? 0 : (S.dateIdx + d + n) % n, opts);
+  }
+}
+
+function toggleDateBlink() {
+  if (S.dateTimer) { stopDateBlink(); updateUrl(); return; }
+  stopBandBlink();
+  for (const b of [$('#date-blink'), panel.querySelector('#ep-blink')]) {
+    if (!b) continue;
+    b.setAttribute('aria-pressed', 'true');
+  }
+  $('#date-blink').textContent = '❚❚ Pause';
+  const eb = panel.querySelector('#ep-blink'); if (eb) eb.textContent = '❚❚ Pause';
+  stepEpoch(1, { keepBlink: true });
+  S.dateTimer = setInterval(() => stepEpoch(1, { keepBlink: true }), 700);
+}
+function stopDateBlink() {
+  clearInterval(S.dateTimer); S.dateTimer = null;
+  $('#date-blink').setAttribute('aria-pressed', 'false');
+  $('#date-blink').textContent = '▶ Sweep dates';
+  const eb = panel.querySelector('#ep-blink');
+  if (eb) { eb.setAttribute('aria-pressed', 'false'); eb.textContent = '▶ Sweep this object\'s dates'; }
+}
+
+$('#date').addEventListener('input', (e) => setDateIdx(+e.target.value));
+$('#latest').addEventListener('click', () => setDateIdx(S.dateIdx === null ? S.dates.length - 1 : null));
+$('#date-blink').addEventListener('click', toggleDateBlink);
+
+// ---------------------------------------------------------------- filter panel
+
+function shapeIcon(cat) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 40; c.style.width = c.style.height = '20px';
+  const x = c.getContext('2d');
+  x.strokeStyle = cat.color; x.fillStyle = '#fff'; x.lineWidth = 3;
+  if (cat.shape === 'dashed') x.setLineDash([6, 4]);
+  shapePath(x, cat.shape, 20, 20, 12); x.stroke();
+  x.beginPath(); x.arc(20, 20, 4, 0, 6.283); x.fill();
+  return c;
+}
+
+function renderCatList() {
+  const counts = {};
+  for (const p of S.pois) counts[p.category] = (counts[p.category] || 0) + 1;
+  const box = $('#cat-list');
+  box.innerHTML = '';
+  for (const [id, cat] of Object.entries(S.cats)) {
+    const label = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = S.shown.has(id); cb.value = id;
+    cb.addEventListener('change', () => { cb.checked ? S.shown.add(id) : S.shown.delete(id); filtersChanged(); });
+    const name = document.createElement('span'); name.textContent = cat.label;
+    const n = document.createElement('span'); n.className = 'n'; n.textContent = counts[id] || 0;
+    label.append(cb, shapeIcon(cat), name, n);
+    box.append(label);
+  }
+}
+
+function renderObjList() {
+  const list = S.pois.filter(passesFilter);
+  $('#shown-count').textContent = `${list.length}`;
+  if (filterPanel.hidden) return;
+  $('#obj-count').textContent = `${list.length} of ${S.pois.length} objects shown`;
+  const ul = $('#obj-list');
+  ul.innerHTML = '';
+  const MAXL = 300;   // keep the list fast with huge catalogs
+  for (const p of list.sort((a, b) => b.size - a.size || a.name.localeCompare(b.name)).slice(0, MAXL)) {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-current', String(S.selected === p));
+    const t = document.createElement('span'); t.className = 't'; t.textContent = p.type;
+    const name = document.createElement('span'); name.textContent = p.name;
+    b.append(shapeIcon(catOf(p)), name, t);
+    b.addEventListener('click', () => selectPoi(p));
+    li.append(b);
+    ul.append(li);
+  }
+  if (list.length > MAXL) ul.insertAdjacentHTML('beforeend', `<li class="muted small">…and ${list.length - MAXL} more. Search to narrow down.</li>`);
+}
+
+function filtersChanged() {
+  renderObjList();
+  S.dirtyOverlay = true;
+  updateUrl();
+}
+
+function openFilter(open) {
+  filterPanel.hidden = !open;
+  $('#open-filter').setAttribute('aria-expanded', String(open));
+  if (open) { renderCatList(); renderObjList(); $('#obj-search').focus(); }
+  else $('#open-filter').focus();
+}
+$('#open-filter').addEventListener('click', () => openFilter(filterPanel.hidden));
+$('#close-filter').addEventListener('click', () => openFilter(false));
+$('#obj-search').addEventListener('input', (e) => { S.search = e.target.value.trim().toLowerCase(); filtersChanged(); });
+$('#only-patch').addEventListener('change', (e) => { S.onlyPatch = e.target.checked; filtersChanged(); });
+$('#cats-all').addEventListener('click', () => { S.shown = new Set(Object.keys(S.cats)); renderCatList(); filtersChanged(); });
+$('#cats-none').addEventListener('click', () => { S.shown.clear(); renderCatList(); filtersChanged(); });
+filterPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') openFilter(false); });
 
 // ---------------------------------------------------------------- input: drag, zoom, click, keys
 
@@ -682,24 +1155,24 @@ function look(dx, dy) {
   S.flight = null;
   const k = 1 / F;
   S.az -= dx * k / Math.max(Math.cos(S.alt), 0.3);
-  S.alt = clamp(S.alt + dy * k, (S.ground ? -12 : -89) * D2R, 89.5 * D2R);
+  S.alt = clamp(S.alt + dy * k, -89.5 * D2R, 89.5 * D2R);   // straight up to straight down
 }
 function zoomBy(f) { S.flight = null; S.fov = clamp(S.fov * f, 4 * D2R, 140 * D2R); }
 
-canvas.addEventListener('pointerdown', (e) => {
-  canvas.setPointerCapture(e.pointerId);
+overlay.addEventListener('pointerdown', (e) => {
+  overlay.setPointerCapture(e.pointerId);
   pointers.set(e.pointerId, [e.offsetX, e.offsetY]);
-  if (pointers.size === 1) drag = { x: e.offsetX, y: e.offsetY, moved: 0 };
+  if (pointers.size === 1) drag = { moved: 0 };
   if (pointers.size === 2) {
     const [a, b] = [...pointers.values()];
     pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), fov: S.fov };
   }
   hideHint();
 });
-canvas.addEventListener('pointermove', (e) => {
+overlay.addEventListener('pointermove', (e) => {
   if (!pointers.has(e.pointerId)) {
-    S.hover = hitPoi(e.offsetX, e.offsetY);
-    dome.classList.toggle('over-poi', !!S.hover);
+    const h = hitPoi(e.offsetX, e.offsetY);
+    if (h !== S.hover) { S.hover = h; S.dirtyOverlay = true; dome.classList.toggle('over-poi', !!h); }
     return;
   }
   const prev = pointers.get(e.pointerId);
@@ -728,34 +1201,26 @@ function endPointer(e) {
     dome.classList.remove('dragging');
   }
 }
-canvas.addEventListener('pointerup', endPointer);
-canvas.addEventListener('pointercancel', endPointer);
-canvas.addEventListener('wheel', (e) => { e.preventDefault(); hideHint(); zoomBy(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
-canvas.addEventListener('keydown', (e) => {
-  const step = 40;
-  const k = { ArrowLeft: () => look(step, 0), ArrowRight: () => look(-step, 0), ArrowUp: () => look(0, step),
-              ArrowDown: () => look(0, -step), '+': () => zoomBy(0.85), '=': () => zoomBy(0.85), '-': () => zoomBy(1.18) }[e.key];
+overlay.addEventListener('pointerup', endPointer);
+overlay.addEventListener('pointercancel', endPointer);
+overlay.addEventListener('wheel', (e) => { e.preventDefault(); hideHint(); zoomBy(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
+overlay.addEventListener('keydown', (e) => {
+  const k = { ArrowLeft: () => look(40, 0), ArrowRight: () => look(-40, 0), ArrowUp: () => look(0, 40),
+              ArrowDown: () => look(0, -40), '+': () => zoomBy(0.85), '=': () => zoomBy(0.85), '-': () => zoomBy(1.18) }[e.key];
   if (k) { e.preventDefault(); k(); hideHint(); }
 });
 
 $('#zoom-in').addEventListener('click', () => zoomBy(0.7));
 $('#zoom-out').addEventListener('click', () => zoomBy(1.4));
 $('#reset-view').addEventListener('click', () => {
-  S.flight = { t0: performance.now(), dur: REDUCED ? 1 : 1500, vec: null,
-               from: { az: S.az, alt: S.alt, fov: S.fov }, horizon: true };
+  S.flight = { t0: performance.now(), dur: REDUCED ? 1 : 1500, from: { az: S.az, alt: S.alt, fov: S.fov }, horizon: true };
 });
-$('#show-ground').addEventListener('change', (e) => { S.ground = e.target.checked; S.dirtyBg = true; });
-$('#show-labels').addEventListener('change', (e) => { S.labels = e.target.checked; });
-$('#show-grid').addEventListener('change', (e) => { S.grid = e.target.checked; });
-$('#fly-to').addEventListener('change', (e) => {
-  const poi = S.pois.find(p => p.id === e.target.value);
-  if (poi) selectPoi(poi);
-});
+$('#show-labels').addEventListener('change', (e) => { S.labels = e.target.checked; S.dirtyOverlay = true; });
+$('#show-grid').addEventListener('change', (e) => { S.grid = e.target.checked; S.dirtyOverlay = true; });
 
 let hintTimer;
 function hideHint() { $('#dome-hint').classList.add('gone'); clearTimeout(hintTimer); }
 
-// Toolbar fades after 2.5 s without mouse movement, and comes back on movement.
 let idleTimer;
 function wake() {
   dome.classList.remove('idle');
@@ -766,20 +1231,29 @@ for (const ev of ['mousemove', 'keydown', 'touchstart', 'focusin']) dome.addEven
 
 // ---------------------------------------------------------------- start
 
+function addStressPoints(n) {      // ?stress=20000: fake points to test speed with a big catalog
+  const cats = Object.keys(S.cats);
+  let s = 99;
+  const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for (let i = 0; i < n; i++) {
+    const ra = rand() * 360, dec = Math.asin(rand() * 2 - 1) * R2D;
+    S.pois.push({ id: `test${i}`, name: `Test point ${i + 1}`, category: cats[Math.floor(rand() * cats.length)],
+                  type: 'Test point', ra, dec, size: rand() < 0.02 ? 3 : rand() < 0.3 ? 2 : 1, blurb: '' });
+  }
+}
+
 (async function start() {
+  if (DEBUG) dome.insertAdjacentHTML('beforeend', '<div class="dome-glass dome-debug" id="dome-debug"></div>');
+  updateMatrix();
   resize();
   addEventListener('resize', resize);
   wake();
   hintTimer = setTimeout(hideHint, 6000);
 
-  // Sidereal time for "now" at longitude 0, so the opening sky changes through the day.
-  const jd = Date.now() / 86400000 + 2440587.5;
-  S.lst = ((280.46061837 + 360.98564736629 * (jd - 2451545)) % 360) * D2R;
-  updateMatrix();
-
   try {
     const [poiData, bandData] = await Promise.all([loadJSON('data/dome/poi.json'), loadJSON('data/dome/bands.json')]);
-    S.pois = poiData.pois.map(p => ({ ...p, vec: eqVec(p.ra, p.dec) }));
+    S.pois = poiData.pois;
+    S.cats = poiData.categories || FALLBACK_CATS;
     S.layout = poiData.cube_layout;
     S.bands = bandData.bands;
   } catch (err) {
@@ -787,29 +1261,50 @@ for (const ev of ['mousemove', 'keydown', 'touchstart', 'focusin']) dome.addEven
     S.bands = Array.from({ length: 102 }, (_, i) => ({ index: i, detector: Math.floor(i / 17) + 1, channel: i % 17,
       center_um: 0.75 * (5 / 0.75) ** ((i + 0.5) / 102) }));
   }
+  if (Q.has('stress')) addStressPoints(clamp(+Q.get('stress') || 10000, 0, 200000));
+  for (const p of S.pois) {
+    p.vec = eqVec(p.ra, p.dec);
+    p._search = `${p.name} ${p.type} ${S.cats[p.category]?.label || ''}`.toLowerCase();
+    if (p.spectrum) p._mean = p.spectrum.reduce((a, b) => a + b, 0) / p.spectrum.length / Math.max(...p.spectrum) * 1.4;
+    if (!S.cats[p.category]) S.cats[p.category] = { label: p.category, color: '#ffd27a', shape: 'circle' };
+  }
+  buildIndex();
+
+  // every observation date across all objects, one per day
+  const all = S.pois.flatMap(p => (p.epochs || []).map(e => e.mjd)).sort((a, b) => a - b);
+  S.dates = all.filter((m, i) => i === 0 || m - all[i - 1] > 0.5);
+  if (!S.dates.length) S.dates = [61300];
+  $('#date').max = S.dates.length - 1;
+
+  // filters and state from the address
+  S.shown = new Set(Q.get('show') ? Q.get('show').split(',').filter(c => S.cats[c]) : Object.keys(S.cats));
+  if (Q.has('band')) { S.band = clamp((+Q.get('band') || 1) - 1, 0, 101); S.allBands = false; }
+  if (Q.get('date')) {
+    const want = Q.get('date');
+    const i = S.dates.findLastIndex(m => iso(m) <= want);
+    S.dateIdx = i < 0 ? 0 : i;
+  }
 
   $('#det-strip').innerHTML = DET_COLORS.map((c, i) => {
     const lo = S.bands[i * 17].center_um, hi = S.bands[i * 17 + 16].center_um;
     return `<span style="background:${c}" title="Detector ${i + 1}: ${lo.toFixed(2)}–${hi.toFixed(2)} µm">${i + 1}</span>`;
   }).join('');
-  for (const p of [...S.pois].sort((a, b) => a.name.localeCompare(b.name))) {
-    $('#fly-to').insertAdjacentHTML('beforeend', `<option value="${p.id}"></option>`);
-    $('#fly-to').lastElementChild.textContent = p.name;
-  }
   syncWave();
+  syncDate();
+  renderObjList();
   requestAnimationFrame(frame);
 
-  // Arriving from a link: start on the ground, then turn and zoom to the target.
-  const q = new URLSearchParams(location.search);
-  const byId = S.pois.find(p => p.id === q.get('poi'));
-  const ra = parseRA(q.get('ra') ?? ''), dec = parseDec(q.get('dec') ?? '');
+  // Arriving from a link: start zoomed out and facing away, then turn and zoom to the target.
+  const byId = S.pois.find(p => p.id === Q.get('poi'));
+  const ra = parseRA(Q.get('ra') ?? ''), dec = parseDec(Q.get('dec') ?? '');
   if (byId) {
-    S.selected = byId; renderPanel(); $('#fly-to').value = byId.id;
-    flyTo(byId, { fromGround: true });
+    S.selected = byId; renderPanel();
+    flyTo(byId, { fromWide: true });
   } else if (ra !== null && dec !== null) {
-    const near = S.pois.find(p => separation(ra, dec, p.ra, p.dec) < 0.5);
-    if (near) { S.selected = near; renderPanel(); $('#fly-to').value = near.id; history.replaceState(null, '', `?poi=${near.id}`); }
-    else selectCustom(ra, dec, q.get('name'), Number(q.get('fov')) || 0.25);
-    flyTo({ ra, dec }, { fromGround: true });
+    const near = S.pois.find(p => p.spectrum && separation(ra, dec, p.ra, p.dec) < 0.5);
+    if (near) { S.selected = near; renderPanel(); }
+    else selectCustom(ra, dec, Q.get('name'), Number(Q.get('fov')) || 0.25);
+    flyTo({ ra, dec }, { fromWide: true });
   }
+  updateUrl();
 })();
