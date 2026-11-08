@@ -1,3 +1,4 @@
 [
+  { "id": "demo", "title": "Simulated demo (WISE 0855 position)", "ra": 133.7951, "dec": -7.2451 },
   { "id": "m101", "title": "Practice patch" }
 ]

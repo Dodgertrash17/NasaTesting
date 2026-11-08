@@ -4,5 +4,6 @@
     { "file": "frames/test_e0.png", "mjd": 60800.1 },
     { "file": "frames/test_e1.png", "mjd": 60983.0 }
   ],
-  "candidates": []
+  "candidates": [
+  { "x": 51.2, "y": 40.8, "seen_in": "e0", "match": null }]
 }

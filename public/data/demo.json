@@ -1,0 +1,63 @@
+{
+  "patch": {
+    "id": "demo",
+    "width_px": 128,
+    "height_px": 128,
+    "ra": 133.7951,
+    "dec": -7.2451,
+    "fov_deg": 0.25,
+    "simulated": true
+  },
+  "frames": [
+    {
+      "file": "frames/demo_e0.png",
+      "mjd": 60800.1
+    },
+    {
+      "file": "frames/demo_e1.png",
+      "mjd": 60983.0
+    },
+    {
+      "file": "frames/demo_e2.png",
+      "mjd": 61165.2
+    },
+    {
+      "file": "frames/demo_e3.png",
+      "mjd": 61348.0
+    }
+  ],
+  "candidates": [
+    {
+      "x": 40.0,
+      "y": 86.0,
+      "seen_in": "e0",
+      "match": {
+        "name": "Simulated mover"
+      }
+    },
+    {
+      "x": 53.0,
+      "y": 77.0,
+      "seen_in": "e1",
+      "match": {
+        "name": "Simulated mover"
+      }
+    },
+    {
+      "x": 66.0,
+      "y": 68.0,
+      "seen_in": "e2",
+      "match": {
+        "name": "Simulated mover"
+      }
+    },
+    {
+      "x": 79.0,
+      "y": 59.0,
+      "seen_in": "e3",
+      "match": {
+        "name": "Simulated mover"
+      }
+    }
+  ]
+}
