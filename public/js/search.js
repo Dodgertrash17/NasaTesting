@@ -62,7 +62,8 @@ form.addEventListener('submit', (e) => {
   }
   formError.textContent = '';
   const named = TARGETS.find(t => separation(ra, dec, t.ra, t.dec) < 0.01);
-  location.href = viewerUrl({ ra, dec, fov: fovInput.value, name: named?.name });
+  const url = viewerUrl({ ra, dec, fov: fovInput.value, name: named?.name });
+  location.href = e.submitter?.value === 'dome' ? url.replace('viewer.html', 'dome.html') : url;
 });
 
 document.querySelector('#presets').replaceChildren(...TARGETS.map(t => {

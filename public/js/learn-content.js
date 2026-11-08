@@ -92,7 +92,8 @@ const LEARN = [
           <p>As the telescope steps across the sky, each star lands on a different part of the filter, and gets measured at a different wavelength. Put all the steps together and you get a spectrum.</p>
           <div class="callout"><p><strong>What that means for blinking:</strong> two images of the same spot can differ because of <em>wavelength</em>, not only time. A fair comparison uses images at similar wavelengths, or adds many bands together.</p></div>
           <h2>Six detectors</h2>
-          <p>The 102 bands are spread across six detector arrays, roughly 17 bands each, from 0.75 µm on the short end to 5.0 µm on the long end. The longest-wavelength detectors have finer color resolution, tuned to spot ices.</p>`,
+          <p>The 102 bands are spread across six detector arrays, roughly 17 bands each, from 0.75 µm on the short end to 5.0 µm on the long end. The longest-wavelength detectors have finer color resolution, tuned to spot ices.</p>
+          <p><a href="dome.html?poi=rhooph">See it in the Sky Dome →</a> Sweep through all 102 bands and watch ice absorption appear in a star-forming cloud.</p>`,
       },
       {
         id: 'survey', title: 'How it scans the sky', summary: 'Every patch, twice a year.',

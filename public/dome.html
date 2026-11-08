@@ -15,11 +15,9 @@
   <header id="site-header"></header>
 
   <main>
-    <!-- SKELETON ONLY. The interactive all-sky view is not built yet. -->
     <div class="dome" id="dome">
-      <!-- The real sky renderer goes here (e.g. Aladin Lite or WorldWide Telescope). -->
-      <canvas class="dome-sky" id="dome-sky" aria-hidden="true"></canvas>
-      <div class="dome-horizon" aria-hidden="true"></div>
+      <canvas class="dome-sky" id="dome-sky" tabindex="0"
+              aria-label="All-sky view from an open field. Drag or use arrow keys to look around, scroll or plus and minus to zoom. Points of interest are listed in the Fly to menu."></canvas>
 
       <!-- Sub-nav from the sketch. Fades out when the mouse is still. -->
       <nav class="dome-toolbar" aria-label="Sky Dome">
@@ -29,22 +27,40 @@
         <a href="search.html#raw">Raw Search</a>
       </nav>
 
-      <section class="card dome-card" aria-labelledby="dome-title">
-        <p class="eyebrow">Coming soon</p>
-        <h1 id="dome-title" style="font-size:1.8rem;margin-bottom:12px">Sky Dome</h1>
-        <p class="muted" id="dome-target">Stand in an open field and look all around the SPHEREx sky.</p>
-        <p class="label" style="margin-top:20px">Planned</p>
-        <ul>
-          <li>Drag to look in any direction, scroll to zoom, like standing under the night sky.</li>
-          <li>Points of interest as dots; bigger dots for brighter or more interesting objects. Click one to open it.</li>
-          <li>For each point: see it across SPHEREx's wavelengths and blink between them.</li>
-          <li>Jump here from the viewer, and back to the viewer from any dot.</li>
-        </ul>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-          <a class="btn primary" id="back-to-viewer" href="search.html" hidden>← Back to viewer</a>
-          <a class="btn" href="search.html">Open the Search Tool</a>
+      <div class="dome-glass dome-status" id="dome-status" aria-live="polite"></div>
+
+      <div class="dome-glass dome-hint" id="dome-hint">
+        <strong>Drag to look around</strong> · scroll to zoom · click a glowing dot
+      </div>
+
+      <!-- Left: view controls -->
+      <div class="dome-glass dome-left" role="group" aria-label="View controls">
+        <label class="visually-hidden" for="fly-to">Fly to a point of interest</label>
+        <select id="fly-to"><option value="">Fly to…</option></select>
+        <div class="row">
+          <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+          <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+          <button type="button" id="reset-view" title="Back to the horizon">Horizon</button>
         </div>
-      </section>
+        <label class="check"><input type="checkbox" id="show-ground" checked> Ground</label>
+        <label class="check"><input type="checkbox" id="show-labels" checked> Labels</label>
+        <label class="check"><input type="checkbox" id="show-grid"> Compass grid</label>
+      </div>
+
+      <!-- Bottom: the 102 SPHEREx bands -->
+      <div class="dome-glass wave-bar all-bands" id="wave-bar" role="group" aria-label="Wavelength">
+        <div class="wave-top">
+          <button type="button" id="all-bands" aria-pressed="true" title="Add all 102 bands together">All bands</button>
+          <span class="wave-read" id="wave-read"></span>
+          <button type="button" id="band-blink" aria-pressed="false" title="Sweep through all 102 bands">▶ Sweep bands</button>
+        </div>
+        <label class="visually-hidden" for="band">SPHEREx band, 1 to 102</label>
+        <input type="range" id="band" min="0" max="101" step="1" value="40">
+        <div class="det-strip" id="det-strip" aria-hidden="true"></div>
+      </div>
+
+      <!-- Right: point of interest details -->
+      <aside class="dome-glass poi-panel" id="poi-panel" hidden aria-labelledby="poi-name"></aside>
     </div>
   </main>
 </body>
