@@ -7,6 +7,8 @@ const state = {
   timer: null,
 };
 
+let images = []
+
 const els = {
   hook:      document.querySelector('#hook'),
   start:     document.querySelector('#start'),
@@ -28,8 +30,19 @@ function mjdToDate(mjd) {
   return new Date((mjd - 40587) * 86400000).toISOString().slice(0, 10);   // "2025-05-01"
 }
 
-function drawFrame() {
+function setStatus(text) {
+  els.status.textContent = text;   // role="status" reads it aloud politely
+}
 
+async function loadJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  return res.json();
+}
+
+function stopBlink() {
+  clearInterval(state.timer);
+  state.playing = false;
 }
 
 function render() {
@@ -44,6 +57,42 @@ function render() {
   els.blink.textContent = state.playing ? 'Pause' : 'Blink';
 }
 
+async function loadImage(src) {
+  const img = new Image();
+  img.src = src;
+  await img.decode();     // waits until the image is ready to paint, returns a 'Promise'
+  return img;
+}
+
+async function loadPatchImages(patch, jsonUrl) {
+  images = await Promise.all(
+    patch.frames.map(f => loadImage(new URL(f.file, jsonUrl)))
+  );
+}
+
+function drawFrame(img) {
+  const ctx = els.canvas.getContext('2d');
+  els.canvas.width = img.naturalWidth;     // 1 canvas pixel = 1 image pixel
+  els.canvas.height = img.naturalHeight;
+  ctx.imageSmoothingEnabled = false;       // keep real pixels when scaled
+  ctx.drawImage(img, 0, 0);
+}
+
+async function openPatch(id) {
+  setStatus('Loading sky images…');
+  try {
+    const jsonUrl = new URL(`data/${id}.json`, location.href);
+    const patch = await loadJSON(jsonUrl);
+    await loadPatchImages(patch, jsonUrl);      // preload before the first blink
+    Object.assign(state, { patch, frame: 0, revealed: false });
+    setStatus('');
+    render();
+  } catch (err) {
+    console.error(err);
+    setStatus('We could not load the sky images. Check your connection and reload the page.');
+  }
+}
+
 els.frame.addEventListener('input', () => {
   stopBlink();
   state.frame = Number(els.frame.value);
@@ -54,3 +103,14 @@ els.start.addEventListener('click', () => {
   els.hook.hidden = true;
   els.challenge.hidden = false;
 });
+
+async function start() {
+  try {
+    state.patches = await loadJSON('data/patches.json');
+  } catch (err) {
+    state.patches = [{ id: 'm101', title: 'Practice patch' }];   // fallback until Pipe writes the list
+  }
+  await openPatch(state.patches[0].id);
+}
+
+start()

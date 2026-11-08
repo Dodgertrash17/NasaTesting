@@ -1,0 +1,8 @@
+{
+  "patch": { "id": "m101", "width_px": 146, "height_px": 146 },
+  "frames": [
+    { "file": "frames/test_e0.png", "mjd": 60800.1 },
+    { "file": "frames/test_e1.png", "mjd": 60983.0 }
+  ],
+  "candidates": []
+}
