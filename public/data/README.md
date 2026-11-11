@@ -5,12 +5,35 @@ Regenerate it with `python tools/make_sample_data.py` (add `--boost 5` to exagge
 
 When real data comes, the data pipeline only needs to write files in these shapes. The pages don't need to change.
 
+## Where the site reads data: `js/data-source.js`
+
+The viewer only talks to `SkyData`, never to `fetch()` directly:
+
+- `SkyData.getPatch({ ra, dec, fov, det })` returns the `<id>.json` shape below plus the decoded images,
+  or `{ status: "no-coverage", nearest }`, and throws `SkyData.DataError` on network failure (the viewer offers Retry).
+- `SkyData.getOverlay("gaia" | "wise", { patch, target })` returns catalogue positions to draw over the image.
+- `SkyData.config.source` is `"static"` (these files) or `"api"`. Add `&source=api` to any viewer link to try the live path.
+
+**Live endpoint contract (to build):** `GET api/patch?ra=<deg>&dec=<deg>&fov=<deg>&det=<all|1..6>` returns the same JSON as
+`<id>.json` (frame paths relative to the endpoint URL or absolute). Return HTTP 404, or `{ "status": "no-coverage", "nearest": {...} }`,
+when SPHEREx has no images there. Cache the five test targets so the demo never depends on IRSA being fast.
+
+## Viewer URL parameters
+
+`viewer.html?ra=&dec=&fov=&name=&det=&mode=&ref=&flags=1&gaia=1&wise=1&track=1&embed=1&source=api`
+
+- `ra`, `dec`: degrees or sexagesimal (`08h55m10.8s`, `-7d14m42s`). `fov`: degrees.
+- `det`: `all` or `1`–`6`. `mode`: `each` (one date per frame), `stack` (all dates added), `diff` (subtract).
+  `ref` (with `diff`): `first`, `prev` or `stack`.
+- `flags`, `gaia`, `wise`, `track`: layers that start switched on. `embed=1`: no site header, for iframes.
+
 ## `patches.json`: which data file covers which spot
 
 ```json
-[{ "id": "wise0855", "title": "WISE 0855", "ra": 133.7951, "dec": -7.2451 }]
+[{ "id": "wise0855", "title": "WISE 0855", "ra": 133.7951, "dec": -7.2451, "fov_deg": 0.25 }]
 ```
-The viewer opens `data/<id>.json` for the closest entry within half the field of view.
+The viewer opens `data/<id>.json` for the closest entry whose own area (`fov_deg`, default 0.25°) covers the
+requested spot, then crops to the field of view the user picked.
 
 ## `<id>.json`: one patch of sky over time (Viewer page)
 
@@ -29,8 +52,18 @@ The viewer opens `data/<id>.json` for the closest entry within half the field of
     "mjd": 60863.4,                        // Modified Julian Date
     "band": "All 102 bands stacked",       // optional text shown in Raw Data
     "flags": ["3 cosmic rays"],            // optional short notes shown in Raw Data
-    "flags_file": "frames/wise0855/e00_flags.png"  // optional mask, 255 = flagged pixel
+    "flags_file": "frames/wise0855/e00_flags.png", // optional mask, 255 = flagged pixel
+    "flag_bits": { "SATURATED": 12, "COSMIC_RAY": 3 },  // optional: flagged-pixel counts per FLAGS bit
+    "detector": "all",                     // "all" (6 detectors added) or 1..6; drives the detector picker
+    "wavelength_um": [3.83, 4.41],         // optional, shown in the frame panel
+    "n_exposures": 14                      // optional: how many exposures were stacked
   }],
+  "light_curve": [{ "mjd": 60863.4, "flux": 812.5, "err": 9.1, "flagged": false }],  // optional: real target photometry;
+                                           // otherwise the chart measures the display images (relative only)
+  "overlays": {                            // optional catalogue rows; otherwise a sample of the test target only
+    "gaia": [{ "ra": 133.79, "dec": -7.24, "label": "Gaia DR3 123", "epoch": 2016.0 }],
+    "wise": [{ "ra": 133.79, "dec": -7.24, "label": "CatWISE J0855", "epoch": 2015.4 }]
+  },
   "predictions": [{                        // optional: AI / pipeline candidates (right panel)
     "id": "A", "label": "Candidate A",
     "kind": "Moving object (steady drift)",

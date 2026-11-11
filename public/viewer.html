@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/common.js" defer></script>
+  <script src="js/data-source.js" defer></script>
   <script src="js/viewer.js" defer></script>
 </head>
 <body data-page="search">
@@ -17,91 +18,145 @@
   <main>
     <a class="back-link" href="search.html" id="back-link">← Back to search</a>
 
+    <!-- 1. Choose a patch: coordinates, field of view, one-click test targets. All of it lands in the URL. -->
+    <section class="goto card" aria-label="Choose a patch of sky">
+      <form id="goto-form" class="goto-form" novalidate>
+        <div class="field">
+          <label for="g-ra">Right Ascension</label>
+          <input id="g-ra" autocomplete="off" spellcheck="false" placeholder="133.795 or 08h55m10.8s" aria-describedby="goto-error">
+        </div>
+        <div class="field">
+          <label for="g-dec">Declination</label>
+          <input id="g-dec" autocomplete="off" spellcheck="false" placeholder="-7.245 or -7d14m42s" aria-describedby="goto-error">
+        </div>
+        <div class="field field-fov">
+          <label for="g-fov">Field of view</label>
+          <select id="g-fov" aria-describedby="fov-hint"></select>
+        </div>
+        <button type="submit" class="primary">Show images</button>
+      </form>
+      <p id="goto-error" class="form-error" role="alert"></p>
+      <p id="fov-hint" class="muted small fov-hint">Bigger fields catch faster movers but take longer to load.</p>
+      <div class="preset-row">
+        <span class="muted small" id="preset-label">Test targets:</span>
+        <div id="preset-list" class="preset-list" role="group" aria-labelledby="preset-label"></div>
+      </div>
+    </section>
+
     <div class="viewer-top">
       <div class="title-block">
         <h1 id="viewer-title">Patch of sky</h1>
         <p class="coords mono" id="target-coords"></p>
+        <p class="target-note" id="target-note" hidden></p>
       </div>
       <div class="actions">
         <button type="button" id="copy-link" class="ghost">Copy link</button>
+        <button type="button" id="copy-embed" class="ghost">Copy embed code</button>
+        <a id="open-full" class="btn ghost" target="_blank" rel="noopener" hidden>Open full viewer ↗</a>
       </div>
     </div>
 
-    <!-- Shown when no images cover the requested spot -->
+    <!-- Shown instead of the viewer: no coordinates, no coverage, or a failed download -->
     <section id="empty" class="card empty" hidden aria-live="polite">
-      <h2>No SPHEREx images for this spot yet</h2>
+      <h2 id="empty-title">No SPHEREx images for this spot yet</h2>
       <p id="empty-detail"></p>
-      <div class="actions">
-        <a class="btn" href="search.html#raw">Try other coordinates</a>
-        <a class="btn" href="search.html#gallery">Browse the gallery</a>
-        <a class="btn primary" href="viewer.html?ra=133.79510&dec=-7.24510&fov=0.25&name=WISE+0855">Open the demo</a>
-      </div>
+      <div class="actions" id="empty-actions"></div>
     </section>
 
     <div id="viewer" class="viewer-layout" hidden>
 
-      <!-- LEFT: raw data -->
+      <!-- LEFT: what you're looking at -->
       <aside class="panel raw area-raw" aria-labelledby="raw-title">
         <h3 id="raw-title">This image</h3>
         <dl id="raw-frame"></dl>
+        <h3>Contamination flags</h3>
+        <div id="flag-summary" class="flag-summary"></div>
         <h3>Under cursor</h3>
-        <p class="hint">Hover over the image.</p>
+        <p class="hint">Hover over the image. Click to measure brightness there.</p>
         <dl id="raw-cursor"></dl>
         <h3>Patch</h3>
         <dl id="raw-patch"></dl>
         <a id="download" class="btn ghost small" download style="width:100%">Download this image</a>
       </aside>
 
-      <!-- CENTER: image -->
-      <figure class="area-image" style="margin:0">
+      <!-- CENTER: the image -->
+      <figure class="area-image">
         <div class="stage" id="stage">
           <canvas id="sky" width="600" height="600" tabindex="0"
-                  aria-label="SPHEREx image of the selected patch of sky. Space to blink, arrow keys to change date."></canvas>
+                  aria-describedby="sky-caption"
+                  aria-label="SPHEREx image of the selected patch of sky. Space plays or pauses, arrow keys change date, Enter measures brightness at the center."></canvas>
           <div class="crosshair" aria-hidden="true"></div>
           <span id="sim-badge" class="badge badge-warn" hidden>Simulated data</span>
+          <span id="fov-badge" class="badge badge-fov mono" aria-hidden="true"></span>
           <span id="frame-badge" class="badge badge-date mono" aria-hidden="true"></span>
           <span id="count-badge" class="badge badge-count mono" aria-hidden="true"></span>
-          <div id="loading" class="loading" hidden><span class="spinner"></span>Loading sky images…</div>
+          <div id="loading" class="loading" hidden>
+            <span class="spinner"></span>
+            <span id="loading-text">Loading sky images…</span>
+            <span class="progress" aria-hidden="true"><i id="loading-bar"></i></span>
+          </div>
         </div>
+        <figcaption id="sky-caption" class="muted small sky-caption"></figcaption>
       </figure>
 
-      <!-- under the image: blink + view controls -->
+      <!-- under the image: the "little video" and how each frame is built -->
       <div class="area-controls">
         <div class="controls-bar">
           <div class="transport">
             <button type="button" id="prev" class="icon" aria-label="Previous date">&#9664;&#xFE0E;</button>
-            <button type="button" id="blink" class="primary" aria-pressed="false">Blink</button>
+            <button type="button" id="blink" class="primary" aria-pressed="false">▶ Play</button>
             <button type="button" id="next" class="icon" aria-label="Next date">&#9654;&#xFE0E;</button>
           </div>
           <label>
-            <span class="visually-hidden">Blink speed</span>
+            <span class="visually-hidden">Playback speed</span>
             <select id="speed">
-              <option value="slow">Slow</option>
-              <option value="normal" selected>Normal</option>
-              <option value="fast">Fast</option>
+              <option value="slow">Slow · 1 swap/s</option>
+              <option value="normal" selected>Normal · 2 swaps/s</option>
+              <option value="fast">Fast · 3 swaps/s</option>
             </select>
           </label>
-          <div class="segmented" role="radiogroup" aria-label="Image mode">
-            <label><input type="radio" name="mode" value="normal" checked><span>Image</span></label>
-            <label><input type="radio" name="mode" value="diff"><span>Difference</span></label>
-          </div>
-          <details class="adjust">
-            <summary>Adjust</summary>
-            <div class="adjust-pop">
-              <label class="range-row" for="stretch">Brightness
-                <input type="range" id="stretch" min="0.5" max="3" step="0.1" value="1"></label>
-              <label class="range-row" for="contrast">Contrast
-                <input type="range" id="contrast" min="0.5" max="3" step="0.1" value="1"></label>
-              <label class="check"><input type="checkbox" id="invert"> Invert colors</label>
-              <label class="check"><input type="checkbox" id="crosshair" checked> Target crosshair</label>
-              <label class="check"><input type="checkbox" id="show-flags"> Show flagged pixels</label>
-            </div>
-          </details>
         </div>
-        <p class="muted small" id="mode-help">Each date as observed.</p>
+        <div class="controls-bar">
+          <div class="segmented" role="radiogroup" aria-label="What each frame shows">
+            <label><input type="radio" name="mode" value="each" checked><span>Each date</span></label>
+            <label><input type="radio" name="mode" value="stack"><span>Add all dates</span></label>
+            <label><input type="radio" name="mode" value="diff"><span>Subtract</span></label>
+          </div>
+          <label id="ref-wrap" hidden>
+            <span class="visually-hidden">Subtract which image</span>
+            <select id="ref">
+              <option value="first">minus first date</option>
+              <option value="prev">minus previous date</option>
+              <option value="stack">minus all dates added</option>
+            </select>
+          </label>
+          <label>
+            <span class="visually-hidden">Detector</span>
+            <select id="det" aria-describedby="mode-help"></select>
+          </label>
+        </div>
+        <p class="muted small" id="mode-help"></p>
       </div>
 
-      <!-- BOTTOM: timeline -->
+      <!-- brightness over time, for the variable stars (and anything you click) -->
+      <section class="panel area-chart lc" aria-labelledby="lc-title">
+        <div class="lc-head">
+          <h2 id="lc-title">Brightness over time</h2>
+          <span class="muted small" id="lc-where"></span>
+          <button type="button" id="lc-reset" class="ghost small" hidden>Back to target</button>
+        </div>
+        <div class="lc-plot">
+          <svg id="lc-svg" viewBox="0 0 640 220" role="img" aria-labelledby="lc-title lc-summary"></svg>
+          <div id="lc-tip" class="lc-tip" hidden></div>
+        </div>
+        <p class="muted small" id="lc-summary"></p>
+        <details class="lc-table">
+          <summary class="small">Show as a table</summary>
+          <table><thead><tr><th scope="col">Date</th><th scope="col">Relative brightness</th><th scope="col">Flags</th></tr></thead><tbody id="lc-rows"></tbody></table>
+        </details>
+      </section>
+
+      <!-- timeline -->
       <section class="panel area-timeline timeline" aria-label="Timeline">
         <div class="tl-track">
           <div class="tl-head">
@@ -115,17 +170,37 @@
         <a class="btn dome-btn" id="dome-link" href="dome.html">🌐 View in Sky Dome</a>
       </section>
 
-      <!-- RIGHT: AI predictions -->
-      <aside class="panel area-ai" aria-labelledby="ai-title">
-        <div class="ai-head">
-          <h2 id="ai-title">Mover predictions</h2>
-          <span class="pill pill-warn">AI · prototype</span>
-        </div>
-        <p class="ai-note">Objects our model thinks moved or changed. Pick one to highlight it on the image.</p>
-        <ol class="ai-list" id="ai-list"></ol>
-        <label class="check small"><input type="checkbox" id="reveal"> Circle all candidates</label>
-        <p class="ai-note" style="margin-top:12px">Is this right? Your blink is the final check. Predictions are a starting point, not an answer.</p>
-      </aside>
+      <!-- RIGHT: layers + candidates -->
+      <div class="area-side">
+        <section class="panel layers" aria-labelledby="layers-title">
+          <h2 id="layers-title">Layers</h2>
+          <label class="check"><input type="checkbox" id="show-flags"> <span class="swatch swatch-flag" aria-hidden="true"></span> Contamination flags</label>
+          <label class="check"><input type="checkbox" id="ov-gaia"> <span class="swatch swatch-gaia" aria-hidden="true">◆</span> Gaia DR3 positions (2016)</label>
+          <label class="check"><input type="checkbox" id="ov-wise"> <span class="swatch swatch-wise" aria-hidden="true">■</span> WISE positions (2010)</label>
+          <label class="check"><input type="checkbox" id="show-track"> <span class="swatch swatch-track" aria-hidden="true">○</span> Expected position on each date</label>
+          <p class="ai-note" id="overlay-note"></p>
+          <details class="adjust-inline">
+            <summary>Adjust image</summary>
+            <label class="range-row" for="stretch">Brightness
+              <input type="range" id="stretch" min="0.5" max="3" step="0.1" value="1"></label>
+            <label class="range-row" for="contrast">Contrast
+              <input type="range" id="contrast" min="0.5" max="3" step="0.1" value="1"></label>
+            <label class="check"><input type="checkbox" id="invert"> Invert colors</label>
+            <label class="check"><input type="checkbox" id="crosshair" checked> Target crosshair</label>
+          </details>
+        </section>
+
+        <section class="panel area-ai" aria-labelledby="ai-title">
+          <div class="ai-head">
+            <h2 id="ai-title">Mover predictions</h2>
+            <span class="pill pill-warn">AI · prototype</span>
+          </div>
+          <p class="ai-note">Objects our model thinks moved or changed. Pick one to highlight it on the image.</p>
+          <ol class="ai-list" id="ai-list"></ol>
+          <label class="check small"><input type="checkbox" id="reveal"> Circle all candidates</label>
+          <p class="ai-note" style="margin-top:12px">Is this right? Your blink is the final check. Predictions are a starting point, not an answer.</p>
+        </section>
+      </div>
     </div>
 
     <p id="status" role="status" class="muted small"></p>

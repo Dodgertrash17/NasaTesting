@@ -61,21 +61,22 @@ form.addEventListener('submit', (e) => {
     return;
   }
   formError.textContent = '';
-  const named = TARGETS.find(t => separation(ra, dec, t.ra, t.dec) < 0.01);
+  const named = knownTarget(ra, dec);
   const url = viewerUrl({ ra, dec, fov: fovInput.value, name: named?.name });
   location.href = e.submitter?.value === 'dome' ? url.replace('viewer.html', 'dome.html') : url;
 });
 
+fovInput.replaceChildren(...FOV_OPTIONS.map(o => new Option(o.label, o.deg)));
+fovInput.value = String(15 / 60);
+
+// One click opens the viewer with the field of view that suits each target.
 document.querySelector('#presets').replaceChildren(...TARGETS.map(t => {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.textContent = t.name;
-  b.addEventListener('click', () => {
-    raInput.value = formatRA(t.ra);
-    decInput.value = formatDec(t.dec);
-    form.requestSubmit();
-  });
-  return b;
+  const a = document.createElement('a');
+  a.className = 'btn preset';
+  a.href = viewerUrl({ ra: t.ra, dec: t.dec, fov: t.fov, name: t.name });
+  a.innerHTML = `<span></span><span class="preset-kind">${t.kind === 'mover' ? 'moves' : 'varies'}</span>`;
+  a.firstChild.textContent = t.name;
+  return a;
 }));
 
 // ---------- gallery cards (used by Gallery and Filtered) ----------

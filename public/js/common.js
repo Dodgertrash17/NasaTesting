@@ -15,19 +15,49 @@ const NAV = [
   { href: 'about.html',  label: 'About',       section: 'about' },
 ];
 
-// Challenge targets (J2000). Shared by the search page and the viewer.
+// The five challenge test targets. Shared by the search page and the viewer.
+// ra/dec are the catalogue position at `epoch` (decimal year); pm is proper motion in
+// arcsec/yr as [mu_ra * cos(dec), mu_dec]. Values are approximate: verify in SIMBAD.
+// `fov` is the field of view (degrees) a preset opens with: fast movers get a wider field
+// because they are no longer at their catalogue position.
 const TARGETS = [
-  { id: 'wise0855', name: 'WISE 0855',      ra: 133.7951, dec: -7.2451 },
-  { id: 'barnard',  name: "Barnard's Star", ra: 269.4521, dec: 4.6934 },
-  { id: 'epsindib', name: 'Epsilon Indi B', ra: 331.0438, dec: -56.7827 },
-  { id: 'rwaur',    name: 'RW Aurigae',     ra: 76.9563,  dec: 30.4013 },
-  { id: 'rdra',     name: 'R Draconis',     ra: 248.1675, dec: 66.7551 },
+  { id: 'barnard',  name: "Barnard's Star", ra: 269.4521, dec: 4.6934,   epoch: 2000, pm: [-0.80, 10.33],
+    fov: 15 / 60, kind: 'mover',    note: 'Fastest-moving star in our sky: about 10″ a year, so 2 to 3 SPHEREx pixels across the survey.' },
+  { id: 'epsindib', name: 'Epsilon Indi B', ra: 331.0438, dec: -56.7827, epoch: 2000, pm: [3.98, -2.47],
+    fov: 10 / 60, kind: 'mover',    note: 'Two brown dwarfs about 1″ apart, so they show as one dot. Moves about 4.7″ a year.' },
+  { id: 'wise0855', name: 'WISE 0855',      ra: 133.7951, dec: -7.2451,  epoch: 2014, pm: [-8.05, 0.66],
+    fov: 10 / 60, kind: 'mover',    gaia: false, note: 'The coldest known brown dwarf. Very faint: look at the longest-wavelength detector and the stack.' },
+  { id: 'rwaur',    name: 'RW Aurigae',     ra: 76.9563,  dec: 30.4013,  epoch: 2000, pm: [0, 0],
+    fov: 5 / 60,  kind: 'variable', note: 'A young star that dims irregularly. Watch the brightness chart, not the position.' },
+  { id: 'rdra',     name: 'R Draconis',     ra: 248.1675, dec: 66.7551,  epoch: 2000, pm: [0, 0],
+    fov: 5 / 60,  kind: 'variable', note: 'A pulsating giant (Mira variable) with a ~245-day cycle. Bright: check the saturation flags.' },
 ];
+
+// Field-of-view choices (degrees). Bigger fields catch faster movers but download more.
+const FOV_OPTIONS = [2, 5, 10, 15, 30, 60].map(m => ({ deg: m / 60, label: m < 60 ? `${m}′` : '1°' }));
+
+function formatFov(deg) {
+  const m = deg * 60;
+  return m >= 60 ? `${+(m / 60).toFixed(2)}°` : `${+m.toFixed(1)}′`;
+}
+
+// Find a preset target near a position (within ~36″).
+function knownTarget(ra, dec) {
+  return TARGETS.find(t => separation(ra, dec, t.ra, t.dec) < 0.01) || null;
+}
 
 // ---------- header + footer ----------
 
+// ?embed=1 hides the site header and footer so a page can sit inside an <iframe>.
+const EMBED = new URLSearchParams(location.search).get('embed') === '1';
+
 function renderChrome() {
   const page = document.body.dataset.page;
+  if (EMBED) {
+    document.body.classList.add('embed');
+    for (const el of document.querySelectorAll('#site-header, #site-footer')) el.remove();
+    return;
+  }
   const header = document.querySelector('#site-header');
   if (header) {
     header.className = 'site-header';
@@ -107,9 +137,26 @@ function separation(ra1, dec1, ra2, dec2) {
   return Math.acos(Math.min(1, Math.max(-1, c))) / r;
 }
 
-function viewerUrl({ ra, dec, fov = 0.25, name }) {
-  const q = new URLSearchParams({ ra: (+ra).toFixed(5), dec: (+dec).toFixed(5), fov });
+function mjdToYear(mjd) {
+  return 2000 + (mjd - 51544.5) / 365.25;
+}
+
+// Move a catalogue position along its proper motion. pm = [mu_ra*cos(dec), mu_dec] in arcsec/yr.
+// Good to well under an arcsecond over decades; use astropy's apply_space_motion in the pipeline.
+function propagate(ra, dec, pm, fromYear, toYear) {
+  if (!pm) return { ra, dec };
+  const dt = toYear - fromYear;
+  const d = dec + (pm[1] * dt) / 3600;
+  const r = ra + (pm[0] * dt) / 3600 / Math.cos(dec * Math.PI / 180);
+  return { ra: (r + 360) % 360, dec: d };
+}
+
+// Build a viewer link. Everything the viewer shows can be described in its URL, so links can
+// be shared and the page can be embedded: viewer.html?ra=..&dec=..&fov=..&det=..&mode=..&embed=1
+function viewerUrl({ ra, dec, fov = 0.25, name, ...extra }) {
+  const q = new URLSearchParams({ ra: (+ra).toFixed(5), dec: (+dec).toFixed(5), fov: +(+fov).toFixed(4) });
   if (name) q.set('name', name);
+  for (const [k, v] of Object.entries(extra)) if (v != null && v !== '') q.set(k, v);
   return `viewer.html?${q}`;
 }
 

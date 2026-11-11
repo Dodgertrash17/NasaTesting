@@ -43,19 +43,14 @@
           </div>
           <div class="field field-fov">
             <label for="fov">Field of view</label>
-            <select id="fov" name="fov">
-              <option value="0.1">0.1°</option>
-              <option value="0.25" selected>0.25°</option>
-              <option value="0.5">0.5°</option>
-              <option value="1">1°</option>
-            </select>
+            <select id="fov" name="fov"></select>
           </div>
           <button type="submit" class="primary" value="viewer">Show images →</button>
           <button type="submit" value="dome">🌐 Find in Sky Dome</button>
         </form>
         <p id="form-error" role="alert"></p>
         <div class="presets">
-          <span class="muted small" id="presets-label">Challenge targets:</span>
+          <span class="muted small" id="presets-label">Challenge test targets (one click):</span>
           <div id="presets" class="presets" role="group" aria-labelledby="presets-label" style="margin:0"></div>
         </div>
       </div>
