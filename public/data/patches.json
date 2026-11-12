@@ -1,9 +1,713 @@
 [
-  {"id": "wise0855", "title": "WISE 0855 (simulated)", "ra": 133.7951, "dec": -7.2451, "fov_deg": 0.25},
-  {"id": "barnard", "title": "Barnard's Star (simulated)", "ra": 269.4521, "dec": 4.6934, "fov_deg": 0.25},
-  {"id": "epsindib", "title": "Epsilon Indi B (simulated)", "ra": 331.0438, "dec": -56.7827, "fov_deg": 0.25},
-  {"id": "rwaur", "title": "RW Aurigae (simulated)", "ra": 76.9563, "dec": 30.4013, "fov_deg": 0.25},
-  {"id": "rdra", "title": "R Draconis (simulated)", "ra": 248.1675, "dec": 66.7551, "fov_deg": 0.25},
-  {"id": "m42", "title": "Orion Nebula (simulated)", "ra": 83.8221, "dec": -5.3911, "fov_deg": 1.0},
-  {"id": "m101", "title": "Practice patch"}
+ {
+  "id": "m42",
+  "title": "Orion Nebula (simulated)",
+  "ra": 83.8221,
+  "dec": -5.3911,
+  "fov_deg": 1.0
+ },
+ {
+  "id": "m101",
+  "title": "Practice patch"
+ },
+ {
+  "id": "barnard",
+  "title": "Barnard's Star",
+  "ra": 269.446268,
+  "dec": 4.768204,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "epsindib",
+  "title": "Epsilon Indi B",
+  "ra": 331.09665,
+  "dec": -56.800664,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "wise0855",
+  "title": "WISE 0855-0714",
+  "ra": 133.75947,
+  "dec": -7.242557,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rwaur",
+  "title": "RW Aurigae",
+  "ra": 76.95609,
+  "dec": 30.401128,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rdra",
+  "title": "R Draconis",
+  "ra": 248.167233,
+  "dec": 66.755024,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "kapteynsstar",
+  "title": "Kapteyn's Star",
+  "ra": 77.985457,
+  "dec": -45.05967,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "groombridge1830",
+  "title": "Groombridge 1830",
+  "ra": 178.281404,
+  "dec": 37.676666,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "lacaille9352",
+  "title": "Lacaille 9352",
+  "ra": 346.527103,
+  "dec": -35.843469,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "cd3715492",
+  "title": "CD-37 15492",
+  "ra": 1.402974,
+  "dec": -37.374229,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia79892096",
+  "title": "Gaia DR3 3098328182579892096",
+  "ra": 122.997689,
+  "dec": 8.736251,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "61cygni",
+  "title": "61 Cygni",
+  "ra": 316.768289,
+  "dec": 38.764839,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "teegardensstar",
+  "title": "Teegarden's Star",
+  "ra": 43.279596,
+  "dec": 16.853803,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "lalande21185",
+  "title": "Lalande 21185",
+  "ra": 165.828969,
+  "dec": 35.935385,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "wolf359",
+  "title": "Wolf 359",
+  "ra": 164.09237,
+  "dec": 6.995229,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia02602752",
+  "title": "Gaia DR3 778947814402602752",
+  "ra": 166.325177,
+  "dec": 43.533556,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "omicron2eridani4",
+  "title": "Omicron2 Eridani (40 Eri)",
+  "ra": 63.823357,
+  "dec": -7.680375,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia31605760",
+  "title": "Gaia DR3 3713594960831605760",
+  "ra": 204.105681,
+  "dec": 3.671386,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "proximacentauri",
+  "title": "Proxima Centauri",
+  "ra": 217.369436,
+  "dec": -62.673938,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "luytensstar",
+  "title": "Luyten's Star",
+  "ra": 111.856222,
+  "dec": 5.199129,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia12759552",
+  "title": "Gaia DR3 6307374845312759552",
+  "ra": 227.547017,
+  "dec": -16.404993,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia63905536",
+  "title": "Gaia DR3 6307365499463905536",
+  "ra": 227.546495,
+  "dec": -16.48849,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia73009792",
+  "title": "Gaia DR3 1711005951573009792",
+  "ra": 267.37638,
+  "dec": 82.797847,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia12503424",
+  "title": "Gaia DR3 6281432246412503424",
+  "ra": 221.062339,
+  "dec": -20.337908,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "lacaille8760axmi",
+  "title": "Lacaille 8760 (AX Mic)",
+  "ra": 319.28339,
+  "dec": -38.875639,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia58739840",
+  "title": "Gaia DR3 5140693571158739840",
+  "ra": 24.781439,
+  "dec": -17.946788,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia96316416",
+  "title": "Gaia DR3 1057879895596316416",
+  "ra": 175.089473,
+  "dec": 67.236168,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia14712448",
+  "title": "Gaia DR3 5115463180914712448",
+  "ra": 54.576155,
+  "dec": -11.50656,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "vanmaanensstar",
+  "title": "Van Maanen's Star",
+  "ra": 12.300176,
+  "dec": 5.369024,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia60306560",
+  "title": "Gaia DR3 6663600360560306560",
+  "ra": 290.20673,
+  "dec": -45.579151,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia28596096",
+  "title": "Gaia DR3 1057318835428596096",
+  "ra": 169.968099,
+  "dec": 65.847803,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "groombridge34",
+  "title": "Groombridge 34",
+  "ra": 4.624397,
+  "dec": 44.025931,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia84811520",
+  "title": "Gaia DR3 5339892367684811520",
+  "ra": 168.967631,
+  "dec": -57.539109,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gliese440whitedw",
+  "title": "Gliese 440 (white dwarf)",
+  "ra": 176.474039,
+  "dec": -64.844011,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia27143808",
+  "title": "Gaia DR3 6439125097427143808",
+  "ra": 281.314389,
+  "dec": -63.958933,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia16413696",
+  "title": "Gaia DR3 2611561706216413696",
+  "ra": 343.490518,
+  "dec": -6.786723,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia76250624",
+  "title": "Gaia DR3 6165095738576250624",
+  "ra": 205.491878,
+  "dec": -34.247118,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia17922304",
+  "title": "Gaia DR3 2338944532617922304",
+  "ra": 355.817179,
+  "dec": -24.180442,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia41041536",
+  "title": "Gaia DR3 2515037264041041536",
+  "ra": 33.074694,
+  "dec": 3.562238,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia72576384",
+  "title": "Gaia DR3 3519785523672576384",
+  "ra": 186.227094,
+  "dec": -18.25897,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia92046592",
+  "title": "Gaia DR3 4780100658292046592",
+  "ra": 62.607136,
+  "dec": -53.619707,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia72813568",
+  "title": "Gaia DR3 3340477717172813568",
+  "ra": 85.55339,
+  "dec": 12.478001,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia96586112",
+  "title": "Gaia DR3 5184938400096586112",
+  "ra": 41.574409,
+  "dec": -5.002629,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia37068160",
+  "title": "Gaia DR3 2519329585637068160",
+  "ra": 30.734148,
+  "dec": 5.700709,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia37310080",
+  "title": "Gaia DR3 470826482637310080",
+  "ra": 67.816197,
+  "dec": 58.962296,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gaia68019072",
+  "title": "Gaia DR3 4736655036868019072",
+  "ra": 53.577374,
+  "dec": -49.888742,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "luhman16",
+  "title": "Luhman 16AB",
+  "ra": 162.295559,
+  "dec": -53.31705,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1828",
+  "title": "WISE 1828+2650",
+  "ra": 277.134847,
+  "dec": 26.844564,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1541",
+  "title": "WISE 1541-2250",
+  "ra": 235.459594,
+  "dec": -22.841026,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w0410",
+  "title": "WISE 0410+1502",
+  "ra": 62.599226,
+  "dec": 15.036919,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1738",
+  "title": "WISE 1738+2732",
+  "ra": 264.649696,
+  "dec": 27.548221,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w2056",
+  "title": "WISE 2056+1459",
+  "ra": 314.124196,
+  "dec": 15.000561,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1405",
+  "title": "WISE 1405+5534",
+  "ra": 211.309038,
+  "dec": 55.573712,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1639",
+  "title": "WISE 1639-6847",
+  "ra": 249.92651,
+  "dec": -68.806471,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w0359",
+  "title": "WISE 0359-5401",
+  "ra": 59.891231,
+  "dec": -54.034747,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "ugps0722",
+  "title": "UGPS 0722-0540",
+  "ra": 110.609694,
+  "dec": -5.673352,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "2m0415",
+  "title": "2MASS 0415-0935",
+  "ra": 63.848216,
+  "dec": -9.581087,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "2m0939",
+  "title": "2MASS 0939-2448",
+  "ra": 144.902268,
+  "dec": -24.815261,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w0458",
+  "title": "WISE 0458+6434",
+  "ra": 74.726836,
+  "dec": 64.582554,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "2m0729",
+  "title": "2MASS 0729-3954",
+  "ra": 112.244658,
+  "dec": -39.888858,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w1217",
+  "title": "WISE 1217+1626",
+  "ra": 184.490441,
+  "dec": 16.439259,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "denis0255",
+  "title": "DENIS 0255-4700",
+  "ra": 43.776307,
+  "dec": -47.018306,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "2m0036",
+  "title": "2MASS 0036+1821",
+  "ra": 9.074445,
+  "dec": 18.353764,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "lp944",
+  "title": "LP 944-20",
+  "ra": 54.899693,
+  "dec": -35.426856,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gl570d",
+  "title": "Gliese 570 D",
+  "ra": 224.320734,
+  "dec": -21.376268,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "w0647",
+  "title": "WISE 0647-6232",
+  "ra": 101.846573,
+  "dec": -62.541605,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "mira",
+  "title": "Mira (o Ceti)",
+  "ra": 34.836649,
+  "dec": -2.978704,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "chicyg",
+  "title": "Chi Cygni",
+  "ra": 297.641132,
+  "dec": 32.913751,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rleo",
+  "title": "R Leonis",
+  "ra": 146.889546,
+  "dec": 11.428602,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rcas",
+  "title": "R Cassiopeiae",
+  "ra": 359.604577,
+  "dec": 51.388935,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "uori",
+  "title": "U Orionis",
+  "ra": 88.954783,
+  "dec": 20.175142,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rhya",
+  "title": "R Hydrae",
+  "ra": 202.427824,
+  "dec": -23.281235,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "tcep",
+  "title": "T Cephei",
+  "ra": 317.38156,
+  "dec": 68.490573,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "raql",
+  "title": "R Aquilae",
+  "ra": 286.592744,
+  "dec": 8.229507,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rtri",
+  "title": "R Trianguli",
+  "ra": 39.260051,
+  "dec": 34.264184,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "ruma",
+  "title": "R Ursae Majoris",
+  "ra": 161.15949,
+  "dec": 68.775568,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rboo",
+  "title": "R Bootis",
+  "ra": 219.298027,
+  "dec": 26.736658,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "svir",
+  "title": "S Virginis",
+  "ra": 203.250337,
+  "dec": -7.194713,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rcrb",
+  "title": "R Coronae Borealis",
+  "ra": 237.143374,
+  "dec": 28.156664,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "ttau",
+  "title": "T Tauri",
+  "ra": 65.497723,
+  "dec": 19.535017,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "rytau",
+  "title": "RY Tauri",
+  "ra": 65.489277,
+  "dec": 28.443015,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "aatau",
+  "title": "AA Tauri",
+  "ra": 68.73096,
+  "dec": 24.481249,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "drtau",
+  "title": "DR Tauri",
+  "ra": 71.775936,
+  "dec": 16.978459,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "fuori",
+  "title": "FU Orionis",
+  "ra": 86.343204,
+  "dec": 9.070063,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "v1647ori",
+  "title": "V1647 Orionis (McNeil's Nebula)",
+  "ra": 86.554744,
+  "dec": -0.101365,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "v1057cyg",
+  "title": "V1057 Cygni",
+  "ra": 314.723862,
+  "dec": 44.257856,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "exlup",
+  "title": "EX Lupi",
+  "ra": 240.772785,
+  "dec": -40.307226,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "deltacep",
+  "title": "Delta Cephei",
+  "ra": 337.292962,
+  "dec": 58.415217,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "etaaql",
+  "title": "Eta Aquilae",
+  "ra": 298.118268,
+  "dec": 1.005599,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv9413825536",
+  "title": "Gaia DR3 5982321339413825536",
+  "ra": 236.104429,
+  "dec": -50.750386,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv0945707776",
+  "title": "Gaia DR3 6868233080945707776",
+  "ra": 295.576608,
+  "dec": -20.546588,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv3589489536",
+  "title": "Gaia DR3 4041615043589489536",
+  "ra": 268.106289,
+  "dec": -34.191243,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv9231713408",
+  "title": "Gaia DR3 4087778009231713408",
+  "ra": 289.060163,
+  "dec": -16.971472,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv6977267328",
+  "title": "Gaia DR3 4077746236977267328",
+  "ra": 277.595822,
+  "dec": -23.731934,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv3330179456",
+  "title": "Gaia DR3 4042524653330179456",
+  "ra": 270.188074,
+  "dec": -33.075028,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv3068984832",
+  "title": "Gaia DR3 4292229963068984832",
+  "ra": 288.810622,
+  "dec": 3.192587,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv7771922560",
+  "title": "Gaia DR3 2952849187771922560",
+  "ra": 103.765893,
+  "dec": -12.25271,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv7798780288",
+  "title": "Gaia DR3 3108548967798780288",
+  "ra": 108.1117,
+  "dec": -1.866355,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv6809283840",
+  "title": "Gaia DR3 4056473946809283840",
+  "ra": 267.794856,
+  "dec": -29.469563,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv2917288448",
+  "title": "Gaia DR3 2683251852917288448",
+  "ra": 330.668106,
+  "dec": 2.403715,
+  "fov_deg": 0.25
+ },
+ {
+  "id": "gv5907958144",
+  "title": "Gaia DR3 6756288915907958144",
+  "ra": 288.150258,
+  "dec": -32.849931,
+  "fov_deg": 0.25
+ }
 ]

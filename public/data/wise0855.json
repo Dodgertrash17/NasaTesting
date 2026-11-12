@@ -1,143 +1,1234 @@
 {
-  "patch": {
-    "id": "wise0855",
-    "name": "WISE 0855",
-    "width_px": 146,
-    "height_px": 146,
-    "ra": 133.7951,
-    "dec": -7.2451,
-    "fov_deg": 0.25,
-    "pixel_scale_arcsec": 6.164,
-    "coord_epoch": 2014.0,
-    "simulated": true,
-    "boost": 1.0
+ "patch": {
+  "id": "wise0855",
+  "name": "WISE 0855-0714",
+  "width_px": 147,
+  "height_px": 147,
+  "ra": 133.75947,
+  "dec": -7.242557,
+  "fov_deg": 0.25,
+  "pixel_scale_arcsec": 6.15,
+  "simulated": false,
+  "grid_epoch": 2026.0,
+  "source": "SPHEREx Level 2 images (IRSA), processed by pipeline steps 1-7"
+ },
+ "frames": [
+  {
+   "file": "frames/wise0855/v00_all.png",
+   "flags_file": "frames/wise0855/v00_all_flags.png",
+   "mjd": 60801.235,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.991,
+    4.997
+   ],
+   "n_exposures": 30,
+   "flags": [
+    "30 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2705
+   }
   },
-  "frames": [
-    {
-      "file": "frames/wise0855/e00.png",
-      "flags_file": "frames/wise0855/e00_flags.png",
-      "mjd": 60863.05,
-      "band": "All 102 bands stacked",
-      "detector": "all",
-      "n_exposures": 23,
-      "flags": [
-        "5 cosmic rays"
-      ]
-    },
-    {
-      "file": "frames/wise0855/e01.png",
-      "flags_file": "frames/wise0855/e01_flags.png",
-      "mjd": 61046.89,
-      "band": "All 102 bands stacked",
-      "detector": "all",
-      "n_exposures": 9,
-      "flags": [
-        "2 cosmic rays"
-      ]
-    },
-    {
-      "file": "frames/wise0855/e02.png",
-      "flags_file": "frames/wise0855/e02_flags.png",
-      "mjd": 61230.77,
-      "band": "All 102 bands stacked",
-      "detector": "all",
-      "n_exposures": 18,
-      "flags": [
-        "3 cosmic rays"
-      ]
-    }
-  ],
-  "candidates": [
-    {
-      "x": 87.5,
-      "y": 71.3,
-      "seen_in": "e0",
-      "match": {
-        "name": "Candidate A"
-      }
-    },
-    {
-      "x": 88.2,
-      "y": 71.2,
-      "seen_in": "e1",
-      "match": {
-        "name": "Candidate A"
-      }
-    },
-    {
-      "x": 88.8,
-      "y": 71.2,
-      "seen_in": "e2",
-      "match": {
-        "name": "Candidate A"
-      }
-    },
-    {
-      "x": 118.5,
-      "y": 86.5,
-      "seen_in": "e2",
-      "match": {
-        "name": "Candidate B"
-      }
-    },
-    {
-      "x": 73,
-      "y": 37,
-      "seen_in": "e1",
-      "match": {
-        "name": "Candidate C"
-      }
-    }
-  ],
-  "predictions": [
-    {
-      "id": "A",
-      "label": "Candidate A",
-      "kind": "Moving object (steady drift)",
-      "confidence": 0.88,
-      "track": [
-        {
-          "epoch": 0,
-          "x": 87.5,
-          "y": 71.3
-        },
-        {
-          "epoch": 1,
-          "x": 88.2,
-          "y": 71.2
-        },
-        {
-          "epoch": 2,
-          "x": 88.8,
-          "y": 71.2
-        }
-      ]
-    },
-    {
-      "id": "B",
-      "label": "Candidate B",
-      "kind": "Seen on one date only (asteroid?)",
-      "confidence": 0.64,
-      "track": [
-        {
-          "epoch": 2,
-          "x": 118.5,
-          "y": 86.5
-        }
-      ]
-    },
-    {
-      "id": "C",
-      "label": "Candidate C",
-      "kind": "Possible artifact (cosmic ray)",
-      "confidence": 0.12,
-      "track": [
-        {
-          "epoch": 1,
-          "x": 73,
-          "y": 37
-        }
-      ]
-    }
+  {
+   "file": "frames/wise0855/v00_1.png",
+   "flags_file": "frames/wise0855/v00_1_flags.png",
+   "mjd": 60801.516,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.991,
+    1.064
+   ],
+   "n_exposures": 4,
+   "flags": [
+    "4 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2814
+   }
+  },
+  {
+   "file": "frames/wise0855/v00_2.png",
+   "flags_file": "frames/wise0855/v00_2_flags.png",
+   "mjd": 60801.278,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.278,
+    1.627
+   ],
+   "n_exposures": 8,
+   "flags": [
+    "8 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2640
+   }
+  },
+  {
+   "file": "frames/wise0855/v00_3.png",
+   "flags_file": "frames/wise0855/v00_3_flags.png",
+   "mjd": 60800.745,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    2.208,
+    2.413
+   ],
+   "n_exposures": 3,
+   "flags": [
+    "3 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2689
+   }
+  },
+  {
+   "file": "frames/wise0855/v00_4.png",
+   "flags_file": "frames/wise0855/v00_4_flags.png",
+   "mjd": 60801.54,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    3.352,
+    3.633
+   ],
+   "n_exposures": 4,
+   "flags": [
+    "4 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2835
+   }
+  },
+  {
+   "file": "frames/wise0855/v00_5.png",
+   "flags_file": "frames/wise0855/v00_5_flags.png",
+   "mjd": 60801.29,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    4.031,
+    4.399
+   ],
+   "n_exposures": 8,
+   "flags": [
+    "8 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2691
+   }
+  },
+  {
+   "file": "frames/wise0855/v00_6.png",
+   "flags_file": "frames/wise0855/v00_6_flags.png",
+   "mjd": 60800.769,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.853,
+    4.997
+   ],
+   "n_exposures": 3,
+   "flags": [
+    "3 exposures between 2025-05-05 and 2025-05-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2720
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_all.png",
+   "flags_file": "frames/wise0855/v01_all_flags.png",
+   "mjd": 60986.266,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.745,
+    4.972
+   ],
+   "n_exposures": 108,
+   "flags": [
+    "108 exposures between 2025-10-31 and 2025-11-14",
+    "target saturated in 8 of 108 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2582
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_1.png",
+   "flags_file": "frames/wise0855/v01_1_flags.png",
+   "mjd": 60980.696,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.745,
+    1.115
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-10-31 and 2025-11-14",
+    "target saturated in 1 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2317
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_2.png",
+   "flags_file": "frames/wise0855/v01_2_flags.png",
+   "mjd": 60986.829,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.097,
+    1.624
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-10-31 and 2025-11-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2614
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_3.png",
+   "flags_file": "frames/wise0855/v01_3_flags.png",
+   "mjd": 60991.528,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.625,
+    2.381
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-10-31 and 2025-11-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2772
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_4.png",
+   "flags_file": "frames/wise0855/v01_4_flags.png",
+   "mjd": 60980.72,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.43,
+    3.832
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-10-31 and 2025-11-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2321
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_5.png",
+   "flags_file": "frames/wise0855/v01_5_flags.png",
+   "mjd": 60986.841,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.809,
+    4.396
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-10-31 and 2025-11-14",
+    "target saturated in 5 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2603
+   }
+  },
+  {
+   "file": "frames/wise0855/v01_6.png",
+   "flags_file": "frames/wise0855/v01_6_flags.png",
+   "mjd": 60991.551,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.406,
+    4.972
+   ],
+   "n_exposures": 16,
+   "flags": [
+    "16 exposures between 2025-10-31 and 2025-11-14",
+    "target saturated in 2 of 16 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2805
+   }
+  },
+  {
+   "file": "frames/wise0855/v02_all.png",
+   "flags_file": "frames/wise0855/v02_all_flags.png",
+   "mjd": 61021.651,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    1.28,
+    4.726
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-12-11 and 2025-12-13",
+    "target saturated in 1 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2707
+   }
+  },
+  {
+   "file": "frames/wise0855/v02_2.png",
+   "flags_file": "frames/wise0855/v02_2_flags.png",
+   "mjd": 61021.699,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.28,
+    1.442
+   ],
+   "n_exposures": 6,
+   "flags": [
+    "6 exposures between 2025-12-11 and 2025-12-13"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2658
+   }
+  },
+  {
+   "file": "frames/wise0855/v02_3.png",
+   "flags_file": "frames/wise0855/v02_3_flags.png",
+   "mjd": 61021.554,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.893,
+    2.028
+   ],
+   "n_exposures": 3,
+   "flags": [
+    "3 exposures between 2025-12-11 and 2025-12-13"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2929
+   }
+  },
+  {
+   "file": "frames/wise0855/v02_5.png",
+   "flags_file": "frames/wise0855/v02_5_flags.png",
+   "mjd": 61021.711,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    4.034,
+    4.202
+   ],
+   "n_exposures": 6,
+   "flags": [
+    "6 exposures between 2025-12-11 and 2025-12-13",
+    "target saturated in 1 of 6 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2709
+   }
+  },
+  {
+   "file": "frames/wise0855/v02_6.png",
+   "flags_file": "frames/wise0855/v02_6_flags.png",
+   "mjd": 61021.566,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.622,
+    4.726
+   ],
+   "n_exposures": 3,
+   "flags": [
+    "3 exposures between 2025-12-11 and 2025-12-13"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2914
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_all.png",
+   "flags_file": "frames/wise0855/v03_all_flags.png",
+   "mjd": 61161.741,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.742,
+    4.925
+   ],
+   "n_exposures": 98,
+   "flags": [
+    "98 exposures between 2026-04-21 and 2026-05-14",
+    "target saturated in 1 of 98 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 12,
+    "NO_DATA": 2606
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_1.png",
+   "flags_file": "frames/wise0855/v03_1_flags.png",
+   "mjd": 61163.725,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.742,
+    1.089
+   ],
+   "n_exposures": 14,
+   "flags": [
+    "14 exposures between 2026-04-21 and 2026-05-14",
+    "target saturated in 1 of 14 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 4,
+    "NO_DATA": 2745
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_2.png",
+   "flags_file": "frames/wise0855/v03_2_flags.png",
+   "mjd": 61165.848,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.109,
+    1.589
+   ],
+   "n_exposures": 15,
+   "flags": [
+    "15 exposures between 2026-04-21 and 2026-05-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 12,
+    "NO_DATA": 2605
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_3.png",
+   "flags_file": "frames/wise0855/v03_3_flags.png",
+   "mjd": 61157.271,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.627,
+    2.311
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-04-21 and 2026-05-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 3,
+    "NO_DATA": 2448
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_4.png",
+   "flags_file": "frames/wise0855/v03_4_flags.png",
+   "mjd": 61163.737,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.422,
+    3.73
+   ],
+   "n_exposures": 14,
+   "flags": [
+    "14 exposures between 2026-04-21 and 2026-05-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2730
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_5.png",
+   "flags_file": "frames/wise0855/v03_5_flags.png",
+   "mjd": 61165.86,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.825,
+    4.362
+   ],
+   "n_exposures": 15,
+   "flags": [
+    "15 exposures between 2026-04-21 and 2026-05-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2608
+   }
+  },
+  {
+   "file": "frames/wise0855/v03_6.png",
+   "flags_file": "frames/wise0855/v03_6_flags.png",
+   "mjd": 61157.283,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.407,
+    4.925
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-04-21 and 2026-05-14"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2460
+   }
+  }
+ ],
+ "light_curve": [
+  {
+   "mjd": 60801.235,
+   "flux": 1.0,
+   "err": 0.0,
+   "flagged": false,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 60801.516,
+   "flux": 581.18,
+   "err": 17.68,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60801.278,
+   "flux": 685.77,
+   "err": 127.83,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60800.745,
+   "flux": 290.96,
+   "err": 178.08,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60801.54,
+   "flux": 128.29,
+   "err": 14.14,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60801.29,
+   "flux": 522.6,
+   "err": 95.7,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60800.769,
+   "flux": 384.41,
+   "err": 101.68,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60986.266,
+   "flux": 1.228,
+   "err": 0.806,
+   "flagged": false,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 60980.696,
+   "flux": 1041.94,
+   "err": 25.75,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60986.829,
+   "flux": 931.72,
+   "err": 28.69,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60991.528,
+   "flux": 594.4,
+   "err": 20.26,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60980.72,
+   "flux": 258.22,
+   "err": 20.62,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60986.841,
+   "flux": 425.39,
+   "err": 67.75,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60991.551,
+   "flux": 560.41,
+   "err": 52.53,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61021.651,
+   "flux": 1.69,
+   "err": 0.517,
+   "flagged": false,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 61021.699,
+   "flux": 947.6,
+   "err": 30.89,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61021.554,
+   "flux": 716.7,
+   "err": 40.17,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61021.711,
+   "flux": 421.8,
+   "err": 40.68,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61021.566,
+   "flux": 503.82,
+   "err": 62.7,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61161.741,
+   "flux": 1.346,
+   "err": 0.307,
+   "flagged": false,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 61163.725,
+   "flux": 1132.47,
+   "err": 20.91,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61165.848,
+   "flux": 1007.12,
+   "err": 29.28,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61157.271,
+   "flux": 614.36,
+   "err": 23.68,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61163.737,
+   "flux": 286.87,
+   "err": 27.67,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61165.86,
+   "flux": 539.94,
+   "err": 102.9,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61157.283,
+   "flux": 590.18,
+   "err": 49.12,
+   "flagged": false,
+   "unit": "uJy"
+  }
+ ],
+ "overlays": {
+  "gaia": [],
+  "wise": [
+   {
+    "ra": 133.778826,
+    "dec": -7.243755,
+    "label": "CWISE J085506.91-071437.5",
+    "epoch": 2017.27
+   }
   ]
+ },
+ "predictions": [
+  {
+   "id": "M0",
+   "label": "WISE 0855-0714",
+   "kind": "Moving star, confirmed by CatWISE2020 (7.94\u2033/yr)",
+   "confidence": 0.97,
+   "pm_arcsec_yr": 6.86,
+   "track": [
+    {
+     "epoch": 0,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 1,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 2,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 3,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 4,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 5,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 6,
+     "x": 72.23,
+     "y": 72.77
+    },
+    {
+     "epoch": 7,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 8,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 9,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 10,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 11,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 12,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 13,
+     "x": 72.95,
+     "y": 72.73
+    },
+    {
+     "epoch": 14,
+     "x": 72.78,
+     "y": 72.9
+    },
+    {
+     "epoch": 15,
+     "x": 72.78,
+     "y": 72.9
+    },
+    {
+     "epoch": 16,
+     "x": 72.78,
+     "y": 72.9
+    },
+    {
+     "epoch": 17,
+     "x": 72.78,
+     "y": 72.9
+    },
+    {
+     "epoch": 18,
+     "x": 72.78,
+     "y": 72.9
+    },
+    {
+     "epoch": 19,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 20,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 21,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 22,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 23,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 24,
+     "x": 73.35,
+     "y": 72.63
+    },
+    {
+     "epoch": 25,
+     "x": 73.35,
+     "y": 72.63
+    }
+   ]
+  },
+  {
+   "id": "M1",
+   "label": "Candidate 2",
+   "kind": "Possible mover, no catalogue match (likely an artefact)",
+   "confidence": 0.15,
+   "pm_arcsec_yr": 13.84,
+   "track": [
+    {
+     "epoch": 0,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 1,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 2,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 3,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 4,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 5,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 6,
+     "x": 36.88,
+     "y": 42.18
+    },
+    {
+     "epoch": 7,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 8,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 9,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 10,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 11,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 12,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 13,
+     "x": 34.88,
+     "y": 41.34
+    },
+    {
+     "epoch": 14,
+     "x": 34.84,
+     "y": 41.65
+    },
+    {
+     "epoch": 15,
+     "x": 34.84,
+     "y": 41.65
+    },
+    {
+     "epoch": 16,
+     "x": 34.84,
+     "y": 41.65
+    },
+    {
+     "epoch": 17,
+     "x": 34.84,
+     "y": 41.65
+    },
+    {
+     "epoch": 18,
+     "x": 34.84,
+     "y": 41.65
+    },
+    {
+     "epoch": 19,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 20,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 21,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 22,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 23,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 24,
+     "x": 34.92,
+     "y": 41.32
+    },
+    {
+     "epoch": 25,
+     "x": 34.92,
+     "y": 41.32
+    }
+   ]
+  },
+  {
+   "id": "M2",
+   "label": "Candidate 3",
+   "kind": "Possible mover, no catalogue match (likely an artefact)",
+   "confidence": 0.15,
+   "pm_arcsec_yr": 12.05,
+   "track": [
+    {
+     "epoch": 0,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 1,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 2,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 3,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 4,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 5,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 6,
+     "x": 9.51,
+     "y": 27.07
+    },
+    {
+     "epoch": 7,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 8,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 9,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 10,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 11,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 12,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 13,
+     "x": 8.93,
+     "y": 25.72
+    },
+    {
+     "epoch": 19,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 20,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 21,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 22,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 23,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 24,
+     "x": 8.92,
+     "y": 25.24
+    },
+    {
+     "epoch": 25,
+     "x": 8.92,
+     "y": 25.24
+    }
+   ]
+  },
+  {
+   "id": "M3",
+   "label": "Candidate 4",
+   "kind": "Possible mover, no catalogue match (likely an artefact)",
+   "confidence": 0.15,
+   "pm_arcsec_yr": 17.99,
+   "track": [
+    {
+     "epoch": 0,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 1,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 2,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 3,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 4,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 5,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 6,
+     "x": 127.25,
+     "y": 14.95
+    },
+    {
+     "epoch": 14,
+     "x": 129.88,
+     "y": 14.66
+    },
+    {
+     "epoch": 15,
+     "x": 129.88,
+     "y": 14.66
+    },
+    {
+     "epoch": 16,
+     "x": 129.88,
+     "y": 14.66
+    },
+    {
+     "epoch": 17,
+     "x": 129.88,
+     "y": 14.66
+    },
+    {
+     "epoch": 18,
+     "x": 129.88,
+     "y": 14.66
+    },
+    {
+     "epoch": 19,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 20,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 21,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 22,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 23,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 24,
+     "x": 129.94,
+     "y": 14.43
+    },
+    {
+     "epoch": 25,
+     "x": 129.94,
+     "y": 14.43
+    }
+   ]
+  }
+ ],
+ "pipeline": {
+  "asteroids_named": 0,
+  "asteroids_predicted_in_field": 4,
+  "one_frame_unidentified": 168,
+  "target_verdicts": [
+   {
+    "visit": 1,
+    "vs_visit": 0,
+    "verdict": "steady"
+   },
+   {
+    "visit": 2,
+    "vs_visit": 0,
+    "verdict": "steady"
+   },
+   {
+    "visit": 3,
+    "vs_visit": 0,
+    "verdict": "steady"
+   }
+  ]
+ }
 }

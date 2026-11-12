@@ -1,0 +1,730 @@
+{
+ "patch": {
+  "id": "kapteynsstar",
+  "name": "Kapteyn's Star",
+  "width_px": 147,
+  "height_px": 147,
+  "ra": 77.985457,
+  "dec": -45.05967,
+  "fov_deg": 0.25,
+  "pixel_scale_arcsec": 6.15,
+  "simulated": false,
+  "grid_epoch": 2026.0,
+  "source": "SPHEREx Level 2 images (IRSA), processed by pipeline steps 1-7"
+ },
+ "frames": [
+  {
+   "file": "frames/kapteynsstar/v00_all.png",
+   "flags_file": "frames/kapteynsstar/v00_all_flags.png",
+   "mjd": 60910.245,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.741,
+    4.956
+   ],
+   "n_exposures": 118,
+   "flags": [
+    "118 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 91 of 118 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 1422
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_1.png",
+   "flags_file": "frames/kapteynsstar/v00_1_flags.png",
+   "mjd": 60900.35,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.741,
+    1.099
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2398
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_2.png",
+   "flags_file": "frames/kapteynsstar/v00_2_flags.png",
+   "mjd": 60907.849,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.104,
+    1.653
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 1818
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_3.png",
+   "flags_file": "frames/kapteynsstar/v00_3_flags.png",
+   "mjd": 60921.768,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.68,
+    2.416
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 205
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_4.png",
+   "flags_file": "frames/kapteynsstar/v00_4_flags.png",
+   "mjd": 60900.37,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.423,
+    3.669
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 18 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2861
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_5.png",
+   "flags_file": "frames/kapteynsstar/v00_5_flags.png",
+   "mjd": 60907.418,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.837,
+    4.406
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 9 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 1472
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v00_6.png",
+   "flags_file": "frames/kapteynsstar/v00_6_flags.png",
+   "mjd": 60922.737,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.411,
+    4.956
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-08-10 and 2025-09-20",
+    "target saturated in 4 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 290
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_all.png",
+   "flags_file": "frames/kapteynsstar/v01_all_flags.png",
+   "mjd": 61091.956,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.747,
+    4.969
+   ],
+   "n_exposures": 114,
+   "flags": [
+    "114 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 104 of 114 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 65,
+    "NO_DATA": 1738
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_1.png",
+   "flags_file": "frames/kapteynsstar/v01_1_flags.png",
+   "mjd": 61104.793,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.747,
+    1.117
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 19 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 58,
+    "NO_DATA": 278
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_2.png",
+   "flags_file": "frames/kapteynsstar/v01_2_flags.png",
+   "mjd": 61090.475,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.096,
+    1.629
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 19 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 52,
+    "NO_DATA": 2134
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_3.png",
+   "flags_file": "frames/kapteynsstar/v01_3_flags.png",
+   "mjd": 61080.988,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.646,
+    2.375
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 18 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 45,
+    "NO_DATA": 2807
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_4.png",
+   "flags_file": "frames/kapteynsstar/v01_4_flags.png",
+   "mjd": 61104.884,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.433,
+    3.74
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 18 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 60,
+    "NO_DATA": 423
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_5.png",
+   "flags_file": "frames/kapteynsstar/v01_5_flags.png",
+   "mjd": 61090.487,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.808,
+    4.401
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 17 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 14,
+    "NO_DATA": 1612
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v01_6.png",
+   "flags_file": "frames/kapteynsstar/v01_6_flags.png",
+   "mjd": 61081.362,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.391,
+    4.969
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-01-25 and 2026-03-10",
+    "target saturated in 13 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 7,
+    "NO_DATA": 2743
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_all.png",
+   "flags_file": "frames/kapteynsstar/v02_all_flags.png",
+   "mjd": 61273.351,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.746,
+    4.997
+   ],
+   "n_exposures": 118,
+   "flags": [
+    "118 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 105 of 118 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 66,
+    "NO_DATA": 1557
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_1.png",
+   "flags_file": "frames/kapteynsstar/v02_1_flags.png",
+   "mjd": 61263.261,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.746,
+    1.108
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 36,
+    "NO_DATA": 2070
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_2.png",
+   "flags_file": "frames/kapteynsstar/v02_2_flags.png",
+   "mjd": 61272.003,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.114,
+    1.646
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 19 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 37,
+    "NO_DATA": 1602
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_3.png",
+   "flags_file": "frames/kapteynsstar/v02_3_flags.png",
+   "mjd": 61285.636,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.637,
+    2.406
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 19 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 61,
+    "NO_DATA": 181
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_4.png",
+   "flags_file": "frames/kapteynsstar/v02_4_flags.png",
+   "mjd": 61262.796,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.432,
+    3.8
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 49,
+    "NO_DATA": 2063
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_5.png",
+   "flags_file": "frames/kapteynsstar/v02_5_flags.png",
+   "mjd": 61272.015,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.805,
+    4.423
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 17 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 11,
+    "NO_DATA": 1573
+   }
+  },
+  {
+   "file": "frames/kapteynsstar/v02_6.png",
+   "flags_file": "frames/kapteynsstar/v02_6_flags.png",
+   "mjd": 61285.648,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.428,
+    4.997
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2026-08-07 and 2026-09-04",
+    "target saturated in 10 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 6,
+    "NO_DATA": 181
+   }
+  }
+ ],
+ "light_curve": [
+  {
+   "mjd": 60910.245,
+   "flux": 1.0,
+   "err": 0.0,
+   "flagged": true,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 60900.35,
+   "flux": 3003836.25,
+   "err": 243828.82,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60907.849,
+   "flux": 4234423.77,
+   "err": 350149.83,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60921.768,
+   "flux": 3958920.48,
+   "err": 452956.23,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60900.37,
+   "flux": 2560131.25,
+   "err": 150986.67,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60907.418,
+   "flux": 2902868.18,
+   "err": 55360.04,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60922.737,
+   "flux": 2297635.62,
+   "err": 60697.53,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61091.956,
+   "flux": 1.006,
+   "err": 0.053,
+   "flagged": true,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 61104.793,
+   "flux": 3144012.25,
+   "err": 189526.17,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61090.475,
+   "flux": 4603732.03,
+   "err": 252393.96,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61080.988,
+   "flux": 4421667.94,
+   "err": 351575.81,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61104.884,
+   "flux": 2385876.46,
+   "err": 153696.81,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61090.487,
+   "flux": 2929399.6,
+   "err": 22942.33,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61081.362,
+   "flux": 2142247.61,
+   "err": 59533.13,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61273.351,
+   "flux": 0.999,
+   "err": 0.039,
+   "flagged": true,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 61263.261,
+   "flux": 2730705.85,
+   "err": 308120.31,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61272.003,
+   "flux": 4361471.32,
+   "err": 306089.61,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61285.636,
+   "flux": 3271755.67,
+   "err": 292211.99,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61262.796,
+   "flux": 2815633.62,
+   "err": 123811.94,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61272.015,
+   "flux": 3034687.72,
+   "err": 36625.42,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61285.648,
+   "flux": 1970881.85,
+   "err": 66501.32,
+   "flagged": false,
+   "unit": "uJy"
+  }
+ ],
+ "overlays": {
+  "gaia": [
+   {
+    "ra": 77.959937,
+    "dec": -45.043813,
+    "label": "Gaia DR3 4810594479418041856",
+    "epoch": 2016.0
+   }
+  ],
+  "wise": []
+ },
+ "predictions": [
+  {
+   "id": "M0",
+   "label": "Kapteyn's Star",
+   "kind": "Moving star, confirmed by Gaia DR3 (8.64\u2033/yr)",
+   "confidence": 0.97,
+   "pm_arcsec_yr": 8.92,
+   "track": [
+    {
+     "epoch": 0,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 1,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 2,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 3,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 4,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 5,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 6,
+     "x": 73.34,
+     "y": 72.76
+    },
+    {
+     "epoch": 7,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 8,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 9,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 10,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 11,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 12,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 13,
+     "x": 72.87,
+     "y": 73.09
+    },
+    {
+     "epoch": 14,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 15,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 16,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 17,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 18,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 19,
+     "x": 72.22,
+     "y": 73.67
+    },
+    {
+     "epoch": 20,
+     "x": 72.22,
+     "y": 73.67
+    }
+   ]
+  }
+ ],
+ "pipeline": {
+  "asteroids_named": 0,
+  "asteroids_predicted_in_field": 0,
+  "one_frame_unidentified": 238,
+  "target_verdicts": [
+   {
+    "visit": 1,
+    "vs_visit": 0,
+    "verdict": "steady"
+   },
+   {
+    "visit": 2,
+    "vs_visit": 0,
+    "verdict": "steady"
+   }
+  ]
+ }
+}

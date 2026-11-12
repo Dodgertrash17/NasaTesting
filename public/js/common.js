@@ -41,9 +41,15 @@ function formatFov(deg) {
   return m >= 60 ? `${+(m / 60).toFixed(2)}°` : `${+m.toFixed(1)}′`;
 }
 
-// Find a preset target near a position (within ~36″).
+// Find a preset target near a position (within ~36″), either at its catalogue position or where it
+// is in 2026.0 (the epoch the real SPHEREx patches are centred on: fast movers shift by up to ~4′).
+const DATA_EPOCH = 2026.0;
 function knownTarget(ra, dec) {
-  return TARGETS.find(t => separation(ra, dec, t.ra, t.dec) < 0.01) || null;
+  return TARGETS.find(t => {
+    if (separation(ra, dec, t.ra, t.dec) < 0.01) return true;
+    const now = propagate(t.ra, t.dec, t.pm, t.epoch, DATA_EPOCH);
+    return separation(ra, dec, now.ra, now.dec) < 0.01;
+  }) || null;
 }
 
 // ---------- header + footer ----------

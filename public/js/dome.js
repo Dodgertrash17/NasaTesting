@@ -745,7 +745,7 @@ function renderPanel() {
     <p class="blurb"></p>
     <h3>Seen in 102 infrared bands</h3>
     <div class="band-view"><canvas id="band-canvas" width="240" height="240" role="img" aria-label=""></canvas>
-      <span class="badge badge-warn">Simulated</span>
+      ${t.simulated === false ? '<span class="badge">SPHEREx data</span>' : '<span class="badge badge-warn">Simulated</span>'}
       <span class="badge badge-date mono" id="band-badge"></span></div>
     <div class="band-caption"><span id="band-cap"></span>
       <label class="check small"><input type="checkbox" id="false-color" checked> False color</label></div>

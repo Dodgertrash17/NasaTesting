@@ -1,0 +1,603 @@
+{
+ "patch": {
+  "id": "gaia72576384",
+  "name": "Gaia DR3 3519785523672576384",
+  "width_px": 147,
+  "height_px": 147,
+  "ra": 186.227094,
+  "dec": -18.25897,
+  "fov_deg": 0.25,
+  "pixel_scale_arcsec": 6.15,
+  "simulated": false,
+  "grid_epoch": 2026.0,
+  "source": "SPHEREx Level 2 images (IRSA), processed by pipeline steps 1-7"
+ },
+ "frames": [
+  {
+   "file": "frames/gaia72576384/v00_all.png",
+   "flags_file": "frames/gaia72576384/v00_all_flags.png",
+   "mjd": 60827.871,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.743,
+    4.949
+   ],
+   "n_exposures": 114,
+   "flags": [
+    "114 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 71 of 114 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 3144
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_1.png",
+   "flags_file": "frames/gaia72576384/v00_1_flags.png",
+   "mjd": 60827.888,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.743,
+    1.108
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 14 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2334
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_2.png",
+   "flags_file": "frames/gaia72576384/v00_2_flags.png",
+   "mjd": 60827.133,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.099,
+    1.612
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 18 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 3183
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_3.png",
+   "flags_file": "frames/gaia72576384/v00_3_flags.png",
+   "mjd": 60828.518,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.647,
+    2.345
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 19 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 3105
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_4.png",
+   "flags_file": "frames/gaia72576384/v00_4_flags.png",
+   "mjd": 60827.9,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.426,
+    3.801
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 18 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2329
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_5.png",
+   "flags_file": "frames/gaia72576384/v00_5_flags.png",
+   "mjd": 60827.157,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.813,
+    4.384
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-05-23 and 2025-07-06",
+    "target saturated in 2 of 18 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 3198
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v00_6.png",
+   "flags_file": "frames/gaia72576384/v00_6_flags.png",
+   "mjd": 60828.53,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.393,
+    4.949
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2025-05-23 and 2025-07-06"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 3083
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_all.png",
+   "flags_file": "frames/gaia72576384/v01_all_flags.png",
+   "mjd": 61040.008,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.751,
+    5.0
+   ],
+   "n_exposures": 113,
+   "flags": [
+    "113 exposures between 2025-12-25 and 2026-01-13",
+    "target saturated in 71 of 113 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 46,
+    "NO_DATA": 2328
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_1.png",
+   "flags_file": "frames/gaia72576384/v01_1_flags.png",
+   "mjd": 61035.979,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.751,
+    1.111
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-12-25 and 2026-01-13",
+    "target saturated in 17 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 39,
+    "NO_DATA": 2292
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_2.png",
+   "flags_file": "frames/gaia72576384/v01_2_flags.png",
+   "mjd": 61039.189,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.108,
+    1.642
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-12-25 and 2026-01-13",
+    "target saturated in 18 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 42,
+    "NO_DATA": 2430
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_3.png",
+   "flags_file": "frames/gaia72576384/v01_3_flags.png",
+   "mjd": 61044.868,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.637,
+    2.416
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-12-25 and 2026-01-13",
+    "target saturated in 18 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 30,
+    "NO_DATA": 2406
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_4.png",
+   "flags_file": "frames/gaia72576384/v01_4_flags.png",
+   "mjd": 61035.991,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.401,
+    3.814
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-12-25 and 2026-01-13",
+    "target saturated in 18 of 19 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 23,
+    "NO_DATA": 2265
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_5.png",
+   "flags_file": "frames/gaia72576384/v01_5_flags.png",
+   "mjd": 61039.12,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.789,
+    4.413
+   ],
+   "n_exposures": 18,
+   "flags": [
+    "18 exposures between 2025-12-25 and 2026-01-13"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2367
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v01_6.png",
+   "flags_file": "frames/gaia72576384/v01_6_flags.png",
+   "mjd": 61044.892,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.411,
+    5.0
+   ],
+   "n_exposures": 19,
+   "flags": [
+    "19 exposures between 2025-12-25 and 2026-01-13"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2368
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_all.png",
+   "flags_file": "frames/gaia72576384/v02_all_flags.png",
+   "mjd": 61196.511,
+   "band": "All 6 detectors added",
+   "detector": "all",
+   "wavelength_um": [
+    0.752,
+    5.004
+   ],
+   "n_exposures": 120,
+   "flags": [
+    "120 exposures between 2026-05-28 and 2026-07-09",
+    "target saturated in 76 of 120 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 45,
+    "NO_DATA": 2378
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_1.png",
+   "flags_file": "frames/gaia72576384/v02_1_flags.png",
+   "mjd": 61196.724,
+   "band": "Detector 1, its ~17 channels stacked",
+   "detector": 1,
+   "wavelength_um": [
+    0.752,
+    1.095
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09",
+    "target saturated in 20 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 36,
+    "NO_DATA": 2671
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_2.png",
+   "flags_file": "frames/gaia72576384/v02_2_flags.png",
+   "mjd": 61197.257,
+   "band": "Detector 2, its ~17 channels stacked",
+   "detector": 2,
+   "wavelength_um": [
+    1.11,
+    1.632
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09",
+    "target saturated in 19 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 39,
+    "NO_DATA": 2671
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_3.png",
+   "flags_file": "frames/gaia72576384/v02_3_flags.png",
+   "mjd": 61195.552,
+   "band": "Detector 3, its ~17 channels stacked",
+   "detector": 3,
+   "wavelength_um": [
+    1.626,
+    2.42
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09",
+    "target saturated in 19 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 31,
+    "NO_DATA": 2266
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_4.png",
+   "flags_file": "frames/gaia72576384/v02_4_flags.png",
+   "mjd": 61196.748,
+   "band": "Detector 4, its ~17 channels stacked",
+   "detector": 4,
+   "wavelength_um": [
+    2.445,
+    3.752
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09",
+    "target saturated in 18 of 20 exposures (brightness approximate)"
+   ],
+   "flag_bits": {
+    "SATURATED": 10,
+    "NO_DATA": 2872
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_5.png",
+   "flags_file": "frames/gaia72576384/v02_5_flags.png",
+   "mjd": 61197.269,
+   "band": "Detector 5, its ~17 channels stacked",
+   "detector": 5,
+   "wavelength_um": [
+    3.793,
+    4.404
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2480
+   }
+  },
+  {
+   "file": "frames/gaia72576384/v02_6.png",
+   "flags_file": "frames/gaia72576384/v02_6_flags.png",
+   "mjd": 61195.576,
+   "band": "Detector 6, its ~17 channels stacked",
+   "detector": 6,
+   "wavelength_um": [
+    4.406,
+    5.004
+   ],
+   "n_exposures": 20,
+   "flags": [
+    "20 exposures between 2026-05-28 and 2026-07-09"
+   ],
+   "flag_bits": {
+    "SATURATED": 0,
+    "NO_DATA": 2243
+   }
+  }
+ ],
+ "light_curve": [
+  {
+   "mjd": 60827.871,
+   "flux": 1.0,
+   "err": 0.0,
+   "flagged": true,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 60827.888,
+   "flux": 941149.76,
+   "err": 61789.99,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60827.133,
+   "flux": 1256772.1,
+   "err": 24664.65,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60828.518,
+   "flux": 1057987.67,
+   "err": 17321.21,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60827.9,
+   "flux": 615141.18,
+   "err": 7744.67,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60827.157,
+   "flux": 476879.24,
+   "err": 12029.03,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 60828.53,
+   "flux": 341521.47,
+   "err": 5574.26,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61040.008,
+   "flux": 0.993,
+   "err": 0.007,
+   "flagged": true,
+   "unit": "relative to first visit"
+  },
+  {
+   "mjd": 61035.979,
+   "flux": 947733.3,
+   "err": 64563.61,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61039.189,
+   "flux": 1255877.04,
+   "err": 18599.6,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61044.868,
+   "flux": 1100432.73,
+   "err": 17776.15,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61035.991,
+   "flux": 604465.52,
+   "err": 12233.84,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61039.12,
+   "flux": 455569.72,
+   "err": 11870.46,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61044.892,
+   "flux": 342240.35,
+   "err": 7363.37,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61196.724,
+   "flux": 825826.15,
+   "err": 46361.1,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61197.257,
+   "flux": 1266336.96,
+   "err": 13995.59,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61195.552,
+   "flux": 1090980.22,
+   "err": 22611.81,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61196.748,
+   "flux": 677210.04,
+   "err": 34108.92,
+   "flagged": true,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61197.269,
+   "flux": 466737.66,
+   "err": 12341.29,
+   "flagged": false,
+   "unit": "uJy"
+  },
+  {
+   "mjd": 61195.576,
+   "flux": 346081.59,
+   "err": 8469.36,
+   "flagged": false,
+   "unit": "uJy"
+  }
+ ],
+ "overlays": {
+  "gaia": [
+   {
+    "ra": 186.22389,
+    "dec": -18.252556,
+    "label": "Gaia DR3 3519785523672576384",
+    "epoch": 2016.0
+   }
+  ],
+  "wise": []
+ },
+ "predictions": [],
+ "pipeline": {
+  "asteroids_named": 1,
+  "asteroids_predicted_in_field": 6,
+  "one_frame_unidentified": 188,
+  "target_verdicts": [
+   {
+    "visit": 1,
+    "vs_visit": 0,
+    "verdict": "steady"
+   },
+   {
+    "visit": 3,
+    "vs_visit": 0,
+    "verdict": "steady"
+   }
+  ]
+ }
+}
