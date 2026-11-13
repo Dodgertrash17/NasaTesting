@@ -396,13 +396,21 @@ function renderFlags(frame, fi) {
     : `${inView} flagged pixel${inView === 1 ? '' : 's'} in view.` + (els.showFlags.checked ? ' Shown in red.' : ' Turn on "Contamination flags" in Layers to see them.');
   box.append(p);
 
+  // The warning line is always there and only hidden when not needed, so the panel
+  // doesn't grow and shrink (and shove the layout around) while blinking between dates.
   const lc = lightCurve.find(l => l.vi === state.frame);
-  if (lc?.flagged) {
-    const w = document.createElement('p');
-    w.className = 'flag-warn';
-    w.textContent = `⚠ The measured spot has ${lc.nFlag} flagged pixel${lc.nFlag === 1 ? '' : 's'} on this date (saturation or a cosmic ray), so its brightness here is not reliable.`;
-    box.append(w);
-  }
+  const w = document.createElement('p');
+  w.className = 'flag-warn';
+  const n = lc?.flagged ? lc.nFlag : 1;
+  w.textContent = `⚠ The measured spot has ${n} flagged pixel${n === 1 ? '' : 's'} on this date (saturation or a cosmic ray), so its brightness here is not reliable.`;
+  if (!lc?.flagged) { w.style.visibility = 'hidden'; w.setAttribute('aria-hidden', 'true'); }
+  box.append(w);
+
+  // Chips and the hint can still differ in length between dates: never let the box shrink
+  // while the same patch is open, so nothing below it moves.
+  if (box._patch !== patch()) { box._patch = patch(); box.style.minHeight = ''; }
+  const h = box.offsetHeight;
+  if (h > (parseFloat(box.style.minHeight) || 0)) box.style.minHeight = `${h}px`;
 }
 
 function renderRawPatch() {
