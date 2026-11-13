@@ -738,6 +738,14 @@ const demoAction = ['Open the WISE 0855 demo', viewerUrl({ ...demo, fov: demo.fo
 // The bar spreads the four steps over 0-100%, with downloading (the slow part) taking most of it.
 const STEP_SPAN = { 1: [0, 8], 2: [8, 85], 3: [85, 93], 4: [93, 100] };
 function showStage(info) {
+  if (info.wake) {
+    els.loadingText.textContent = `${info.message}…`;
+    els.loadingBar.style.width = '3%';
+    els.loadingDetail.textContent = 'It runs on free hosting that sleeps after about 15 minutes without visitors, ' +
+      'so the first search after a quiet spell waits up to a minute while it starts. After that it stays awake.';
+    setStatus(`${info.message}…`);
+    return;
+  }
   const [a, b] = STEP_SPAN[info.step] || [0, 100];
   const frac = info.total ? info.done / info.total : 0;
   const count = info.total ? ` (${info.done} of ${info.total})` : '';
@@ -788,7 +796,7 @@ async function load() {
       `Nothing in our image set covers RA ${formatRA(r.ra)}, Dec ${formatDec(r.dec)}.` +
       (near ? ` The nearest patch we have is ${near.title}, ${near.sepDeg.toFixed(1)}° away.` : '') +
       (res.liveUnavailable || SkyData.config.source === 'static'
-        ? ' This copy of the site only has the 100 pre-processed targets. Any other coordinates work when the site is run with the live SPHEREx server (pipeline/server.py).'
+        ? ' The live SPHEREx server that processes new spots could not be reached (it may be restarting, or not set up yet), so right now only the 100 pre-processed targets open. Try again in a minute.'
         : ' New SPHEREx data arrives every few weeks, so check back.'),
       actions);
     return;

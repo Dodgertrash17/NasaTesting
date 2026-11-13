@@ -3,7 +3,7 @@
 // The viewer never calls fetch() itself. It asks SkyData for a patch, an overlay catalogue or a
 // light curve, and gets back objects in the shapes described in data/README.md.
 //
-// Where patches come from (`source`, or &source= in the URL):
+// Where patches come from (`source`, or &source= in the URL; the live server address is LIVE_SERVER below):
 //   'auto'   (default) the pre-processed files in data/ first; for any other spot, the live endpoint
 //            (pipeline/server.py, GET api/patch) that downloads and stacks SPHEREx images on demand.
 //            Where no live server is running (a static-only deploy) it falls back to "no coverage".
@@ -12,12 +12,20 @@
 //
 // Load after common.js:  <script src="js/data-source.js" defer></script>
 
+// The live SPHEREx server (pipeline/server.py). Run locally, the site and the server share one address,
+// so the relative 'api/patch' is used. Anywhere else (the Vercel site) it calls the hosted copy on Render.
+// If Render gave your service a different address, change LIVE_SERVER (or test one with &api=https://…).
+const LIVE_SERVER = 'https://skyblink-spherex-live.onrender.com';
+
 const SkyData = (() => {
   const q = new URLSearchParams(location.search);
   const LAYER_KEYS = { gaia: 1, wise: 1 };
+  const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname) || location.hostname.endsWith('.onrender.com');
   const config = {
     source: q.get('source') || 'auto',     // 'auto' = data/ then live endpoint, 'static', 'api'
-    apiBase: 'api/patch',                    // GET api/patch?ra=&dec=&fov=&det=&layers= -> same JSON as data/<id>.json
+    apiBase: q.get('api') ? `${q.get('api').replace(/\/$/, '')}/api/patch`
+      : isLocal ? 'api/patch' : `${LIVE_SERVER}/api/patch`,   // GET ?ra=&dec=&fov=&det=&layers= -> data/<id>.json shape
+    wakeAfterMs: 2500,                       // no answer this long: the free server is probably waking up
     staticDefaultFovDeg: 0.25,               // patch width when patches.json does not say
     pollMs: 1500,                            // how often to ask the live endpoint while it works
     layers: (q.has('layers') ? q.get('layers') : 'gaia,wise').split(',').filter(k => k in LAYER_KEYS),
@@ -48,6 +56,8 @@ const SkyData = (() => {
   function loadImage(src) {
     return new Promise((resolve, reject) => {
       const img = new Image();
+      // frames from the live server on another host: ask for CORS so the viewer can read their pixels
+      if (new URL(src, location.href).origin !== location.origin) img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
       img.onerror = () => reject(new Error(`Could not load ${src}`));
       img.src = src;
@@ -93,15 +103,21 @@ const SkyData = (() => {
   // { stage, step, steps, done, total, message, elapsed_s }, passed to onStage for the progress display.
   // -> { status: 'ok', patch } | { status: 'no-coverage', nearest } | { status: 'unavailable' }
   async function fetchLive(url, { onStage, signal, optional }) {
-    for (;;) {
+    for (let first = true; ; first = false) {
       let res;
+      // Free hosting puts the server to sleep when nobody uses it; the first request then takes up to a
+      // minute while it starts. Say so instead of looking stuck.
+      const wake = first && setTimeout(() => onStage?.({ wake: true, message: 'Waking up the live SPHEREx server' }),
+        config.wakeAfterMs);
       try {
         res = await fetch(url, { signal, cache: 'no-store' });
       } catch (err) {
+        clearTimeout(wake);
         if (err.name === 'AbortError') throw err;
         if (optional) return { status: 'unavailable' };
         throw new DataError('network');
       }
+      clearTimeout(wake);
       const isJson = (res.headers.get('content-type') || '').includes('json');
       if (!isJson) {                         // no live server here (static hosting answers with a page)
         if (optional) return { status: 'unavailable' };

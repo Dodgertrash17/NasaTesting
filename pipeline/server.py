@@ -25,6 +25,7 @@ Raw and cleaned frames are deleted as soon as a patch is exported, and data/live
 public/data/live out of git (.gitignore) so it never reaches the deployed site.
 
 Run:   python pipeline/server.py [--port 8000] [--site public] [--max 36] [--live-max-mb 500]
+Host:  render.yaml at the repo root runs this on Render's free plan (see pipeline/RENDER.md).
 Open:  http://localhost:8000/search.html  (raw search falls back to this live endpoint)
 """
 import argparse
@@ -58,6 +59,13 @@ PIX = 6.15
 SITE = os.path.join(os.path.dirname(HERE), "public")
 WORK = os.environ.get("SPHEREX_LIVE_CACHE", os.path.join(HERE, "cache", "live"))
 JOBS = {}                       # key -> progress dict of the job making that patch
+# Hosting knobs (environment variables, so a host like Render can set them without code changes):
+#   ALLOWED_ORIGINS  comma-separated sites allowed to call this server from the browser ("*" = any)
+#   LIVE_MAX_JOBS    live searches processed at the same time (others wait their turn; keeps memory low)
+#   LIVE_THREADS     parallel downloads per search
+ALLOWED_ORIGINS = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
+JOB_SLOTS = threading.Semaphore(int(os.environ.get("LIVE_MAX_JOBS", "2")))
+THREADS = int(os.environ.get("LIVE_THREADS", "12"))
 JOBS_LOCK = threading.Lock()
 LIVE_MAX_MB = 500
 LAYERS = ("gaia", "wise")
@@ -193,7 +201,7 @@ def process(ra, dec, fov, max_images, key, log, progress, layers=()):
 
     progress("download", 0, len(rows))
     recs, done = [], 0
-    with ThreadPoolExecutor(12) as ex:
+    with ThreadPoolExecutor(THREADS) as ex:
         for rec in ex.map(one, rows):
             done += 1
             progress("download", done, len(rows))
@@ -316,6 +324,9 @@ def run_job(key, ra, dec, fov, mx, layers, near):
             msg = "Looking up " + " and ".join({"gaia": "Gaia", "wise": "WISE"}[x] for x in layers) + " sources"
         job.update(stage=stage, step=step, message=msg, done=done, total=total)
 
+    if not JOB_SLOTS.acquire(blocking=False):
+        job.update(message="Waiting for another search on this server to finish")
+        JOB_SLOTS.acquire()
     try:
         doc = process(ra, dec, fov, mx, key, log, progress, layers)
         if doc is None:
@@ -328,6 +339,8 @@ def run_job(key, ra, dec, fov, mx, layers, near):
     except Exception:  # noqa: BLE001
         traceback.print_exc()
         job.update(status="error")
+    finally:
+        JOB_SLOTS.release()
     job["finished"] = time.time()
 
 
@@ -359,20 +372,45 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=SITE, **k)
 
+    def end_headers(self):
+        # CORS on every response (JSON and PNG frames), so a site on another host (e.g. Vercel) can call
+        # the API and also read the frame pixels in a canvas (the viewer measures brightness from them).
+        origin = self.headers.get("Origin")
+        if "*" in ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", "*")
+        elif origin and (origin in ALLOWED_ORIGINS or
+                         any(o.startswith("*.") and origin.endswith(o[1:]) for o in ALLOWED_ORIGINS)):
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+        super().end_headers()
+
     def send_json(self, code, obj):
         body = json.dumps(obj).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
+    def do_OPTIONS(self):  # noqa: N802
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Max-Age", "86400")
+        self.end_headers()
+
     def do_GET(self):  # noqa: N802
         u = urlparse(self.path)
-        if u.path.rstrip("/").endswith("/api/patch"):
+        p = u.path.rstrip("/")
+        if p.endswith("/api/patch"):
             return self.api_patch(parse_qs(u.query))
+        if p.endswith("/api/health"):
+            return self.send_json(200, {"ok": True, "jobs_running": sum(j["status"] == "working" for j in JOBS.values())})
         return super().do_GET()
+
+    def log_message(self, fmt, *args):  # quieter logs: skip the browser's progress polling
+        if " 202 " not in fmt % args:
+            super().log_message(fmt, *args)
 
     def api_patch(self, q):
         try:
@@ -419,7 +457,7 @@ class Handler(SimpleHTTPRequestHandler):
 def main():
     global SITE, LIVE_MAX_MB
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)))
     ap.add_argument("--site", default=SITE)
     ap.add_argument("--max", type=int, default=36, help="images per live request (more = slower, cleaner)")
     ap.add_argument("--live-max-mb", type=float, default=500, help="cap on data/live; least recently viewed go first")

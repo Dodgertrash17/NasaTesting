@@ -44,3 +44,6 @@ Live patches skip the movers/asteroid steps (too slow for a click); the processe
 0.2 to 0.5 MB, and the folder is kept under `--live-max-mb` (default 500 MB) by deleting the least recently
 viewed patches first. A static-only deploy (for example Vercel without the Python server) serves just the
 100 processed targets; the raw search then says the spot needs the live server.
+
+**Hosting.** `render.yaml` (repo root) runs the live server on Render's free plan so the Vercel site can search
+any RA/Dec. Setup clicks and free-plan behaviour (cold starts, temporary cache): [RENDER.md](RENDER.md).
