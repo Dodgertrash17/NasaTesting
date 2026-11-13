@@ -30,12 +30,12 @@ import sys
 import warnings
 
 import numpy as np
+from scipy import ndimage as ndi
 from astropy.io import fits
 from astropy.wcs import WCS, FITSFixedWarning
 from PIL import Image
 
 warnings.simplefilter("ignore", FITSFixedWarning)
-warnings.filterwarnings("ignore", category=RuntimeWarning)
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from irsa import tap  # noqa: E402
@@ -53,15 +53,40 @@ def mjd_to_year(mjd):
     return 2000 + (mjd - 51544.5) / 365.25
 
 
-def asinh_scale(values):
-    """Stretch for a set of images: black at the sky level, soft knee a few noise units up."""
+def display_scale(values):
+    """Stretch shared by a set of images (all visits of one detector), as (lo, hi, soft) for to_u8.
+
+    Black sits at the sky level and the asinh knee is 4 noise units up, so pure sky noise renders as a
+    dark, fine grain instead of mid-grey static while faint stars stay visible. The top (hi) leaves room for bright stars
+    so their cores do not all clip to white. Noise is measured per image set, so a noisy detector or a
+    visit with few exposures gets the same look as a deep one rather than a much grainier one."""
     v = values[np.isfinite(values)]
     if v.size == 0:
         return 0.0, 1.0, 1.0
     sky = float(np.median(v))
     noise = float(1.4826 * np.median(np.abs(v - sky))) or 1e-3
-    hi = float(np.percentile(v, 99.9))
-    return sky - 1.0 * noise, max(hi, sky + 20 * noise), 2.0 * noise
+    hi = max(float(np.percentile(v, 99.95)), sky + 200 * noise)
+    return sky, hi, 4.0 * noise
+
+
+def fill_holes(img):
+    """Fill NaN holes that are fully surrounded by data (saturated star cores, masked hot pixels) with
+    the surrounding values, growing inward, so bright stars look like stars and not black donuts.
+    NaN that touches the image edge (no coverage) is left alone and stays black."""
+    fin = np.isfinite(img)
+    holes = ndi.binary_fill_holes(fin) & ~fin
+    if not holes.any():
+        return img
+    filled = np.where(fin, img, -np.inf)
+    for _ in range(64):
+        todo = holes & ~np.isfinite(filled)
+        if not todo.any():
+            break
+        grown = ndi.grey_dilation(filled, size=3)
+        filled = np.where(todo, grown, filled)
+    out = img.copy()
+    out[holes] = np.where(np.isfinite(filled[holes]), filled[holes], np.nan)
+    return out
 
 
 def to_u8(img, lo, hi, soft):
@@ -122,7 +147,7 @@ def export_patch(t, web, overlays):
     fy = lambda y: round((n - 1) - y, 2)
     fdir = os.path.join(web, "frames", tid)
     shutil.rmtree(fdir, ignore_errors=True)
-    scales = {b: asinh_scale(stack[:, b]) for b in range(nb)}
+    scales = {b: display_scale(stack[:, b]) for b in range(nb)}
     vis_of = {m["visit"]: i for i, m in enumerate(info["visits"])}
 
     frames, lc, used = [], [], set()
@@ -141,7 +166,7 @@ def export_patch(t, web, overlays):
                 mjd = round(mjd + 0.012, 3)
             used.add(mjd)
             name = f"v{i:02d}_{det}"
-            save_png(to_u8(flip(img), *scales[b]), os.path.join(fdir, name + ".png"))
+            save_png(to_u8(flip(fill_holes(img)), *scales[b]), os.path.join(fdir, name + ".png"))
             sat = flip(satf[i, b] > 0.25)
             nodata = flip(~np.isfinite(img))
             save_png(np.where(sat | nodata, 255, 0).astype(np.uint8), os.path.join(fdir, name + "_flags.png"))
@@ -257,11 +282,13 @@ def export_dome(t, web, bands):
             continue
         tiles.setdefault((vi, bi), []).append(im)
     # one stretch per detector row, shared by every visit
-    mean = {k: np.nanmean(np.array(v), axis=0) for k, v in tiles.items()}
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)       # pixels no frame covered stay NaN
+        mean = {k: np.nanmean(np.array(v), axis=0) for k, v in tiles.items()}
     scale = {}
     for d in range(1, 7):
         ims = [m for (vi, bi), m in mean.items() if bands[bi]["detector"] == d]
-        scale[d] = asinh_scale(np.array(ims)) if ims else (0, 1, 1)
+        scale[d] = display_scale(np.array(ims)) if ims else (0, 1, 1)
     cube_dir = os.path.join(web, "dome", "cubes", tid)
     shutil.rmtree(cube_dir, ignore_errors=True)
     epochs = []
@@ -276,7 +303,7 @@ def export_dome(t, web, bands):
             if m is None:
                 continue
             y0, x0 = (b["detector"] - 1) * TILE, b["channel"] * TILE
-            canvas[y0:y0 + TILE, x0:x0 + TILE] = to_u8(m[::-1], *scale[b["detector"]])
+            canvas[y0:y0 + TILE, x0:x0 + TILE] = to_u8(fill_holes(m)[::-1], *scale[b["detector"]])
         path = os.path.join(cube_dir, f"e{vi:02d}.png")
         save_png(canvas, path)
         epochs.append(dict(mjd=vm["mjd_mean"], cube=f"dome/cubes/{tid}/e{vi:02d}.png",

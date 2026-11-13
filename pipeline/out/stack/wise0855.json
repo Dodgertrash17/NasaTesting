@@ -39,21 +39,21 @@
      "n_frames": 4,
      "wavelength_um": [
       3.352,
-      3.633
+      3.632
      ]
     },
     "5": {
      "n_frames": 8,
      "wavelength_um": [
-      4.031,
-      4.399
+      4.037,
+      4.406
      ]
     },
     "6": {
      "n_frames": 3,
      "wavelength_um": [
-      4.853,
-      4.997
+      4.859,
+      5.003
      ]
     }
    },
@@ -62,17 +62,17 @@
     72.95
    ],
    "target_measured_px": [
-    72.01,
-    72.4
+    71.93,
+    72.37
    ],
-   "offset_arcsec": 3.5
+   "offset_arcsec": 3.81
   },
   {
    "visit": 1,
-   "mjd_mean": 60986.266,
+   "mjd_mean": 60986.36,
    "mjd_min": 60979.723,
    "mjd_max": 60993.913,
-   "n_frames": 108,
+   "n_frames": 110,
    "detectors": {
     "1": {
      "n_frames": 18,
@@ -98,22 +98,22 @@
     "4": {
      "n_frames": 18,
      "wavelength_um": [
-      2.43,
+      2.429,
       3.832
      ]
     },
     "5": {
      "n_frames": 19,
      "wavelength_um": [
-      3.809,
-      4.396
+      3.815,
+      4.402
      ]
     },
     "6": {
-     "n_frames": 16,
+     "n_frames": 18,
      "wavelength_um": [
-      4.406,
-      4.972
+      4.412,
+      4.979
      ]
     }
    },
@@ -122,10 +122,10 @@
     72.99
    ],
    "target_measured_px": [
-    72.76,
-    73.17
+    72.75,
+    73.19
    ],
-   "offset_arcsec": 1.17
+   "offset_arcsec": 1.29
   },
   {
    "visit": 2,
@@ -151,15 +151,15 @@
     "5": {
      "n_frames": 6,
      "wavelength_um": [
-      4.034,
-      4.202
+      4.04,
+      4.219
      ]
     },
     "6": {
      "n_frames": 3,
      "wavelength_um": [
-      4.622,
-      4.726
+      4.629,
+      4.732
      ]
     }
    },
@@ -168,10 +168,10 @@
     73.0
    ],
    "target_measured_px": [
-    72.73,
-    73.24
+    72.77,
+    73.23
    ],
-   "offset_arcsec": 1.93
+   "offset_arcsec": 1.77
   },
   {
    "visit": 3,
@@ -211,15 +211,15 @@
     "5": {
      "n_frames": 15,
      "wavelength_um": [
-      3.825,
-      4.362
+      3.831,
+      4.368
      ]
     },
     "6": {
      "n_frames": 20,
      "wavelength_um": [
-      4.407,
-      4.925
+      4.414,
+      4.931
      ]
     }
    },
@@ -228,10 +228,10 @@
     73.03
    ],
    "target_measured_px": [
-    73.17,
-    73.37
+    73.18,
+    73.39
    ],
-   "offset_arcsec": 2.64
+   "offset_arcsec": 2.7
   }
  ]
 }

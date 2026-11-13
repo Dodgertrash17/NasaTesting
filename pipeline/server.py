@@ -36,10 +36,10 @@ warnings.filterwarnings("ignore")
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from irsa import spherex_images_at  # noqa: E402
-from step2_download import fetch_s3, resolve_paths, did_of  # noqa: E402
+from step2_download import fetch_s3, resolve_paths, did_of, PAD  # noqa: E402
 from step3_clean import clean_one  # noqa: E402
-from step4_align_stack import make_grid, reproject, clipped_mean  # noqa: E402
-from step7_export import asinh_scale, to_u8, save_png, mjd_to_date, robust  # noqa: E402
+from step4_align_stack import make_grid, reproject, stack_frames  # noqa: E402
+from step7_export import display_scale, to_u8, save_png, mjd_to_date, robust, fill_holes  # noqa: E402
 
 PIX = 6.15
 SITE = os.path.join(os.path.dirname(HERE), "public")
@@ -115,7 +115,7 @@ def process(ra, dec, fov, max_images, key, log):
     d = os.path.join(WORK, key)
     os.makedirs(os.path.join(d, "clean"), exist_ok=True)
     t = dict(id=key, name="", ra=ra, dec=dec, epoch=2026.0)
-    size = min(max(fov * 1.15, 0.05), 0.5)
+    size = min(max(fov * PAD, 0.05), 0.75)     # padded so rotated detector cutouts fill the grid
 
     def one(r):
         uri = paths.get(did_of(r["access_url"]))
@@ -151,7 +151,7 @@ def process(ra, dec, fov, max_images, key, log):
         for r in rs:
             im, _, sat = reproject(os.path.join(d, "clean", r["file"]), grid, n)
             ims.append(im)
-        m, _ = clipped_mean(np.array(ims)) if len(ims) > 1 else (ims[0], None)
+        m, _ = stack_frames(ims)
         # no background flattening here: each frame's sky level is already removed in cleaning, and a
         # surface fit over a small live field eats into galaxies and nebulae that fill it
         stacks[(v, det)] = m
@@ -176,7 +176,7 @@ def process(ra, dec, fov, max_images, key, log):
         keys = [(v, det) for v in visits if (v, det) in stacks and np.isfinite(stacks[(v, det)]).any()]
         if not keys:
             continue
-        sc = asinh_scale(np.array([stacks[k] for k in keys]))
+        sc = display_scale(np.array([stacks[k] for k in keys]))
         for k in keys:
             m = meta[k]
             mjd = round(m["mjd"], 3)
@@ -185,7 +185,7 @@ def process(ra, dec, fov, max_images, key, log):
             used.append(mjd)
             name = f"v{k[0]:02d}_{det}"
             img = stacks[k][::-1]
-            save_png(to_u8(img, *sc), os.path.join(fdir, name + ".png"))
+            save_png(to_u8(fill_holes(img), *sc), os.path.join(fdir, name + ".png"))
             save_png(np.where(~np.isfinite(img), 255, 0).astype(np.uint8), os.path.join(fdir, name + "_flags.png"))
             frames.append(dict(file=f"/data/live/{key}/{name}.png", flags_file=f"/data/live/{key}/{name}_flags.png",
                                mjd=mjd, detector=det, wavelength_um=m["wl"], n_exposures=m["n"],

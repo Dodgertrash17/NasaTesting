@@ -3,10 +3,10 @@
   "id": "barnard",
   "name": "Barnard's Star",
   "kind": "star",
-  "n_images": 359,
+  "n_images": 358,
   "n_visits": 6,
   "releases": {
-   "spherex_qr2": 240,
+   "spherex_dr1": 239,
    "spherex_qr3": 119
   },
   "visits": [
@@ -14,14 +14,14 @@
     "visit": 0,
     "mjd_start": 60902.86,
     "mjd_end": 60923.11,
-    "n": 109,
+    "n": 108,
     "per_detector": {
      "1": 19,
      "2": 18,
      "3": 18,
      "4": 18,
      "5": 18,
-     "6": 18
+     "6": 17
     }
    },
    {
@@ -83,16 +83,16 @@
     }
    }
   ],
-  "est_download_mb": 1903
+  "est_download_mb": 1897
  },
  {
   "id": "epsindib",
   "name": "Epsilon Indi B",
   "kind": "brown-dwarf",
-  "n_images": 445,
+  "n_images": 458,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 325,
+   "spherex_dr1": 338,
    "spherex_qr3": 120
   },
   "visits": [
@@ -100,13 +100,13 @@
     "visit": 0,
     "mjd_start": 60789.86,
     "mjd_end": 60836.19,
-    "n": 114,
+    "n": 118,
     "per_detector": {
      "1": 3,
      "2": 32,
      "3": 25,
      "4": 4,
-     "5": 26,
+     "5": 30,
      "6": 24
     }
    },
@@ -114,14 +114,14 @@
     "visit": 1,
     "mjd_start": 60946.96,
     "mjd_end": 60991.86,
-    "n": 137,
+    "n": 146,
     "per_detector": {
-     "1": 21,
-     "2": 29,
-     "3": 22,
-     "4": 20,
+     "1": 24,
+     "2": 30,
+     "3": 23,
+     "4": 23,
      "5": 24,
-     "6": 21
+     "6": 22
     }
    },
    {
@@ -151,16 +151,16 @@
     }
    }
   ],
-  "est_download_mb": 2358
+  "est_download_mb": 2427
  },
  {
   "id": "wise0855",
   "name": "WISE 0855-0714",
   "kind": "brown-dwarf",
-  "n_images": 256,
+  "n_images": 258,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 256
+   "spherex_dr1": 258
   },
   "visits": [
    {
@@ -181,14 +181,14 @@
     "visit": 1,
     "mjd_start": 60979.72,
     "mjd_end": 60993.91,
-    "n": 108,
+    "n": 110,
     "per_detector": {
      "1": 18,
      "2": 19,
      "3": 18,
      "4": 18,
      "5": 19,
-     "6": 16
+     "6": 18
     }
    },
    {
@@ -218,16 +218,16 @@
     }
    }
   ],
-  "est_download_mb": 1357
+  "est_download_mb": 1367
  },
  {
   "id": "rwaur",
   "name": "RW Aurigae",
   "kind": "variable",
-  "n_images": 333,
+  "n_images": 335,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 224,
+   "spherex_dr1": 226,
    "spherex_qr3": 109
   },
   "visits": [
@@ -235,14 +235,14 @@
     "visit": 0,
     "mjd_start": 60919.42,
     "mjd_end": 60938.23,
-    "n": 110,
+    "n": 112,
     "per_detector": {
      "1": 19,
      "2": 18,
      "3": 19,
      "4": 19,
      "5": 18,
-     "6": 17
+     "6": 19
     }
    },
    {
@@ -274,44 +274,45 @@
     }
    }
   ],
-  "est_download_mb": 1765
+  "est_download_mb": 1776
  },
  {
   "id": "rdra",
   "name": "R Draconis",
   "kind": "variable",
-  "n_images": 2483,
+  "n_images": 2493,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2_deep": 1224,
-   "spherex_qr2": 536,
-   "spherex_qr3_deep": 723
+   "spherex_dr1_deep": 1225,
+   "spherex_dr1": 413,
+   "spherex_qr3": 126,
+   "spherex_qr3_deep": 729
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60789.88,
     "mjd_end": 60878.61,
-    "n": 238,
+    "n": 240,
     "per_detector": {
      "1": 22,
      "2": 33,
-     "3": 66,
+     "3": 67,
      "4": 21,
      "5": 32,
-     "6": 64
+     "6": 65
     }
    },
    {
     "visit": 1,
     "mjd_start": 60916.37,
     "mjd_end": 61053.41,
-    "n": 469,
+    "n": 472,
     "per_detector": {
      "1": 175,
      "2": 37,
      "3": 24,
-     "4": 171,
+     "4": 174,
      "5": 38,
      "6": 24
     }
@@ -320,27 +321,27 @@
     "visit": 2,
     "mjd_start": 61079.48,
     "mjd_end": 61310.29,
-    "n": 1776,
+    "n": 1781,
     "per_detector": {
      "1": 387,
      "2": 19,
-     "3": 485,
+     "3": 483,
      "4": 389,
      "5": 19,
-     "6": 477
+     "6": 484
     }
    }
   ],
-  "est_download_mb": 13160
+  "est_download_mb": 13213
  },
  {
   "id": "kapteynsstar",
   "name": "Kapteyn's Star",
   "kind": "star",
-  "n_images": 380,
+  "n_images": 383,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 255,
+   "spherex_dr1": 258,
    "spherex_qr3": 125
   },
   "visits": [
@@ -348,14 +349,14 @@
     "visit": 0,
     "mjd_start": 60897.19,
     "mjd_end": 60938.09,
-    "n": 141,
+    "n": 144,
     "per_detector": {
      "1": 20,
      "2": 31,
      "3": 22,
-     "4": 18,
+     "4": 20,
      "5": 30,
-     "6": 20
+     "6": 21
     }
    },
    {
@@ -387,53 +388,54 @@
     }
    }
   ],
-  "est_download_mb": 2014
+  "est_download_mb": 2030
  },
  {
   "id": "groombridge1830",
   "name": "Groombridge 1830",
   "kind": "star",
-  "n_images": 348,
+  "n_images": 372,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 348
+   "spherex_dr1": 276,
+   "spherex_qr3": 96
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60792.13,
     "mjd_end": 60833.23,
-    "n": 137,
+    "n": 142,
     "per_detector": {
-     "1": 19,
+     "1": 20,
      "2": 23,
-     "3": 27,
+     "3": 28,
      "4": 20,
      "5": 23,
-     "6": 25
+     "6": 28
     }
    },
    {
     "visit": 1,
     "mjd_start": 61001.8,
     "mjd_end": 61021.22,
-    "n": 104,
+    "n": 124,
     "per_detector": {
-     "1": 24,
-     "2": 18,
-     "3": 16,
-     "4": 24,
-     "5": 17,
-     "6": 5
+     "1": 23,
+     "2": 19,
+     "3": 20,
+     "4": 25,
+     "5": 18,
+     "6": 19
     }
    },
    {
     "visit": 2,
     "mjd_start": 61163.34,
     "mjd_end": 61185.34,
-    "n": 107,
+    "n": 106,
     "per_detector": {
-     "1": 17,
+     "1": 16,
      "2": 17,
      "3": 19,
      "4": 18,
@@ -442,99 +444,101 @@
     }
    }
   ],
-  "est_download_mb": 1844
+  "est_download_mb": 1972
  },
  {
   "id": "lacaille9352",
   "name": "Lacaille 9352",
   "kind": "star",
-  "n_images": 349,
+  "n_images": 359,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 349
+   "spherex_dr1": 263,
+   "spherex_qr3": 96
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60808.74,
     "mjd_end": 60836.87,
-    "n": 128,
+    "n": 133,
     "per_detector": {
      "1": 18,
      "2": 30,
-     "3": 16,
+     "3": 20,
      "4": 18,
      "5": 28,
-     "6": 18
+     "6": 19
     }
    },
    {
     "visit": 1,
     "mjd_start": 60977.25,
     "mjd_end": 61003.12,
-    "n": 127,
+    "n": 130,
     "per_detector": {
      "1": 18,
      "2": 29,
-     "3": 18,
+     "3": 19,
      "4": 18,
-     "5": 27,
-     "6": 17
+     "5": 28,
+     "6": 18
     }
    },
    {
     "visit": 2,
     "mjd_start": 61174.51,
     "mjd_end": 61211.23,
-    "n": 94,
+    "n": 96,
     "per_detector": {
      "1": 9,
      "2": 12,
-     "3": 26,
+     "3": 27,
      "4": 9,
      "5": 12,
-     "6": 26
+     "6": 27
     }
    }
   ],
-  "est_download_mb": 1850
+  "est_download_mb": 1903
  },
  {
   "id": "cd3715492",
   "name": "CD-37 15492",
   "kind": "star",
-  "n_images": 367,
+  "n_images": 383,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 367
+   "spherex_dr1": 248,
+   "spherex_qr3": 135
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60821.85,
     "mjd_end": 60838.7,
-    "n": 107,
+    "n": 116,
     "per_detector": {
      "1": 19,
      "2": 20,
-     "3": 16,
+     "3": 20,
      "4": 18,
-     "5": 17,
-     "6": 17
+     "5": 19,
+     "6": 20
     }
    },
    {
     "visit": 1,
     "mjd_start": 60992.32,
     "mjd_end": 61024.72,
-    "n": 125,
+    "n": 132,
     "per_detector": {
      "1": 19,
      "2": 23,
-     "3": 25,
+     "3": 27,
      "4": 18,
-     "5": 16,
-     "6": 24
+     "5": 19,
+     "6": 26
     }
    },
    {
@@ -562,30 +566,30 @@
     }
    }
   ],
-  "est_download_mb": 1945
+  "est_download_mb": 2030
  },
  {
   "id": "gaia79892096",
   "name": "Gaia DR3 3098328182579892096",
   "kind": "star",
-  "n_images": 217,
+  "n_images": 219,
   "n_visits": 2,
   "releases": {
-   "spherex_qr2": 217
+   "spherex_dr1": 219
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60966.14,
     "mjd_end": 60976.19,
-    "n": 109,
+    "n": 111,
     "per_detector": {
      "1": 18,
      "2": 18,
      "3": 19,
      "4": 19,
      "5": 18,
-     "6": 17
+     "6": 19
     }
    },
    {
@@ -603,41 +607,42 @@
     }
    }
   ],
-  "est_download_mb": 1150
+  "est_download_mb": 1161
  },
  {
   "id": "61cygni",
   "name": "61 Cygni",
   "kind": "star",
-  "n_images": 462,
+  "n_images": 467,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 462
+   "spherex_dr1": 305,
+   "spherex_qr3": 162
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60807.54,
     "mjd_end": 60860.87,
-    "n": 156,
+    "n": 157,
     "per_detector": {
      "1": 25,
      "2": 19,
-     "3": 34,
-     "4": 25,
+     "3": 35,
+     "4": 24,
      "5": 20,
-     "6": 33
+     "6": 34
     }
    },
    {
     "visit": 1,
     "mjd_start": 60972.82,
     "mjd_end": 60995.77,
-    "n": 143,
+    "n": 146,
     "per_detector": {
-     "1": 30,
+     "1": 32,
      "2": 22,
-     "3": 18,
+     "3": 19,
      "4": 32,
      "5": 22,
      "6": 19
@@ -657,27 +662,27 @@
     "visit": 3,
     "mjd_start": 61174.73,
     "mjd_end": 61227.41,
-    "n": 161,
+    "n": 162,
     "per_detector": {
      "1": 21,
      "2": 24,
      "3": 36,
      "4": 21,
      "5": 24,
-     "6": 35
+     "6": 36
     }
    }
   ],
-  "est_download_mb": 2449
+  "est_download_mb": 2475
  },
  {
   "id": "teegardensstar",
   "name": "Teegarden's Star",
   "kind": "star",
-  "n_images": 327,
+  "n_images": 332,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 219,
+   "spherex_dr1": 224,
    "spherex_qr3": 108
   },
   "visits": [
@@ -685,14 +690,14 @@
     "visit": 0,
     "mjd_start": 60889.25,
     "mjd_end": 60898.77,
-    "n": 107,
+    "n": 112,
     "per_detector": {
      "1": 19,
      "2": 19,
-     "3": 17,
-     "4": 18,
+     "3": 18,
+     "4": 19,
      "5": 18,
-     "6": 16
+     "6": 19
     }
    },
    {
@@ -724,16 +729,17 @@
     }
    }
   ],
-  "est_download_mb": 1733
+  "est_download_mb": 1760
  },
  {
   "id": "lalande21185",
   "name": "Lalande 21185",
   "kind": "star",
-  "n_images": 283,
+  "n_images": 294,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 283
+   "spherex_dr1": 264,
+   "spherex_qr3": 30
   },
   "visits": [
    {
@@ -754,14 +760,14 @@
     "visit": 1,
     "mjd_start": 60992.97,
     "mjd_end": 61021.42,
-    "n": 129,
+    "n": 140,
     "per_detector": {
      "1": 27,
      "2": 21,
-     "3": 20,
+     "3": 23,
      "4": 28,
-     "5": 20,
-     "6": 13
+     "5": 21,
+     "6": 20
     }
    },
    {
@@ -779,28 +785,29 @@
     }
    }
   ],
-  "est_download_mb": 1500
+  "est_download_mb": 1558
  },
  {
   "id": "wolf359",
   "name": "Wolf 359",
   "kind": "star",
-  "n_images": 280,
+  "n_images": 290,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 280
+   "spherex_dr1": 250,
+   "spherex_qr3": 40
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60793.97,
     "mjd_end": 60833.98,
-    "n": 114,
+    "n": 115,
     "per_detector": {
      "1": 18,
      "2": 19,
      "3": 21,
-     "4": 16,
+     "4": 17,
      "5": 19,
      "6": 21
     }
@@ -809,14 +816,14 @@
     "visit": 1,
     "mjd_start": 61008.18,
     "mjd_end": 61023.86,
-    "n": 126,
+    "n": 135,
     "per_detector": {
-     "1": 17,
+     "1": 18,
      "2": 18,
-     "3": 31,
-     "4": 17,
+     "3": 32,
+     "4": 18,
      "5": 18,
-     "6": 25
+     "6": 31
     }
    },
    {
@@ -834,30 +841,31 @@
     }
    }
   ],
-  "est_download_mb": 1484
+  "est_download_mb": 1537
  },
  {
   "id": "gaia02602752",
   "name": "Gaia DR3 778947814402602752",
   "kind": "star",
-  "n_images": 289,
+  "n_images": 297,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 289
+   "spherex_dr1": 277,
+   "spherex_qr3": 20
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60790.3,
     "mjd_end": 60803.68,
-    "n": 79,
+    "n": 82,
     "per_detector": {
-     "1": 7,
+     "1": 8,
      "2": 16,
      "3": 17,
      "4": 8,
      "5": 16,
-     "6": 15
+     "6": 17
     }
    },
    {
@@ -874,14 +882,14 @@
     "visit": 2,
     "mjd_start": 60989.04,
     "mjd_end": 61010.01,
-    "n": 110,
+    "n": 115,
     "per_detector": {
      "1": 19,
      "2": 21,
      "3": 19,
-     "4": 18,
-     "5": 18,
-     "6": 15
+     "4": 19,
+     "5": 19,
+     "6": 18
     }
    },
    {
@@ -899,16 +907,16 @@
     }
    }
   ],
-  "est_download_mb": 1532
+  "est_download_mb": 1574
  },
  {
   "id": "omicron2eridani4",
   "name": "Omicron2 Eridani (40 Eri)",
   "kind": "star",
-  "n_images": 427,
+  "n_images": 430,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 268,
+   "spherex_dr1": 271,
    "spherex_qr3": 159
   },
   "visits": [
@@ -916,14 +924,14 @@
     "visit": 0,
     "mjd_start": 60899.24,
     "mjd_end": 60933.74,
-    "n": 130,
+    "n": 133,
     "per_detector": {
-     "1": 22,
+     "1": 23,
      "2": 20,
      "3": 23,
-     "4": 22,
+     "4": 23,
      "5": 21,
-     "6": 22
+     "6": 23
     }
    },
    {
@@ -955,30 +963,31 @@
     }
    }
   ],
-  "est_download_mb": 2263
+  "est_download_mb": 2279
  },
  {
   "id": "gaia31605760",
   "name": "Gaia DR3 3713594960831605760",
   "kind": "star",
-  "n_images": 388,
+  "n_images": 389,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 388
+   "spherex_dr1": 240,
+   "spherex_qr3": 149
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60838.06,
     "mjd_end": 60848.11,
-    "n": 115,
+    "n": 116,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 19,
      "4": 19,
      "5": 19,
-     "6": 20
+     "6": 21
     }
    },
    {
@@ -997,41 +1006,41 @@
     "visit": 2,
     "mjd_start": 61044.85,
     "mjd_end": 61062.36,
-    "n": 117,
+    "n": 118,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 21,
      "4": 19,
      "5": 19,
-     "6": 20
+     "6": 21
     }
    },
    {
     "visit": 3,
     "mjd_start": 61199.66,
     "mjd_end": 61219.21,
-    "n": 150,
+    "n": 149,
     "per_detector": {
      "1": 19,
      "2": 20,
      "3": 36,
-     "4": 19,
+     "4": 18,
      "5": 20,
      "6": 36
     }
    }
   ],
-  "est_download_mb": 2056
+  "est_download_mb": 2062
  },
  {
   "id": "proximacentauri",
   "name": "Proxima Centauri",
   "kind": "star",
-  "n_images": 352,
+  "n_images": 377,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 228,
+   "spherex_dr1": 253,
    "spherex_qr3": 124
   },
   "visits": [
@@ -1039,28 +1048,28 @@
     "visit": 0,
     "mjd_start": 60878.49,
     "mjd_end": 60910.22,
-    "n": 102,
+    "n": 124,
     "per_detector": {
      "1": 18,
      "2": 21,
-     "3": 6,
-     "4": 14,
+     "3": 23,
+     "4": 18,
      "5": 21,
-     "6": 22
+     "6": 23
     }
    },
    {
     "visit": 1,
     "mjd_start": 61075.86,
     "mjd_end": 61126.51,
-    "n": 126,
+    "n": 129,
     "per_detector": {
      "1": 25,
      "2": 22,
-     "3": 18,
-     "4": 22,
+     "3": 19,
+     "4": 23,
      "5": 21,
-     "6": 18
+     "6": 19
     }
    },
    {
@@ -1090,30 +1099,30 @@
     }
    }
   ],
-  "est_download_mb": 1866
+  "est_download_mb": 1998
  },
  {
   "id": "luytensstar",
   "name": "Luyten's Star",
   "kind": "star",
-  "n_images": 221,
+  "n_images": 224,
   "n_visits": 2,
   "releases": {
-   "spherex_qr2": 221
+   "spherex_dr1": 224
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60955.55,
     "mjd_end": 60965.6,
-    "n": 108,
+    "n": 111,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 18,
-     "4": 17,
+     "4": 18,
      "5": 19,
-     "6": 16
+     "6": 18
     }
    },
    {
@@ -1131,7 +1140,7 @@
     }
    }
   ],
-  "est_download_mb": 1171
+  "est_download_mb": 1187
  },
  {
   "id": "gaia12759552",
@@ -1140,8 +1149,8 @@
   "n_images": 334,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 320,
-   "spherex_qr3": 14
+   "spherex_dr1": 226,
+   "spherex_qr3": 108
   },
   "visits": [
    {
@@ -1196,8 +1205,8 @@
   "n_images": 331,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 316,
-   "spherex_qr3": 15
+   "spherex_dr1": 222,
+   "spherex_qr3": 109
   },
   "visits": [
    {
@@ -1249,10 +1258,10 @@
   "id": "gaia73009792",
   "name": "Gaia DR3 1711005951573009792",
   "kind": "star",
-  "n_images": 517,
+  "n_images": 521,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 355,
+   "spherex_dr1": 359,
    "spherex_qr3": 162
   },
   "visits": [
@@ -1260,14 +1269,14 @@
     "visit": 0,
     "mjd_start": 60910.13,
     "mjd_end": 60966.29,
-    "n": 181,
+    "n": 185,
     "per_detector": {
      "1": 34,
      "2": 22,
      "3": 37,
-     "4": 33,
+     "4": 34,
      "5": 22,
-     "6": 33
+     "6": 36
     }
    },
    {
@@ -1299,31 +1308,31 @@
     }
    }
   ],
-  "est_download_mb": 2740
+  "est_download_mb": 2761
  },
  {
   "id": "gaia12503424",
   "name": "Gaia DR3 6281432246412503424",
   "kind": "star",
-  "n_images": 343,
+  "n_images": 345,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 333,
-   "spherex_qr3": 10
+   "spherex_dr1": 229,
+   "spherex_qr3": 116
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60858.58,
     "mjd_end": 60904.3,
-    "n": 116,
+    "n": 118,
     "per_detector": {
      "1": 20,
      "2": 18,
      "3": 21,
      "4": 20,
-     "5": 17,
-     "6": 20
+     "5": 18,
+     "6": 21
     }
    },
    {
@@ -1355,30 +1364,30 @@
     }
    }
   ],
-  "est_download_mb": 1818
+  "est_download_mb": 1828
  },
  {
   "id": "lacaille8760axmi",
   "name": "Lacaille 8760 (AX Mic)",
   "kind": "star",
-  "n_images": 332,
+  "n_images": 339,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 326,
-   "spherex_qr3": 6
+   "spherex_dr1": 331,
+   "spherex_qr3": 8
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60790.54,
     "mjd_end": 60816.29,
-    "n": 82,
+    "n": 85,
     "per_detector": {
-     "1": 3,
+     "1": 4,
      "2": 13,
-     "3": 25,
+     "3": 26,
      "4": 4,
-     "5": 11,
+     "5": 12,
      "6": 26
     }
    },
@@ -1386,14 +1395,14 @@
     "visit": 1,
     "mjd_start": 60947.91,
     "mjd_end": 60990.42,
-    "n": 138,
+    "n": 142,
     "per_detector": {
-     "1": 25,
+     "1": 26,
      "2": 21,
      "3": 26,
-     "4": 24,
-     "5": 19,
-     "6": 23
+     "4": 25,
+     "5": 20,
+     "6": 24
     }
    },
    {
@@ -1421,30 +1430,31 @@
     }
    }
   ],
-  "est_download_mb": 1760
+  "est_download_mb": 1797
  },
  {
   "id": "gaia58739840",
   "name": "Gaia DR3 5140693571158739840",
   "kind": "star",
-  "n_images": 346,
+  "n_images": 351,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 346
+   "spherex_dr1": 241,
+   "spherex_qr3": 110
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60854.26,
     "mjd_end": 60875.33,
-    "n": 117,
+    "n": 122,
     "per_detector": {
      "1": 18,
-     "2": 20,
-     "3": 20,
-     "4": 18,
-     "5": 20,
-     "6": 21
+     "2": 23,
+     "3": 21,
+     "4": 17,
+     "5": 21,
+     "6": 22
     }
    },
    {
@@ -1476,57 +1486,57 @@
     }
    }
   ],
-  "est_download_mb": 1834
+  "est_download_mb": 1860
  },
  {
   "id": "gaia96316416",
   "name": "Gaia DR3 1057879895596316416",
   "kind": "star",
-  "n_images": 338,
+  "n_images": 339,
   "n_visits": 2,
   "releases": {
-   "spherex_qr2": 338
+   "spherex_dr1": 339
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60970.64,
-    "mjd_end": 60988.43,
-    "n": 146,
+    "mjd_end": 60991.48,
+    "n": 148,
     "per_detector": {
-     "1": 19,
+     "1": 20,
      "2": 18,
      "3": 37,
      "4": 19,
      "5": 18,
-     "6": 35
+     "6": 36
     }
    },
    {
     "visit": 1,
     "mjd_start": 61140.59,
     "mjd_end": 61174.0,
-    "n": 192,
+    "n": 191,
     "per_detector": {
      "1": 42,
      "2": 26,
      "3": 28,
      "4": 42,
-     "5": 26,
+     "5": 25,
      "6": 28
     }
    }
   ],
-  "est_download_mb": 1791
+  "est_download_mb": 1797
  },
  {
   "id": "gaia14712448",
   "name": "Gaia DR3 5115463180914712448",
   "kind": "star",
-  "n_images": 411,
+  "n_images": 415,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 293,
+   "spherex_dr1": 297,
    "spherex_qr3": 118
   },
   "visits": [
@@ -1534,14 +1544,14 @@
     "visit": 0,
     "mjd_start": 60887.96,
     "mjd_end": 60903.45,
-    "n": 158,
+    "n": 162,
     "per_detector": {
-     "1": 22,
+     "1": 23,
      "2": 37,
-     "3": 20,
-     "4": 22,
+     "3": 21,
+     "4": 23,
      "5": 37,
-     "6": 20
+     "6": 21
     }
    },
    {
@@ -1585,30 +1595,30 @@
     }
    }
   ],
-  "est_download_mb": 2178
+  "est_download_mb": 2200
  },
  {
   "id": "vanmaanensstar",
   "name": "Van Maanen's Star",
   "kind": "star",
-  "n_images": 325,
+  "n_images": 328,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 323,
-   "spherex_qr3": 2
+   "spherex_dr1": 216,
+   "spherex_qr3": 112
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60855.15,
     "mjd_end": 60875.87,
-    "n": 102,
+    "n": 104,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 14,
      "4": 19,
-     "5": 17,
+     "5": 19,
      "6": 14
     }
    },
@@ -1616,14 +1626,14 @@
     "visit": 1,
     "mjd_start": 61028.37,
     "mjd_end": 61046.71,
-    "n": 111,
+    "n": 112,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 18,
      "4": 19,
      "5": 19,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -1651,7 +1661,7 @@
     }
    }
   ],
-  "est_download_mb": 1722
+  "est_download_mb": 1738
  },
  {
   "id": "gaia60306560",
@@ -1660,7 +1670,7 @@
   "n_images": 372,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 255,
+   "spherex_dr1": 255,
    "spherex_qr3": 117
   },
   "visits": [
@@ -1713,22 +1723,22 @@
   "id": "gaia28596096",
   "name": "Gaia DR3 1057318835428596096",
   "kind": "star",
-  "n_images": 276,
+  "n_images": 278,
   "n_visits": 2,
   "releases": {
-   "spherex_qr2": 276
+   "spherex_dr1": 278
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60969.07,
-    "mjd_end": 60984.22,
-    "n": 120,
+    "mjd_end": 60991.62,
+    "n": 122,
     "per_detector": {
-     "1": 23,
+     "1": 24,
      "2": 18,
      "3": 19,
-     "4": 23,
+     "4": 24,
      "5": 18,
      "6": 19
     }
@@ -1748,30 +1758,30 @@
     }
    }
   ],
-  "est_download_mb": 1463
+  "est_download_mb": 1473
  },
  {
   "id": "groombridge34",
   "name": "Groombridge 34",
   "kind": "star",
-  "n_images": 346,
+  "n_images": 349,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 326,
-   "spherex_qr3": 20
+   "spherex_dr1": 223,
+   "spherex_qr3": 126
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60862.02,
     "mjd_end": 60875.33,
-    "n": 111,
+    "n": 112,
     "per_detector": {
      "1": 20,
      "2": 18,
      "3": 18,
      "4": 20,
-     "5": 17,
+     "5": 18,
      "6": 18
     }
    },
@@ -1779,14 +1789,14 @@
     "visit": 1,
     "mjd_start": 61023.28,
     "mjd_end": 61037.68,
-    "n": 109,
+    "n": 111,
     "per_detector": {
      "1": 18,
      "2": 19,
      "3": 19,
      "4": 18,
      "5": 19,
-     "6": 16
+     "6": 18
     }
    },
    {
@@ -1804,29 +1814,29 @@
     }
    }
   ],
-  "est_download_mb": 1834
+  "est_download_mb": 1850
  },
  {
   "id": "gaia84811520",
   "name": "Gaia DR3 5339892367684811520",
   "kind": "star",
-  "n_images": 532,
+  "n_images": 539,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 523,
-   "spherex_qr3": 9
+   "spherex_dr1": 380,
+   "spherex_qr3": 159
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60830.81,
     "mjd_end": 60887.46,
-    "n": 173,
+    "n": 178,
     "per_detector": {
      "1": 25,
      "2": 23,
-     "3": 41,
-     "4": 22,
+     "3": 44,
+     "4": 24,
      "5": 22,
      "6": 40
     }
@@ -1835,12 +1845,12 @@
     "visit": 1,
     "mjd_start": 61038.52,
     "mjd_end": 61090.8,
-    "n": 201,
+    "n": 202,
     "per_detector": {
      "1": 47,
      "2": 29,
      "3": 28,
-     "4": 45,
+     "4": 46,
      "5": 29,
      "6": 23
     }
@@ -1849,54 +1859,54 @@
     "visit": 2,
     "mjd_start": 61196.83,
     "mjd_end": 61251.48,
-    "n": 158,
+    "n": 159,
     "per_detector": {
      "1": 24,
      "2": 22,
      "3": 33,
-     "4": 22,
+     "4": 23,
      "5": 22,
      "6": 35
     }
    }
   ],
-  "est_download_mb": 2820
+  "est_download_mb": 2857
  },
  {
   "id": "gliese440whitedw",
   "name": "Gliese 440 (white dwarf)",
   "kind": "star",
-  "n_images": 468,
+  "n_images": 480,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 440,
-   "spherex_qr3": 28
+   "spherex_dr1": 336,
+   "spherex_qr3": 144
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60856.82,
     "mjd_end": 60904.04,
-    "n": 135,
+    "n": 145,
     "per_detector": {
      "1": 22,
      "2": 29,
-     "3": 12,
+     "3": 21,
      "4": 23,
      "5": 31,
-     "6": 18
+     "6": 19
     }
    },
    {
     "visit": 1,
     "mjd_start": 61052.57,
     "mjd_end": 61107.57,
-    "n": 190,
+    "n": 191,
     "per_detector": {
      "1": 29,
      "2": 49,
      "3": 23,
-     "4": 22,
+     "4": 23,
      "5": 44,
      "6": 23
     }
@@ -1905,9 +1915,9 @@
     "visit": 2,
     "mjd_start": 61216.51,
     "mjd_end": 61269.73,
-    "n": 143,
+    "n": 144,
     "per_detector": {
-     "1": 20,
+     "1": 21,
      "2": 30,
      "3": 21,
      "4": 21,
@@ -1916,7 +1926,7 @@
     }
    }
   ],
-  "est_download_mb": 2480
+  "est_download_mb": 2544
  },
  {
   "id": "gaia27143808",
@@ -1925,7 +1935,7 @@
   "n_images": 417,
   "n_visits": 5,
   "releases": {
-   "spherex_qr2": 274,
+   "spherex_dr1": 274,
    "spherex_qr3": 143
   },
   "visits": [
@@ -2002,10 +2012,11 @@
   "id": "gaia16413696",
   "name": "Gaia DR3 2611561706216413696",
   "kind": "star",
-  "n_images": 409,
+  "n_images": 410,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 409
+   "spherex_dr1": 301,
+   "spherex_qr3": 109
   },
   "visits": [
    {
@@ -2026,28 +2037,28 @@
     "visit": 1,
     "mjd_start": 60993.61,
     "mjd_end": 61014.46,
-    "n": 146,
+    "n": 148,
     "per_detector": {
      "1": 18,
      "2": 18,
      "3": 37,
      "4": 19,
      "5": 18,
-     "6": 36
+     "6": 38
     }
    },
    {
     "visit": 2,
     "mjd_start": 61184.29,
     "mjd_end": 61196.78,
-    "n": 108,
+    "n": 107,
     "per_detector": {
      "1": 17,
      "2": 19,
      "3": 18,
-     "4": 17,
+     "4": 15,
      "5": 19,
-     "6": 18
+     "6": 19
     }
    },
    {
@@ -2061,17 +2072,17 @@
     }
    }
   ],
-  "est_download_mb": 2168
+  "est_download_mb": 2173
  },
  {
   "id": "gaia76250624",
   "name": "Gaia DR3 6165095738576250624",
   "kind": "star",
-  "n_images": 341,
+  "n_images": 340,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 337,
-   "spherex_qr3": 4
+   "spherex_dr1": 225,
+   "spherex_qr3": 115
   },
   "visits": [
    {
@@ -2092,10 +2103,10 @@
     "visit": 1,
     "mjd_start": 61058.62,
     "mjd_end": 61067.65,
-    "n": 110,
+    "n": 109,
     "per_detector": {
      "1": 18,
-     "2": 18,
+     "2": 17,
      "3": 19,
      "4": 18,
      "5": 18,
@@ -2127,53 +2138,54 @@
     }
    }
   ],
-  "est_download_mb": 1807
+  "est_download_mb": 1802
  },
  {
   "id": "gaia17922304",
   "name": "Gaia DR3 2338944532617922304",
   "kind": "star",
-  "n_images": 326,
+  "n_images": 337,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 326
+   "spherex_dr1": 220,
+   "spherex_qr3": 117
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60824.51,
     "mjd_end": 60840.95,
-    "n": 104,
+    "n": 110,
     "per_detector": {
-     "1": 17,
-     "2": 17,
-     "3": 17,
+     "1": 18,
+     "2": 18,
+     "3": 18,
      "4": 20,
-     "5": 17,
-     "6": 16
+     "5": 18,
+     "6": 18
     }
    },
    {
     "visit": 1,
     "mjd_start": 61001.15,
     "mjd_end": 61017.31,
-    "n": 104,
+    "n": 110,
     "per_detector": {
-     "1": 17,
+     "1": 18,
      "2": 19,
      "3": 18,
-     "4": 17,
-     "5": 17,
-     "6": 16
+     "4": 18,
+     "5": 18,
+     "6": 19
     }
    },
    {
     "visit": 2,
     "mjd_start": 61189.92,
     "mjd_end": 61230.04,
-    "n": 118,
+    "n": 117,
     "per_detector": {
-     "1": 19,
+     "1": 18,
      "2": 20,
      "3": 20,
      "4": 18,
@@ -2182,31 +2194,31 @@
     }
    }
   ],
-  "est_download_mb": 1728
+  "est_download_mb": 1786
  },
  {
   "id": "gaia41041536",
   "name": "Gaia DR3 2515037264041041536",
   "kind": "star",
-  "n_images": 344,
+  "n_images": 345,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 258,
-   "spherex_qr3": 86
+   "spherex_dr1": 233,
+   "spherex_qr3": 112
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60876.21,
     "mjd_end": 60904.13,
-    "n": 123,
+    "n": 124,
     "per_detector": {
      "1": 24,
      "2": 20,
      "3": 18,
      "4": 23,
      "5": 21,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -2238,25 +2250,26 @@
     }
    }
   ],
-  "est_download_mb": 1823
+  "est_download_mb": 1828
  },
  {
   "id": "gaia72576384",
   "name": "Gaia DR3 3519785523672576384",
   "kind": "star",
-  "n_images": 383,
+  "n_images": 381,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 383
+   "spherex_dr1": 242,
+   "spherex_qr3": 139
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60818.36,
     "mjd_end": 60862.52,
-    "n": 120,
+    "n": 118,
     "per_detector": {
-     "1": 19,
+     "1": 17,
      "2": 18,
      "3": 23,
      "4": 19,
@@ -2268,13 +2281,13 @@
     "visit": 1,
     "mjd_start": 61034.93,
     "mjd_end": 61053.06,
-    "n": 113,
+    "n": 114,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 19,
      "4": 19,
-     "5": 18,
+     "5": 19,
      "6": 19
     }
    },
@@ -2292,39 +2305,39 @@
     "visit": 3,
     "mjd_start": 61188.81,
     "mjd_end": 61231.24,
-    "n": 140,
+    "n": 139,
     "per_detector": {
      "1": 28,
      "2": 21,
      "3": 21,
      "4": 28,
      "5": 21,
-     "6": 21
+     "6": 20
     }
    }
   ],
-  "est_download_mb": 2030
+  "est_download_mb": 2019
  },
  {
   "id": "gaia92046592",
   "name": "Gaia DR3 4780100658292046592",
   "kind": "star",
-  "n_images": 464,
+  "n_images": 468,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 402,
-   "spherex_qr3": 62
+   "spherex_dr1": 332,
+   "spherex_qr3": 136
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60856.5,
     "mjd_end": 60889.99,
-    "n": 157,
+    "n": 160,
     "per_detector": {
-     "1": 30,
+     "1": 31,
      "2": 19,
-     "3": 28,
+     "3": 30,
      "4": 31,
      "5": 19,
      "6": 30
@@ -2334,14 +2347,14 @@
     "visit": 1,
     "mjd_start": 61031.72,
     "mjd_end": 61080.4,
-    "n": 171,
+    "n": 172,
     "per_detector": {
      "1": 37,
      "2": 19,
      "3": 33,
      "4": 33,
      "5": 19,
-     "6": 30
+     "6": 31
     }
    },
    {
@@ -2359,16 +2372,16 @@
     }
    }
   ],
-  "est_download_mb": 2459
+  "est_download_mb": 2480
  },
  {
   "id": "gaia72813568",
   "name": "Gaia DR3 3340477717172813568",
   "kind": "star",
-  "n_images": 388,
+  "n_images": 387,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 275,
+   "spherex_dr1": 274,
    "spherex_qr3": 113
   },
   "visits": [
@@ -2376,14 +2389,14 @@
     "visit": 0,
     "mjd_start": 60926.21,
     "mjd_end": 60939.52,
-    "n": 136,
+    "n": 135,
     "per_detector": {
      "1": 30,
      "2": 19,
      "3": 19,
      "4": 30,
      "5": 19,
-     "6": 19
+     "6": 18
     }
    },
    {
@@ -2425,16 +2438,16 @@
     }
    }
   ],
-  "est_download_mb": 2056
+  "est_download_mb": 2051
  },
  {
   "id": "gaia96586112",
   "name": "Gaia DR3 5184938400096586112",
   "kind": "star",
-  "n_images": 344,
+  "n_images": 346,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 218,
+   "spherex_dr1": 220,
    "spherex_qr3": 126
   },
   "visits": [
@@ -2442,28 +2455,28 @@
     "visit": 0,
     "mjd_start": 60879.26,
     "mjd_end": 60904.47,
-    "n": 108,
+    "n": 112,
     "per_detector": {
-     "1": 18,
+     "1": 19,
      "2": 18,
-     "3": 18,
-     "4": 18,
+     "3": 19,
+     "4": 19,
      "5": 18,
-     "6": 18
+     "6": 19
     }
    },
    {
     "visit": 1,
     "mjd_start": 61057.3,
     "mjd_end": 61072.65,
-    "n": 110,
+    "n": 108,
     "per_detector": {
      "1": 19,
      "2": 18,
      "3": 18,
      "4": 18,
      "5": 18,
-     "6": 19
+     "6": 17
     }
    },
    {
@@ -2481,26 +2494,26 @@
     }
    }
   ],
-  "est_download_mb": 1823
+  "est_download_mb": 1834
  },
  {
   "id": "gaia37068160",
   "name": "Gaia DR3 2519329585637068160",
   "kind": "star",
-  "n_images": 345,
+  "n_images": 346,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 249,
-   "spherex_qr3": 96
+   "spherex_dr1": 225,
+   "spherex_qr3": 121
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60876.62,
     "mjd_end": 60904.13,
-    "n": 114,
+    "n": 115,
     "per_detector": {
-     "1": 16,
+     "1": 17,
      "2": 18,
      "3": 21,
      "4": 19,
@@ -2537,16 +2550,16 @@
     }
    }
   ],
-  "est_download_mb": 1828
+  "est_download_mb": 1834
  },
  {
   "id": "gaia37310080",
   "name": "Gaia DR3 470826482637310080",
   "kind": "star",
-  "n_images": 351,
+  "n_images": 357,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 240,
+   "spherex_dr1": 246,
    "spherex_qr3": 111
   },
   "visits": [
@@ -2554,12 +2567,12 @@
     "visit": 0,
     "mjd_start": 60915.62,
     "mjd_end": 60934.09,
-    "n": 131,
+    "n": 136,
     "per_detector": {
      "1": 24,
      "2": 24,
      "3": 20,
-     "4": 19,
+     "4": 24,
      "5": 24,
      "6": 20
     }
@@ -2568,12 +2581,12 @@
     "visit": 1,
     "mjd_start": 61076.37,
     "mjd_end": 61097.35,
-    "n": 109,
+    "n": 110,
     "per_detector": {
      "1": 18,
      "2": 19,
      "3": 18,
-     "4": 17,
+     "4": 18,
      "5": 19,
      "6": 18
     }
@@ -2603,31 +2616,31 @@
     }
    }
   ],
-  "est_download_mb": 1860
+  "est_download_mb": 1892
  },
  {
   "id": "gaia68019072",
   "name": "Gaia DR3 4736655036868019072",
   "kind": "star",
-  "n_images": 361,
+  "n_images": 364,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 340,
-   "spherex_qr3": 21
+   "spherex_dr1": 227,
+   "spherex_qr3": 137
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60852.01,
     "mjd_end": 60874.84,
-    "n": 110,
+    "n": 113,
     "per_detector": {
      "1": 18,
      "2": 18,
-     "3": 18,
+     "3": 20,
      "4": 18,
      "5": 19,
-     "6": 19
+     "6": 20
     }
    },
    {
@@ -2659,30 +2672,30 @@
     }
    }
   ],
-  "est_download_mb": 1913
+  "est_download_mb": 1929
  },
  {
   "id": "luhman16",
   "name": "Luhman 16AB",
   "kind": "brown-dwarf",
-  "n_images": 451,
+  "n_images": 455,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 445,
-   "spherex_qr3": 6
+   "spherex_dr1": 272,
+   "spherex_qr3": 183
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60825.23,
     "mjd_end": 60875.91,
-    "n": 127,
+    "n": 129,
     "per_detector": {
      "1": 24,
-     "2": 22,
+     "2": 23,
      "3": 21,
      "4": 22,
-     "5": 19,
+     "5": 20,
      "6": 19
     }
    },
@@ -2690,9 +2703,9 @@
     "visit": 1,
     "mjd_start": 61030.85,
     "mjd_end": 61074.03,
-    "n": 142,
+    "n": 143,
     "per_detector": {
-     "1": 24,
+     "1": 25,
      "2": 23,
      "3": 24,
      "4": 25,
@@ -2704,27 +2717,27 @@
     "visit": 2,
     "mjd_start": 61184.4,
     "mjd_end": 61242.44,
-    "n": 182,
+    "n": 183,
     "per_detector": {
      "1": 23,
      "2": 29,
      "3": 40,
      "4": 23,
      "5": 29,
-     "6": 38
+     "6": 39
     }
    }
   ],
-  "est_download_mb": 2390
+  "est_download_mb": 2412
  },
  {
   "id": "w1828",
   "name": "WISE 1828+2650",
   "kind": "brown-dwarf",
-  "n_images": 426,
+  "n_images": 427,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 289,
+   "spherex_dr1": 290,
    "spherex_qr3": 137
   },
   "visits": [
@@ -2732,14 +2745,14 @@
     "visit": 0,
     "mjd_start": 60908.43,
     "mjd_end": 60950.76,
-    "n": 143,
+    "n": 144,
     "per_detector": {
      "1": 24,
      "2": 25,
      "3": 23,
      "4": 23,
      "5": 25,
-     "6": 23
+     "6": 24
     }
    },
    {
@@ -2785,7 +2798,7 @@
     }
    }
   ],
-  "est_download_mb": 2258
+  "est_download_mb": 2263
  },
  {
   "id": "w1541",
@@ -2794,8 +2807,8 @@
   "n_images": 350,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 244,
-   "spherex_qr3": 106
+   "spherex_dr1": 230,
+   "spherex_qr3": 120
   },
   "visits": [
    {
@@ -2850,7 +2863,7 @@
   "n_images": 329,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 219,
+   "spherex_dr1": 219,
    "spherex_qr3": 110
   },
   "visits": [
@@ -2903,10 +2916,10 @@
   "id": "w1738",
   "name": "WISE 1738+2732",
   "kind": "brown-dwarf",
-  "n_images": 377,
+  "n_images": 379,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 238,
+   "spherex_dr1": 240,
    "spherex_qr3": 139
   },
   "visits": [
@@ -2914,13 +2927,13 @@
     "visit": 0,
     "mjd_start": 60890.5,
     "mjd_end": 60908.5,
-    "n": 113,
+    "n": 115,
     "per_detector": {
      "1": 19,
      "2": 21,
-     "3": 17,
+     "3": 18,
      "4": 18,
-     "5": 20,
+     "5": 21,
      "6": 18
     }
    },
@@ -2963,30 +2976,31 @@
     }
    }
   ],
-  "est_download_mb": 1998
+  "est_download_mb": 2009
  },
  {
   "id": "w2056",
   "name": "WISE 2056+1459",
   "kind": "brown-dwarf",
-  "n_images": 304,
+  "n_images": 305,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 304
+   "spherex_dr1": 248,
+   "spherex_qr3": 57
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60797.82,
     "mjd_end": 60815.95,
-    "n": 126,
+    "n": 127,
     "per_detector": {
      "1": 22,
      "2": 25,
      "3": 18,
      "4": 21,
      "5": 23,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -3018,44 +3032,45 @@
     }
    }
   ],
-  "est_download_mb": 1611
+  "est_download_mb": 1616
  },
  {
   "id": "w1405",
   "name": "WISE 1405+5534",
   "kind": "brown-dwarf",
-  "n_images": 456,
+  "n_images": 470,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 456
+   "spherex_dr1": 310,
+   "spherex_qr3": 160
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60797.01,
     "mjd_end": 60834.18,
-    "n": 152,
+    "n": 158,
     "per_detector": {
      "1": 20,
      "2": 19,
-     "3": 38,
+     "3": 40,
      "4": 20,
      "5": 19,
-     "6": 36
+     "6": 40
     }
    },
    {
     "visit": 1,
     "mjd_start": 61005.07,
     "mjd_end": 61027.4,
-    "n": 144,
+    "n": 152,
     "per_detector": {
-     "1": 35,
+     "1": 36,
      "2": 20,
-     "3": 19,
-     "4": 33,
-     "5": 19,
-     "6": 18
+     "3": 20,
+     "4": 36,
+     "5": 20,
+     "6": 20
     }
    },
    {
@@ -3073,7 +3088,7 @@
     }
    }
   ],
-  "est_download_mb": 2417
+  "est_download_mb": 2491
  },
  {
   "id": "w1639",
@@ -3082,7 +3097,7 @@
   "n_images": 398,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 259,
+   "spherex_dr1": 259,
    "spherex_qr3": 139
   },
   "visits": [
@@ -3145,22 +3160,22 @@
   "id": "w0359",
   "name": "WISE 0359-5401",
   "kind": "brown-dwarf",
-  "n_images": 367,
+  "n_images": 368,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 329,
-   "spherex_qr3": 38
+   "spherex_dr1": 242,
+   "spherex_qr3": 126
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60850.66,
     "mjd_end": 60880.55,
-    "n": 120,
+    "n": 121,
     "per_detector": {
      "1": 23,
      "2": 19,
-     "3": 17,
+     "3": 18,
      "4": 24,
      "5": 19,
      "6": 18
@@ -3195,30 +3210,30 @@
     }
    }
   ],
-  "est_download_mb": 1945
+  "est_download_mb": 1950
  },
  {
   "id": "ugps0722",
   "name": "UGPS 0722-0540",
   "kind": "brown-dwarf",
-  "n_images": 254,
+  "n_images": 256,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 254
+   "spherex_dr1": 256
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60955.41,
     "mjd_end": 60964.71,
-    "n": 108,
+    "n": 110,
     "per_detector": {
      "1": 19,
      "2": 18,
      "3": 18,
      "4": 19,
      "5": 18,
-     "6": 16
+     "6": 18
     }
    },
    {
@@ -3250,16 +3265,16 @@
     }
    }
   ],
-  "est_download_mb": 1346
+  "est_download_mb": 1357
  },
  {
   "id": "2m0415",
   "name": "2MASS 0415-0935",
   "kind": "brown-dwarf",
-  "n_images": 381,
+  "n_images": 383,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 259,
+   "spherex_dr1": 261,
    "spherex_qr3": 122
   },
   "visits": [
@@ -3267,14 +3282,14 @@
     "visit": 0,
     "mjd_start": 60899.23,
     "mjd_end": 60933.74,
-    "n": 150,
+    "n": 152,
     "per_detector": {
      "1": 21,
      "2": 34,
      "3": 21,
      "4": 21,
-     "5": 33,
-     "6": 20
+     "5": 34,
+     "6": 21
     }
    },
    {
@@ -3306,44 +3321,45 @@
     }
    }
   ],
-  "est_download_mb": 2019
+  "est_download_mb": 2030
  },
  {
   "id": "2m0939",
   "name": "2MASS 0939-2448",
   "kind": "brown-dwarf",
-  "n_images": 283,
+  "n_images": 289,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 283
+   "spherex_dr1": 273,
+   "spherex_qr3": 16
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60791.33,
     "mjd_end": 60833.18,
-    "n": 128,
+    "n": 133,
     "per_detector": {
      "1": 30,
      "2": 19,
      "3": 18,
-     "4": 30,
-     "5": 16,
-     "6": 15
+     "4": 29,
+     "5": 19,
+     "6": 18
     }
    },
    {
     "visit": 1,
     "mjd_start": 60996.9,
     "mjd_end": 61021.96,
-    "n": 127,
+    "n": 128,
     "per_detector": {
      "1": 19,
-     "2": 20,
-     "3": 25,
+     "2": 19,
+     "3": 24,
      "4": 19,
-     "5": 20,
-     "6": 24
+     "5": 21,
+     "6": 26
     }
    },
    {
@@ -3369,7 +3385,7 @@
     }
    }
   ],
-  "est_download_mb": 1500
+  "est_download_mb": 1532
  },
  {
   "id": "w0458",
@@ -3378,7 +3394,7 @@
   "n_images": 354,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 226,
+   "spherex_dr1": 226,
    "spherex_qr3": 128
   },
   "visits": [
@@ -3431,10 +3447,10 @@
   "id": "2m0729",
   "name": "2MASS 0729-3954",
   "kind": "brown-dwarf",
-  "n_images": 341,
+  "n_images": 340,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 341
+   "spherex_dr1": 340
   },
   "visits": [
    {
@@ -3465,50 +3481,51 @@
     "visit": 2,
     "mjd_start": 61140.61,
     "mjd_end": 61169.74,
-    "n": 148,
+    "n": 147,
     "per_detector": {
      "1": 26,
      "2": 27,
      "3": 22,
-     "4": 24,
+     "4": 23,
      "5": 27,
      "6": 22
     }
    }
   ],
-  "est_download_mb": 1807
+  "est_download_mb": 1802
  },
  {
   "id": "w1217",
   "name": "WISE 1217+1626",
   "kind": "brown-dwarf",
-  "n_images": 347,
+  "n_images": 351,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 347
+   "spherex_dr1": 223,
+   "spherex_qr3": 128
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60810.34,
     "mjd_end": 60825.36,
-    "n": 108,
+    "n": 109,
     "per_detector": {
      "1": 18,
      "2": 18,
      "3": 18,
      "4": 19,
      "5": 18,
-     "6": 17
+     "6": 18
     }
    },
    {
     "visit": 1,
     "mjd_start": 61023.12,
     "mjd_end": 61051.02,
-    "n": 112,
+    "n": 114,
     "per_detector": {
-     "1": 16,
+     "1": 18,
      "2": 18,
      "3": 21,
      "4": 18,
@@ -3520,38 +3537,39 @@
     "visit": 2,
     "mjd_start": 61178.89,
     "mjd_end": 61216.23,
-    "n": 127,
+    "n": 128,
     "per_detector": {
      "1": 21,
      "2": 19,
      "3": 24,
      "4": 21,
      "5": 19,
-     "6": 23
+     "6": 24
     }
    }
   ],
-  "est_download_mb": 1839
+  "est_download_mb": 1860
  },
  {
   "id": "denis0255",
   "name": "DENIS 0255-4700",
   "kind": "brown-dwarf",
-  "n_images": 400,
+  "n_images": 403,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 400
+   "spherex_dr1": 270,
+   "spherex_qr3": 133
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60846.58,
     "mjd_end": 60865.53,
-    "n": 134,
+    "n": 135,
     "per_detector": {
      "1": 29,
      "2": 19,
-     "3": 18,
+     "3": 19,
      "4": 30,
      "5": 19,
      "6": 19
@@ -3561,14 +3579,14 @@
     "visit": 1,
     "mjd_start": 61019.83,
     "mjd_end": 61041.42,
-    "n": 133,
+    "n": 135,
     "per_detector": {
      "1": 19,
      "2": 19,
-     "3": 30,
+     "3": 31,
      "4": 19,
      "5": 18,
-     "6": 28
+     "6": 29
     }
    },
    {
@@ -3577,39 +3595,40 @@
     "mjd_end": 61229.63,
     "n": 133,
     "per_detector": {
-     "1": 29,
+     "1": 30,
      "2": 18,
      "3": 19,
-     "4": 30,
+     "4": 29,
      "5": 18,
      "6": 19
     }
    }
   ],
-  "est_download_mb": 2120
+  "est_download_mb": 2136
  },
  {
   "id": "2m0036",
   "name": "2MASS 0036+1821",
   "kind": "brown-dwarf",
-  "n_images": 362,
+  "n_images": 363,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 362
+   "spherex_dr1": 253,
+   "spherex_qr3": 110
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60854.07,
     "mjd_end": 60868.2,
-    "n": 140,
+    "n": 141,
     "per_detector": {
      "1": 33,
      "2": 19,
      "3": 19,
      "4": 32,
      "5": 19,
-     "6": 18
+     "6": 19
     }
    },
    {
@@ -3635,36 +3654,36 @@
      "1": 18,
      "2": 19,
      "3": 18,
-     "4": 19,
+     "4": 18,
      "5": 19,
-     "6": 17
+     "6": 18
     }
    }
   ],
-  "est_download_mb": 1919
+  "est_download_mb": 1924
  },
  {
   "id": "lp944",
   "name": "LP 944-20",
   "kind": "brown-dwarf",
-  "n_images": 436,
+  "n_images": 441,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 321,
-   "spherex_qr3": 115
+   "spherex_dr1": 286,
+   "spherex_qr3": 155
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60872.05,
     "mjd_end": 60903.51,
-    "n": 141,
+    "n": 144,
     "per_detector": {
      "1": 19,
      "2": 21,
-     "3": 30,
+     "3": 32,
      "4": 19,
-     "5": 20,
+     "5": 21,
      "6": 32
     }
    },
@@ -3672,14 +3691,14 @@
     "visit": 1,
     "mjd_start": 61048.35,
     "mjd_end": 61083.52,
-    "n": 140,
+    "n": 142,
     "per_detector": {
-     "1": 32,
+     "1": 33,
      "2": 22,
      "3": 20,
      "4": 30,
      "5": 18,
-     "6": 18
+     "6": 19
     }
    },
    {
@@ -3697,31 +3716,31 @@
     }
    }
   ],
-  "est_download_mb": 2311
+  "est_download_mb": 2337
  },
  {
   "id": "gl570d",
   "name": "Gliese 570 D",
   "kind": "brown-dwarf",
-  "n_images": 369,
+  "n_images": 370,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 335,
-   "spherex_qr3": 34
+   "spherex_dr1": 229,
+   "spherex_qr3": 141
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60867.96,
     "mjd_end": 60885.42,
-    "n": 111,
+    "n": 112,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 18,
      "4": 19,
      "5": 19,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -3763,26 +3782,26 @@
     }
    }
   ],
-  "est_download_mb": 1956
+  "est_download_mb": 1961
  },
  {
   "id": "w0647",
   "name": "WISE 0647-6232",
   "kind": "brown-dwarf",
-  "n_images": 739,
+  "n_images": 741,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 653,
-   "spherex_qr3": 86
+   "spherex_dr1": 520,
+   "spherex_qr3": 221
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60802.41,
     "mjd_end": 60854.11,
-    "n": 130,
+    "n": 131,
     "per_detector": {
-     "1": 44,
+     "1": 45,
      "2": 22,
      "4": 45,
      "5": 19
@@ -3802,14 +3821,14 @@
     "visit": 2,
     "mjd_start": 60924.15,
     "mjd_end": 61249.64,
-    "n": 519,
+    "n": 520,
     "per_detector": {
-     "1": 104,
+     "1": 103,
      "2": 49,
-     "3": 109,
+     "3": 110,
      "4": 103,
      "5": 48,
-     "6": 106
+     "6": 107
     }
    },
    {
@@ -3823,40 +3842,40 @@
     }
    }
   ],
-  "est_download_mb": 3917
+  "est_download_mb": 3927
  },
  {
   "id": "mira",
   "name": "Mira (o Ceti)",
   "kind": "variable",
-  "n_images": 386,
+  "n_images": 391,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 319,
-   "spherex_qr3": 67
+   "spherex_dr1": 267,
+   "spherex_qr3": 124
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60871.45,
     "mjd_end": 60904.74,
-    "n": 148,
+    "n": 154,
     "per_detector": {
      "1": 18,
      "2": 21,
      "3": 38,
      "4": 18,
-     "5": 19,
-     "6": 34
+     "5": 21,
+     "6": 38
     }
    },
    {
     "visit": 1,
     "mjd_start": 61036.39,
     "mjd_end": 61068.03,
-    "n": 114,
+    "n": 113,
     "per_detector": {
-     "1": 18,
+     "1": 17,
      "2": 19,
      "3": 19,
      "4": 21,
@@ -3879,43 +3898,43 @@
     }
    }
   ],
-  "est_download_mb": 2046
+  "est_download_mb": 2072
  },
  {
   "id": "chicyg",
   "name": "Chi Cygni",
   "kind": "variable",
-  "n_images": 433,
+  "n_images": 471,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 382,
-   "spherex_qr3": 51
+   "spherex_dr1": 404,
+   "spherex_qr3": 67
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60790.34,
     "mjd_end": 60834.98,
-    "n": 138,
+    "n": 160,
     "per_detector": {
      "1": 4,
-     "2": 23,
-     "3": 33,
-     "4": 4,
+     "2": 25,
+     "3": 52,
+     "4": 3,
      "5": 24,
-     "6": 50
+     "6": 52
     }
    },
    {
     "visit": 1,
     "mjd_start": 60941.31,
     "mjd_end": 60967.86,
-    "n": 135,
+    "n": 149,
     "per_detector": {
-     "1": 23,
-     "2": 29,
-     "3": 16,
-     "4": 20,
+     "1": 27,
+     "2": 30,
+     "3": 18,
+     "4": 27,
      "5": 29,
      "6": 18
     }
@@ -3924,12 +3943,12 @@
     "visit": 2,
     "mjd_start": 61145.6,
     "mjd_end": 61199.58,
-    "n": 109,
+    "n": 111,
     "per_detector": {
      "1": 20,
      "2": 28,
      "3": 8,
-     "4": 18,
+     "4": 20,
      "5": 27,
      "6": 8
     }
@@ -3947,16 +3966,16 @@
     }
    }
   ],
-  "est_download_mb": 2295
+  "est_download_mb": 2496
  },
  {
   "id": "rleo",
   "name": "R Leonis",
   "kind": "variable",
-  "n_images": 232,
+  "n_images": 236,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 232
+   "spherex_dr1": 236
   },
   "visits": [
    {
@@ -3985,14 +4004,14 @@
     "visit": 2,
     "mjd_start": 60987.54,
     "mjd_end": 61002.33,
-    "n": 102,
+    "n": 106,
     "per_detector": {
      "1": 18,
      "2": 17,
      "3": 18,
-     "4": 17,
-     "5": 17,
-     "6": 15
+     "4": 18,
+     "5": 18,
+     "6": 17
     }
    },
    {
@@ -4010,31 +4029,31 @@
     }
    }
   ],
-  "est_download_mb": 1230
+  "est_download_mb": 1251
  },
  {
   "id": "rcas",
   "name": "R Cassiopeiae",
   "kind": "variable",
-  "n_images": 391,
+  "n_images": 393,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 383,
-   "spherex_qr3": 8
+   "spherex_dr1": 257,
+   "spherex_qr3": 136
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60859.78,
     "mjd_end": 60890.35,
-    "n": 127,
+    "n": 129,
     "per_detector": {
      "1": 28,
      "2": 18,
      "3": 18,
-     "4": 28,
+     "4": 29,
      "5": 18,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -4066,7 +4085,7 @@
     }
    }
   ],
-  "est_download_mb": 2072
+  "est_download_mb": 2083
  },
  {
   "id": "uori",
@@ -4075,7 +4094,7 @@
   "n_images": 367,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 220,
+   "spherex_dr1": 220,
    "spherex_qr3": 147
   },
   "visits": [
@@ -4131,8 +4150,8 @@
   "n_images": 353,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 347,
-   "spherex_qr3": 6
+   "spherex_dr1": 235,
+   "spherex_qr3": 118
   },
   "visits": [
    {
@@ -4187,8 +4206,8 @@
   "n_images": 518,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 490,
-   "spherex_qr3": 28
+   "spherex_dr1": 354,
+   "spherex_qr3": 164
   },
   "visits": [
    {
@@ -4240,10 +4259,10 @@
   "id": "raql",
   "name": "R Aquilae",
   "kind": "variable",
-  "n_images": 394,
+  "n_images": 422,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 278,
+   "spherex_dr1": 306,
    "spherex_qr3": 116
   },
   "visits": [
@@ -4251,28 +4270,28 @@
     "visit": 0,
     "mjd_start": 60922.22,
     "mjd_end": 60943.75,
-    "n": 100,
+    "n": 126,
     "per_detector": {
      "1": 18,
      "2": 27,
-     "3": 7,
-     "4": 6,
-     "5": 25,
-     "6": 17
+     "3": 18,
+     "4": 18,
+     "5": 27,
+     "6": 18
     }
    },
    {
     "visit": 1,
     "mjd_start": 61130.19,
     "mjd_end": 61139.9,
-    "n": 125,
+    "n": 127,
     "per_detector": {
      "1": 18,
      "2": 28,
-     "3": 18,
-     "4": 15,
+     "3": 19,
+     "4": 17,
      "5": 28,
-     "6": 18
+     "6": 17
     }
    },
    {
@@ -4283,10 +4302,10 @@
     "per_detector": {
      "1": 12,
      "2": 8,
-     "3": 6,
+     "3": 7,
      "4": 12,
      "5": 8,
-     "6": 7
+     "6": 6
     }
    },
    {
@@ -4304,16 +4323,16 @@
     }
    }
   ],
-  "est_download_mb": 2088
+  "est_download_mb": 2237
  },
  {
   "id": "rtri",
   "name": "R Trianguli",
   "kind": "variable",
-  "n_images": 330,
+  "n_images": 333,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 220,
+   "spherex_dr1": 223,
    "spherex_qr3": 110
   },
   "visits": [
@@ -4321,14 +4340,14 @@
     "visit": 0,
     "mjd_start": 60890.08,
     "mjd_end": 60899.38,
-    "n": 108,
+    "n": 111,
     "per_detector": {
      "1": 18,
      "2": 18,
      "3": 19,
-     "4": 17,
+     "4": 18,
      "5": 19,
-     "6": 17
+     "6": 19
     }
    },
    {
@@ -4370,30 +4389,30 @@
     }
    }
   ],
-  "est_download_mb": 1749
+  "est_download_mb": 1765
  },
  {
   "id": "ruma",
   "name": "R Ursae Majoris",
   "kind": "variable",
-  "n_images": 309,
+  "n_images": 315,
   "n_visits": 2,
   "releases": {
-   "spherex_qr2": 309
+   "spherex_dr1": 315
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60962.01,
     "mjd_end": 60991.62,
-    "n": 147,
+    "n": 153,
     "per_detector": {
-     "1": 18,
-     "2": 35,
-     "3": 21,
+     "1": 19,
+     "2": 36,
+     "3": 22,
      "4": 19,
-     "5": 34,
-     "6": 20
+     "5": 35,
+     "6": 22
     }
    },
    {
@@ -4411,31 +4430,31 @@
     }
    }
   ],
-  "est_download_mb": 1638
+  "est_download_mb": 1670
  },
  {
   "id": "rboo",
   "name": "R Bootis",
   "kind": "variable",
-  "n_images": 438,
+  "n_images": 443,
   "n_visits": 5,
   "releases": {
-   "spherex_qr2": 416,
-   "spherex_qr3": 22
+   "spherex_dr1": 271,
+   "spherex_qr3": 172
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60839.28,
     "mjd_end": 60852.59,
-    "n": 128,
+    "n": 133,
     "per_detector": {
      "1": 18,
      "2": 30,
      "3": 19,
      "4": 19,
-     "5": 26,
-     "6": 16
+     "5": 29,
+     "6": 18
     }
    },
    {
@@ -4487,17 +4506,17 @@
     }
    }
   ],
-  "est_download_mb": 2321
+  "est_download_mb": 2348
  },
  {
   "id": "svir",
   "name": "S Virginis",
   "kind": "variable",
-  "n_images": 343,
+  "n_images": 342,
   "n_visits": 5,
   "releases": {
-   "spherex_qr2": 335,
-   "spherex_qr3": 8
+   "spherex_dr1": 223,
+   "spherex_qr3": 119
   },
   "visits": [
    {
@@ -4542,12 +4561,12 @@
     "visit": 3,
     "mjd_start": 61201.7,
     "mjd_end": 61220.3,
-    "n": 112,
+    "n": 111,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 18,
-     "4": 19,
+     "4": 18,
      "5": 19,
      "6": 18
     }
@@ -4563,31 +4582,31 @@
     }
    }
   ],
-  "est_download_mb": 1818
+  "est_download_mb": 1813
  },
  {
   "id": "rcrb",
   "name": "R Coronae Borealis",
   "kind": "variable",
-  "n_images": 392,
+  "n_images": 393,
   "n_visits": 5,
   "releases": {
-   "spherex_qr2": 384,
-   "spherex_qr3": 8
+   "spherex_dr1": 250,
+   "spherex_qr3": 143
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60856.13,
     "mjd_end": 60870.39,
-    "n": 131,
+    "n": 133,
     "per_detector": {
      "1": 19,
      "2": 28,
      "3": 19,
      "4": 19,
-     "5": 28,
-     "6": 18
+     "5": 29,
+     "6": 19
     }
    },
    {
@@ -4620,14 +4639,14 @@
     "visit": 3,
     "mjd_start": 61223.15,
     "mjd_end": 61239.3,
-    "n": 136,
+    "n": 135,
     "per_detector": {
      "1": 19,
      "2": 29,
      "3": 20,
      "4": 19,
      "5": 29,
-     "6": 20
+     "6": 19
     }
    },
    {
@@ -4641,7 +4660,7 @@
     }
    }
   ],
-  "est_download_mb": 2078
+  "est_download_mb": 2083
  },
  {
   "id": "ttau",
@@ -4650,7 +4669,7 @@
   "n_images": 322,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 215,
+   "spherex_dr1": 215,
    "spherex_qr3": 107
   },
   "visits": [
@@ -4706,7 +4725,7 @@
   "n_images": 392,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 243,
+   "spherex_dr1": 243,
    "spherex_qr3": 149
   },
   "visits": [
@@ -4759,10 +4778,10 @@
   "id": "aatau",
   "name": "AA Tauri",
   "kind": "variable",
-  "n_images": 333,
+  "n_images": 339,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 221,
+   "spherex_dr1": 227,
    "spherex_qr3": 112
   },
   "visits": [
@@ -4770,12 +4789,12 @@
     "visit": 0,
     "mjd_start": 60914.73,
     "mjd_end": 60929.61,
-    "n": 108,
+    "n": 114,
     "per_detector": {
      "1": 19,
      "2": 19,
      "3": 19,
-     "4": 13,
+     "4": 19,
      "5": 19,
      "6": 19
     }
@@ -4809,7 +4828,7 @@
     }
    }
   ],
-  "est_download_mb": 1765
+  "est_download_mb": 1797
  },
  {
   "id": "drtau",
@@ -4818,7 +4837,7 @@
   "n_images": 333,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 219,
+   "spherex_dr1": 219,
    "spherex_qr3": 114
   },
   "visits": [
@@ -4874,7 +4893,7 @@
   "n_images": 380,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 248,
+   "spherex_dr1": 248,
    "spherex_qr3": 132
   },
   "visits": [
@@ -4927,10 +4946,10 @@
   "id": "v1647ori",
   "name": "V1647 Orionis (McNeil's Nebula)",
   "kind": "variable",
-  "n_images": 384,
+  "n_images": 386,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 269,
+   "spherex_dr1": 271,
    "spherex_qr3": 115
   },
   "visits": [
@@ -4938,9 +4957,9 @@
     "visit": 0,
     "mjd_start": 60926.47,
     "mjd_end": 60937.81,
-    "n": 137,
+    "n": 138,
     "per_detector": {
-     "1": 32,
+     "1": 33,
      "2": 18,
      "3": 18,
      "4": 33,
@@ -4952,10 +4971,11 @@
     "visit": 1,
     "mjd_start": 60961.52,
     "mjd_end": 60962.07,
-    "n": 3,
+    "n": 4,
     "per_detector": {
      "1": 1,
      "3": 1,
+     "4": 1,
      "6": 1
     }
    },
@@ -4988,42 +5008,43 @@
     }
    }
   ],
-  "est_download_mb": 2035
+  "est_download_mb": 2046
  },
  {
   "id": "v1057cyg",
   "name": "V1057 Cygni",
   "kind": "variable",
-  "n_images": 413,
+  "n_images": 436,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 413
+   "spherex_dr1": 288,
+   "spherex_qr3": 148
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60807.81,
     "mjd_end": 60857.27,
-    "n": 126,
+    "n": 134,
     "per_detector": {
      "1": 25,
      "2": 20,
-     "3": 20,
-     "4": 20,
+     "3": 22,
+     "4": 25,
      "5": 20,
-     "6": 21
+     "6": 22
     }
    },
    {
     "visit": 1,
     "mjd_start": 60974.18,
     "mjd_end": 61000.59,
-    "n": 138,
+    "n": 152,
     "per_detector": {
-     "1": 36,
+     "1": 37,
      "2": 19,
-     "3": 9,
-     "4": 35,
+     "3": 21,
+     "4": 36,
      "5": 18,
      "6": 21
     }
@@ -5042,18 +5063,18 @@
     "visit": 3,
     "mjd_start": 61174.8,
     "mjd_end": 61228.49,
-    "n": 147,
+    "n": 148,
     "per_detector": {
      "1": 22,
      "2": 18,
-     "3": 35,
-     "4": 19,
+     "3": 34,
+     "4": 21,
      "5": 18,
      "6": 35
     }
    }
   ],
-  "est_download_mb": 2189
+  "est_download_mb": 2311
  },
  {
   "id": "exlup",
@@ -5062,7 +5083,7 @@
   "n_images": 370,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 241,
+   "spherex_dr1": 241,
    "spherex_qr3": 129
   },
   "visits": [
@@ -5125,22 +5146,22 @@
   "id": "deltacep",
   "name": "Delta Cephei",
   "kind": "variable",
-  "n_images": 384,
+  "n_images": 394,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 379,
-   "spherex_qr3": 5
+   "spherex_dr1": 258,
+   "spherex_qr3": 136
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60850.75,
     "mjd_end": 60899.39,
-    "n": 127,
+    "n": 130,
     "per_detector": {
      "1": 20,
      "2": 18,
-     "3": 23,
+     "3": 26,
      "4": 22,
      "5": 18,
      "6": 26
@@ -5150,11 +5171,11 @@
     "visit": 1,
     "mjd_start": 61014.24,
     "mjd_end": 61035.02,
-    "n": 121,
+    "n": 128,
     "per_detector": {
      "1": 25,
      "2": 20,
-     "3": 12,
+     "3": 19,
      "4": 25,
      "5": 20,
      "6": 19
@@ -5175,7 +5196,7 @@
     }
    }
   ],
-  "est_download_mb": 2035
+  "est_download_mb": 2088
  },
  {
   "id": "etaaql",
@@ -5184,7 +5205,7 @@
   "n_images": 360,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 273,
+   "spherex_dr1": 273,
    "spherex_qr3": 87
   },
   "visits": [
@@ -5247,10 +5268,10 @@
   "id": "gv9413825536",
   "name": "Gaia DR3 5982321339413825536",
   "kind": "variable",
-  "n_images": 362,
+  "n_images": 365,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 220,
+   "spherex_dr1": 223,
    "spherex_qr3": 142
   },
   "visits": [
@@ -5258,12 +5279,12 @@
     "visit": 0,
     "mjd_start": 60883.25,
     "mjd_end": 60901.66,
-    "n": 107,
+    "n": 109,
     "per_detector": {
      "1": 19,
      "2": 19,
-     "3": 14,
-     "4": 19,
+     "3": 18,
+     "4": 17,
      "5": 18,
      "6": 18
     }
@@ -5272,12 +5293,12 @@
     "visit": 1,
     "mjd_start": 61086.59,
     "mjd_end": 61098.07,
-    "n": 113,
+    "n": 114,
     "per_detector": {
      "1": 20,
      "2": 19,
      "3": 19,
-     "4": 17,
+     "4": 18,
      "5": 19,
      "6": 19
     }
@@ -5297,16 +5318,16 @@
     }
    }
   ],
-  "est_download_mb": 1919
+  "est_download_mb": 1934
  },
  {
   "id": "gv0945707776",
   "name": "Gaia DR3 6868233080945707776",
   "kind": "variable",
-  "n_images": 341,
+  "n_images": 340,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 229,
+   "spherex_dr1": 228,
    "spherex_qr3": 112
   },
   "visits": [
@@ -5314,11 +5335,11 @@
     "visit": 0,
     "mjd_start": 60935.54,
     "mjd_end": 60955.31,
-    "n": 112,
+    "n": 111,
     "per_detector": {
      "1": 18,
      "2": 19,
-     "3": 20,
+     "3": 19,
      "4": 18,
      "5": 19,
      "6": 18
@@ -5353,16 +5374,16 @@
     }
    }
   ],
-  "est_download_mb": 1807
+  "est_download_mb": 1802
  },
  {
   "id": "gv3589489536",
   "name": "Gaia DR3 4041615043589489536",
   "kind": "variable",
-  "n_images": 314,
+  "n_images": 367,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 197,
+   "spherex_dr1": 250,
    "spherex_qr3": 117
   },
   "visits": [
@@ -5370,26 +5391,26 @@
     "visit": 0,
     "mjd_start": 60910.14,
     "mjd_end": 60927.06,
-    "n": 103,
+    "n": 137,
     "per_detector": {
      "1": 18,
-     "2": 29,
-     "3": 3,
-     "4": 11,
-     "5": 25,
-     "6": 17
+     "2": 32,
+     "3": 18,
+     "4": 18,
+     "5": 32,
+     "6": 19
     }
    },
    {
     "visit": 1,
     "mjd_start": 61116.13,
     "mjd_end": 61141.25,
-    "n": 94,
+    "n": 113,
     "per_detector": {
-     "1": 18,
+     "1": 19,
      "2": 19,
-     "3": 9,
-     "4": 9,
+     "3": 17,
+     "4": 19,
      "5": 21,
      "6": 18
     }
@@ -5409,7 +5430,7 @@
     }
    }
   ],
-  "est_download_mb": 1664
+  "est_download_mb": 1945
  },
  {
   "id": "gv9231713408",
@@ -5418,7 +5439,7 @@
   "n_images": 399,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 290,
+   "spherex_dr1": 290,
    "spherex_qr3": 109
   },
   "visits": [
@@ -5471,10 +5492,10 @@
   "id": "gv6977267328",
   "name": "Gaia DR3 4077746236977267328",
   "kind": "variable",
-  "n_images": 233,
+  "n_images": 334,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 117,
+   "spherex_dr1": 218,
    "spherex_qr3": 116
   },
   "visits": [
@@ -5482,26 +5503,27 @@
     "visit": 0,
     "mjd_start": 60917.54,
     "mjd_end": 60951.23,
-    "n": 40,
+    "n": 111,
     "per_detector": {
-     "2": 1,
-     "3": 7,
-     "4": 5,
-     "5": 14,
-     "6": 13
+     "1": 18,
+     "2": 20,
+     "3": 18,
+     "4": 18,
+     "5": 19,
+     "6": 18
     }
    },
    {
     "visit": 1,
     "mjd_start": 61127.54,
     "mjd_end": 61136.7,
-    "n": 77,
+    "n": 107,
     "per_detector": {
-     "1": 3,
-     "2": 15,
-     "3": 10,
-     "4": 14,
-     "5": 17,
+     "1": 18,
+     "2": 18,
+     "3": 17,
+     "4": 18,
+     "5": 18,
      "6": 18
     }
    },
@@ -5530,16 +5552,16 @@
     }
    }
   ],
-  "est_download_mb": 1235
+  "est_download_mb": 1770
  },
  {
   "id": "gv3330179456",
   "name": "Gaia DR3 4042524653330179456",
   "kind": "variable",
-  "n_images": 295,
+  "n_images": 348,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 178,
+   "spherex_dr1": 231,
    "spherex_qr3": 117
   },
   "visits": [
@@ -5547,13 +5569,13 @@
     "visit": 0,
     "mjd_start": 60911.3,
     "mjd_end": 60928.14,
-    "n": 82,
+    "n": 113,
     "per_detector": {
      "1": 19,
-     "2": 14,
-     "3": 7,
-     "4": 7,
-     "5": 17,
+     "2": 20,
+     "3": 18,
+     "4": 19,
+     "5": 19,
      "6": 18
     }
    },
@@ -5561,14 +5583,14 @@
     "visit": 1,
     "mjd_start": 61118.64,
     "mjd_end": 61131.68,
-    "n": 96,
+    "n": 118,
     "per_detector": {
      "1": 19,
-     "2": 18,
-     "3": 5,
-     "4": 15,
+     "2": 19,
+     "3": 20,
+     "4": 20,
      "5": 19,
-     "6": 20
+     "6": 21
     }
    },
    {
@@ -5586,16 +5608,16 @@
     }
    }
   ],
-  "est_download_mb": 1564
+  "est_download_mb": 1844
  },
  {
   "id": "gv3068984832",
   "name": "Gaia DR3 4292229963068984832",
   "kind": "variable",
-  "n_images": 397,
+  "n_images": 420,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 255,
+   "spherex_dr1": 278,
    "spherex_qr3": 142
   },
   "visits": [
@@ -5603,12 +5625,12 @@
     "visit": 0,
     "mjd_start": 60926.91,
     "mjd_end": 60948.04,
-    "n": 94,
+    "n": 114,
     "per_detector": {
-     "1": 17,
-     "2": 16,
-     "3": 5,
-     "4": 18,
+     "1": 19,
+     "2": 19,
+     "3": 19,
+     "4": 19,
      "5": 19,
      "6": 19
     }
@@ -5617,9 +5639,9 @@
     "visit": 1,
     "mjd_start": 61130.94,
     "mjd_end": 61142.75,
-    "n": 114,
+    "n": 116,
     "per_detector": {
-     "1": 17,
+     "1": 19,
      "2": 18,
      "3": 21,
      "4": 19,
@@ -5631,12 +5653,12 @@
     "visit": 2,
     "mjd_start": 61163.73,
     "mjd_end": 61174.38,
-    "n": 47,
+    "n": 48,
     "per_detector": {
      "1": 9,
      "2": 7,
      "3": 8,
-     "4": 8,
+     "4": 9,
      "5": 7,
      "6": 8
     }
@@ -5656,16 +5678,16 @@
     }
    }
   ],
-  "est_download_mb": 2104
+  "est_download_mb": 2226
  },
  {
   "id": "gv7771922560",
   "name": "Gaia DR3 2952849187771922560",
   "kind": "variable",
-  "n_images": 380,
+  "n_images": 382,
   "n_visits": 4,
   "releases": {
-   "spherex_qr2": 307,
+   "spherex_dr1": 309,
    "spherex_qr3": 73
   },
   "visits": [
@@ -5673,14 +5695,14 @@
     "visit": 0,
     "mjd_start": 60946.58,
     "mjd_end": 60964.04,
-    "n": 162,
+    "n": 163,
     "per_detector": {
      "1": 24,
      "2": 39,
      "3": 18,
      "4": 24,
      "5": 40,
-     "6": 17
+     "6": 18
     }
    },
    {
@@ -5699,12 +5721,12 @@
     "visit": 2,
     "mjd_start": 61120.72,
     "mjd_end": 61140.0,
-    "n": 136,
+    "n": 137,
     "per_detector": {
      "1": 18,
      "2": 33,
      "3": 18,
-     "4": 16,
+     "4": 17,
      "5": 33,
      "6": 18
     }
@@ -5722,30 +5744,30 @@
     }
    }
   ],
-  "est_download_mb": 2014
+  "est_download_mb": 2025
  },
  {
   "id": "gv7798780288",
   "name": "Gaia DR3 3108548967798780288",
   "kind": "variable",
-  "n_images": 243,
+  "n_images": 245,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 243
+   "spherex_dr1": 245
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60951.47,
     "mjd_end": 60963.83,
-    "n": 127,
+    "n": 129,
     "per_detector": {
      "1": 22,
      "2": 23,
      "3": 18,
      "4": 22,
-     "5": 25,
-     "6": 17
+     "5": 26,
+     "6": 18
     }
    },
    {
@@ -5775,36 +5797,45 @@
     }
    }
   ],
-  "est_download_mb": 1288
+  "est_download_mb": 1298
  },
  {
   "id": "gv6809283840",
   "name": "Gaia DR3 4056473946809283840",
   "kind": "variable",
-  "n_images": 130,
+  "n_images": 342,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 7,
+   "spherex_dr1": 219,
    "spherex_qr3": 123
   },
   "visits": [
    {
     "visit": 0,
-    "mjd_start": 60916.59,
-    "mjd_end": 60925.42,
-    "n": 4,
+    "mjd_start": 60909.05,
+    "mjd_end": 60928.01,
+    "n": 105,
     "per_detector": {
-     "1": 3,
-     "2": 1
+     "1": 19,
+     "2": 17,
+     "3": 18,
+     "4": 17,
+     "5": 16,
+     "6": 18
     }
    },
    {
     "visit": 1,
-    "mjd_start": 61119.05,
-    "mjd_end": 61123.6,
-    "n": 3,
+    "mjd_start": 61116.2,
+    "mjd_end": 61136.02,
+    "n": 114,
     "per_detector": {
-     "2": 3
+     "1": 19,
+     "2": 19,
+     "3": 20,
+     "4": 18,
+     "5": 19,
+     "6": 19
     }
    },
    {
@@ -5822,28 +5853,29 @@
     }
    }
   ],
-  "est_download_mb": 689
+  "est_download_mb": 1813
  },
  {
   "id": "gv2917288448",
   "name": "Gaia DR3 2683251852917288448",
   "kind": "variable",
-  "n_images": 327,
+  "n_images": 329,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 327
+   "spherex_dr1": 222,
+   "spherex_qr3": 107
   },
   "visits": [
    {
     "visit": 0,
     "mjd_start": 60810.85,
-    "mjd_end": 60833.28,
-    "n": 108,
+    "mjd_end": 60833.41,
+    "n": 110,
     "per_detector": {
-     "1": 18,
+     "1": 19,
      "2": 18,
      "3": 18,
-     "4": 18,
+     "4": 19,
      "5": 18,
      "6": 18
     }
@@ -5877,16 +5909,16 @@
     }
    }
   ],
-  "est_download_mb": 1733
+  "est_download_mb": 1744
  },
  {
   "id": "gv5907958144",
   "name": "Gaia DR3 6756288915907958144",
   "kind": "variable",
-  "n_images": 351,
+  "n_images": 352,
   "n_visits": 3,
   "releases": {
-   "spherex_qr2": 238,
+   "spherex_dr1": 239,
    "spherex_qr3": 113
   },
   "visits": [
@@ -5908,14 +5940,14 @@
     "visit": 1,
     "mjd_start": 61131.41,
     "mjd_end": 61171.66,
-    "n": 124,
+    "n": 125,
     "per_detector": {
      "1": 22,
      "2": 22,
      "3": 19,
      "4": 21,
      "5": 22,
-     "6": 18
+     "6": 19
     }
    },
    {
@@ -5933,6 +5965,6 @@
     }
    }
   ],
-  "est_download_mb": 1860
+  "est_download_mb": 1866
  }
 ]

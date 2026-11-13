@@ -1,0 +1,191 @@
+{
+ "id": "rcrb",
+ "name": "R Coronae Borealis",
+ "ra": 237.143374,
+ "dec": 28.156664,
+ "fov_deg": 0.25,
+ "size_px": 147,
+ "pixel_scale_arcsec": 6.15,
+ "visits": [
+  {
+   "visit": 0,
+   "mjd_mean": 60863.119,
+   "mjd_min": 60856.127,
+   "mjd_max": 60870.392,
+   "n_frames": 116,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.745,
+      1.102
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.109,
+      1.58
+     ]
+    },
+    "3": {
+     "n_frames": 19,
+     "wavelength_um": [
+      1.635,
+      2.383
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.431,
+      3.777
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.806,
+      4.397
+     ]
+    },
+    "6": {
+     "n_frames": 19,
+     "wavelength_um": [
+      4.42,
+      4.981
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    72.83,
+    72.89
+   ],
+   "offset_arcsec": 1.23
+  },
+  {
+   "visit": 2,
+   "mjd_mean": 61074.16,
+   "mjd_min": 61062.844,
+   "mjd_max": 61080.9,
+   "n_frames": 111,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.739,
+      1.103
+     ]
+    },
+    "2": {
+     "n_frames": 18,
+     "wavelength_um": [
+      1.103,
+      1.634
+     ]
+    },
+    "3": {
+     "n_frames": 18,
+     "wavelength_um": [
+      1.653,
+      2.382
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.413,
+      3.783
+     ]
+    },
+    "5": {
+     "n_frames": 18,
+     "wavelength_um": [
+      3.825,
+      4.412
+     ]
+    },
+    "6": {
+     "n_frames": 19,
+     "wavelength_um": [
+      4.435,
+      4.979
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    72.98,
+    73.04
+   ],
+   "offset_arcsec": 0.29
+  },
+  {
+   "visit": 3,
+   "mjd_mean": 61230.686,
+   "mjd_min": 61223.147,
+   "mjd_max": 61239.3,
+   "n_frames": 117,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.739,
+      1.089
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.098,
+      1.637
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.647,
+      2.406
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.415,
+      3.729
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.818,
+      4.415
+     ]
+    },
+    "6": {
+     "n_frames": 19,
+     "wavelength_um": [
+      4.399,
+      4.997
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    72.97,
+    73.0
+   ],
+   "offset_arcsec": 0.18
+  }
+ ]
+}

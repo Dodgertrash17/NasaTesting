@@ -35,7 +35,10 @@ sys.path.insert(0, HERE)
 from step4_align_stack import reproject  # noqa: E402
 
 warnings.simplefilter("ignore", FITSFixedWarning)
-warnings.filterwarnings("ignore", category=RuntimeWarning)
+# NaN-aware means/medians over pixels that no frame covered are expected to be NaN; only those two
+# messages are silenced, so any other numerical warning still shows up in the logs.
+warnings.filterwarnings("ignore", message="Mean of empty slice", category=RuntimeWarning)
+warnings.filterwarnings("ignore", message="All-NaN slice encountered", category=RuntimeWarning)
 logging.getLogger("astropy").setLevel(logging.ERROR)
 
 OUT = os.path.join(HERE, "out")
@@ -50,6 +53,18 @@ VAR_FRAC, VAR_SIG = 0.20, 5.0
 def robust_sigma(a):
     v = a[np.isfinite(a)]
     return 1.4826 * np.median(np.abs(v - np.median(v))) if v.size else np.nan
+
+
+def weighted_bands(imgs):
+    """Inverse-variance weighted sum of detector stacks. A plain mean lets a detector with only a few
+    frames that visit (noisy) drown out a deep one; weighting by 1/noise^2 keeps the best S/N."""
+    w = np.array([1 / robust_sigma(im) ** 2 if np.isfinite(robust_sigma(im)) and robust_sigma(im) > 0 else 0.0
+                  for im in imgs])
+    fin = np.isfinite(imgs)
+    W = np.where(fin, w[:, None, None], 0.0)
+    num = np.where(fin, imgs, 0.0) * W
+    tot = W.sum(axis=0)
+    return np.where(tot > 0, num.sum(axis=0) / np.where(tot > 0, tot, 1), np.nan)
 
 
 def detect(img, nsig=DET_SIGMA, edge=4):
@@ -217,7 +232,7 @@ def run(t, do_residuals=True):
     years = [2000 + (m["mjd_mean"] - 51544.5) / 365.25 for m in info["visits"]]
 
     diff = stack - stack[0:1]                                   # each visit minus the first
-    cold = np.nanmean(stack[:, 5:7], axis=1)                    # detectors 5+6 (3.8-5.0 um) for cold objects
+    cold = np.array([weighted_bands(stack[v, 5:7]) for v in range(nv)])   # detectors 5+6 (3.8-5.0 um), cold objects
 
     res = dict(id=t["id"], name=t["name"], n_visits=nv, years=[round(y, 3) for y in years])
     c = (n - 1) / 2

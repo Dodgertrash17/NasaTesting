@@ -9,10 +9,10 @@
  "visits": [
   {
    "visit": 0,
-   "mjd_mean": 60928.036,
+   "mjd_mean": 60928.19,
    "mjd_min": 60919.42,
    "mjd_max": 60938.232,
-   "n_frames": 110,
+   "n_frames": 112,
    "detectors": {
     "1": {
      "n_frames": 19,
@@ -45,15 +45,15 @@
     "5": {
      "n_frames": 18,
      "wavelength_um": [
-      3.811,
-      4.389
+      3.818,
+      4.395
      ]
     },
     "6": {
-     "n_frames": 17,
+     "n_frames": 19,
      "wavelength_um": [
-      4.393,
-      4.943
+      4.4,
+      4.992
      ]
     }
    },
@@ -65,7 +65,7 @@
     72.86,
     73.08
    ],
-   "offset_arcsec": 0.97
+   "offset_arcsec": 0.95
   },
   {
    "visit": 1,
@@ -105,15 +105,15 @@
     "5": {
      "n_frames": 19,
      "wavelength_um": [
-      3.803,
-      4.417
+      3.81,
+      4.424
      ]
     },
     "6": {
      "n_frames": 19,
      "wavelength_um": [
-      4.408,
-      4.999
+      4.414,
+      5.005
      ]
     }
    },

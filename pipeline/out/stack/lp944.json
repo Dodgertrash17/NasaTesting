@@ -1,0 +1,191 @@
+{
+ "id": "lp944",
+ "name": "LP 944-20",
+ "ra": 54.899693,
+ "dec": -35.426856,
+ "fov_deg": 0.25,
+ "size_px": 147,
+ "pixel_scale_arcsec": 6.15,
+ "visits": [
+  {
+   "visit": 0,
+   "mjd_mean": 60882.039,
+   "mjd_min": 60872.053,
+   "mjd_max": 60903.242,
+   "n_frames": 118,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.751,
+      1.098
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.097,
+      1.644
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.649,
+      2.413
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.445,
+      3.763
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.812,
+      4.422
+     ]
+    },
+    "6": {
+     "n_frames": 20,
+     "wavelength_um": [
+      4.432,
+      5.004
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.02,
+    72.98
+   ],
+   "target_measured_px": [
+    73.0,
+    73.02
+   ],
+   "offset_arcsec": 0.24
+  },
+  {
+   "visit": 1,
+   "mjd_mean": 61064.969,
+   "mjd_min": 61048.348,
+   "mjd_max": 61080.19,
+   "n_frames": 117,
+   "detectors": {
+    "1": {
+     "n_frames": 20,
+     "wavelength_um": [
+      0.747,
+      1.078
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.083,
+      1.641
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.648,
+      2.377
+     ]
+    },
+    "4": {
+     "n_frames": 20,
+     "wavelength_um": [
+      2.434,
+      3.586
+     ]
+    },
+    "5": {
+     "n_frames": 18,
+     "wavelength_um": [
+      3.799,
+      4.419
+     ]
+    },
+    "6": {
+     "n_frames": 19,
+     "wavelength_um": [
+      4.4,
+      4.976
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    73.08,
+    72.98
+   ],
+   "offset_arcsec": 0.55
+  },
+  {
+   "visit": 2,
+   "mjd_mean": 61247.249,
+   "mjd_min": 61237.774,
+   "mjd_max": 61271.041,
+   "n_frames": 120,
+   "detectors": {
+    "1": {
+     "n_frames": 20,
+     "wavelength_um": [
+      0.739,
+      1.109
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.118,
+      1.623
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.638,
+      2.39
+     ]
+    },
+    "4": {
+     "n_frames": 20,
+     "wavelength_um": [
+      2.414,
+      3.806
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.837,
+      4.364
+     ]
+    },
+    "6": {
+     "n_frames": 20,
+     "wavelength_um": [
+      4.423,
+      4.986
+     ]
+    }
+   },
+   "target_predicted_px": [
+    72.97,
+    73.02
+   ],
+   "target_measured_px": [
+    72.95,
+    73.06
+   ],
+   "offset_arcsec": 0.24
+  }
+ ]
+}

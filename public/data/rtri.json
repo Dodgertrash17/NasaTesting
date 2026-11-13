@@ -16,21 +16,21 @@
   {
    "file": "frames/rtri/v00_all.png",
    "flags_file": "frames/rtri/v00_all_flags.png",
-   "mjd": 60894.26,
+   "mjd": 60894.275,
    "band": "All 6 detectors added",
    "detector": "all",
    "wavelength_um": [
     0.745,
-    4.998
+    5.005
    ],
-   "n_exposures": 108,
+   "n_exposures": 111,
    "flags": [
-    "108 exposures between 2025-08-03 and 2025-08-12",
-    "target saturated in 108 of 108 exposures (brightness approximate)"
+    "111 exposures between 2025-08-03 and 2025-08-12",
+    "target saturated in 111 of 111 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1937
+    "SATURATED": 419,
+    "NO_DATA": 29
    }
   },
   {
@@ -41,7 +41,7 @@
    "detector": 1,
    "wavelength_um": [
     0.745,
-    1.096
+    1.097
    ],
    "n_exposures": 18,
    "flags": [
@@ -49,8 +49,8 @@
     "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 2556
+    "SATURATED": 217,
+    "NO_DATA": 26
    }
   },
   {
@@ -69,8 +69,8 @@
     "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1977
+    "SATURATED": 189,
+    "NO_DATA": 37
    }
   },
   {
@@ -89,28 +89,28 @@
     "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 2000
+    "SATURATED": 288,
+    "NO_DATA": 52
    }
   },
   {
    "file": "frames/rtri/v00_4.png",
    "flags_file": "frames/rtri/v00_4_flags.png",
-   "mjd": 60890.881,
+   "mjd": 60890.871,
    "band": "Detector 4, its ~17 channels stacked",
    "detector": 4,
    "wavelength_um": [
     2.43,
     3.757
    ],
-   "n_exposures": 17,
+   "n_exposures": 18,
    "flags": [
-    "17 exposures between 2025-08-03 and 2025-08-12",
-    "target saturated in 17 of 17 exposures (brightness approximate)"
+    "18 exposures between 2025-08-03 and 2025-08-12",
+    "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 2243
+    "SATURATED": 403,
+    "NO_DATA": 72
    }
   },
   {
@@ -120,8 +120,8 @@
    "band": "Detector 5, its ~17 channels stacked",
    "detector": 5,
    "wavelength_um": [
-    3.786,
-    4.403
+    3.792,
+    4.409
    ],
    "n_exposures": 19,
    "flags": [
@@ -129,28 +129,28 @@
     "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1945
+    "SATURATED": 271,
+    "NO_DATA": 30
    }
   },
   {
    "file": "frames/rtri/v00_6.png",
    "flags_file": "frames/rtri/v00_6_flags.png",
-   "mjd": 60897.925,
+   "mjd": 60897.83,
    "band": "Detector 6, its ~17 channels stacked",
    "detector": 6,
    "wavelength_um": [
-    4.439,
-    4.998
+    4.414,
+    5.005
    ],
-   "n_exposures": 17,
+   "n_exposures": 19,
    "flags": [
-    "17 exposures between 2025-08-03 and 2025-08-12",
-    "target saturated in 17 of 17 exposures (brightness approximate)"
+    "19 exposures between 2025-08-03 and 2025-08-12",
+    "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1986
+    "SATURATED": 188,
+    "NO_DATA": 23
    }
   },
   {
@@ -161,7 +161,7 @@
    "detector": "all",
    "wavelength_um": [
     0.744,
-    4.995
+    5.001
    ],
    "n_exposures": 110,
    "flags": [
@@ -170,7 +170,7 @@
    ],
    "flag_bits": {
     "SATURATED": 369,
-    "NO_DATA": 2607
+    "NO_DATA": 25
    }
   },
   {
@@ -190,7 +190,7 @@
    ],
    "flag_bits": {
     "SATURATED": 165,
-    "NO_DATA": 2751
+    "NO_DATA": 38
    }
   },
   {
@@ -210,7 +210,7 @@
    ],
    "flag_bits": {
     "SATURATED": 160,
-    "NO_DATA": 2678
+    "NO_DATA": 25
    }
   },
   {
@@ -229,8 +229,8 @@
     "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 223,
-    "NO_DATA": 1870
+    "SATURATED": 224,
+    "NO_DATA": 36
    }
   },
   {
@@ -241,7 +241,7 @@
    "detector": 4,
    "wavelength_um": [
     2.424,
-    3.737
+    3.738
    ],
    "n_exposures": 18,
    "flags": [
@@ -249,8 +249,8 @@
     "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 356,
-    "NO_DATA": 2799
+    "SATURATED": 355,
+    "NO_DATA": 62
    }
   },
   {
@@ -260,8 +260,8 @@
    "band": "Detector 5, its ~17 channels stacked",
    "detector": 5,
    "wavelength_um": [
-    3.805,
-    4.385
+    3.812,
+    4.392
    ],
    "n_exposures": 18,
    "flags": [
@@ -269,8 +269,8 @@
     "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 255,
-    "NO_DATA": 2615
+    "SATURATED": 256,
+    "NO_DATA": 24
    }
   },
   {
@@ -280,8 +280,8 @@
    "band": "Detector 6, its ~17 channels stacked",
    "detector": 6,
    "wavelength_um": [
-    4.4,
-    4.995
+    4.407,
+    5.001
    ],
    "n_exposures": 19,
    "flags": [
@@ -290,7 +290,7 @@
    ],
    "flag_bits": {
     "SATURATED": 169,
-    "NO_DATA": 1865
+    "NO_DATA": 14
    }
   },
   {
@@ -310,7 +310,7 @@
    ],
    "flag_bits": {
     "SATURATED": 388,
-    "NO_DATA": 2038
+    "NO_DATA": 29
    }
   },
   {
@@ -330,7 +330,7 @@
    ],
    "flag_bits": {
     "SATURATED": 158,
-    "NO_DATA": 1871
+    "NO_DATA": 17
    }
   },
   {
@@ -350,7 +350,7 @@
    ],
    "flag_bits": {
     "SATURATED": 226,
-    "NO_DATA": 2636
+    "NO_DATA": 46
    }
   },
   {
@@ -370,7 +370,7 @@
    ],
    "flag_bits": {
     "SATURATED": 238,
-    "NO_DATA": 2606
+    "NO_DATA": 41
    }
   },
   {
@@ -390,7 +390,7 @@
    ],
    "flag_bits": {
     "SATURATED": 365,
-    "NO_DATA": 1911
+    "NO_DATA": 70
    }
   },
   {
@@ -410,7 +410,7 @@
    ],
    "flag_bits": {
     "SATURATED": 278,
-    "NO_DATA": 2587
+    "NO_DATA": 33
    }
   },
   {
@@ -430,13 +430,13 @@
    ],
    "flag_bits": {
     "SATURATED": 166,
-    "NO_DATA": 2092
+    "NO_DATA": 20
    }
   }
  ],
  "light_curve": [
   {
-   "mjd": 60894.26,
+   "mjd": 60894.275,
    "flux": 1.0,
    "err": 0.0,
    "flagged": true,
@@ -444,50 +444,50 @@
   },
   {
    "mjd": 60890.859,
-   "flux": 31882548.83,
+   "flux": 29292661.18,
    "err": null,
    "flagged": true,
    "unit": "uJy"
   },
   {
-   "mjd": 60897.925,
-   "flux": 80105722.63,
-   "err": 6512088.92,
+   "mjd": 60897.83,
+   "flux": 85174218.85,
+   "err": 5583097.65,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61073.034,
-   "flux": 10844798.14,
-   "err": 993340.76,
+   "flux": 10575961.51,
+   "err": 1286047.58,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61067.127,
-   "flux": 107696082.16,
-   "err": 2882288.77,
+   "flux": 109627439.12,
+   "err": 2775305.06,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61260.848,
-   "flux": 1.272,
-   "err": 0.184,
+   "flux": 1.23,
+   "err": 0.147,
    "flagged": true,
    "unit": "relative to first visit"
   },
   {
    "mjd": 61256.228,
-   "flux": 16174482.29,
-   "err": 4014961.45,
+   "flux": 16174482.94,
+   "err": 4014961.79,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61264.211,
-   "flux": 101931954.13,
-   "err": 9667813.04,
+   "flux": 101931964.55,
+   "err": 9667807.89,
    "flagged": true,
    "unit": "uJy"
   }
@@ -507,12 +507,12 @@
  "pipeline": {
   "asteroids_named": 0,
   "asteroids_predicted_in_field": 2,
-  "one_frame_unidentified": 120,
+  "one_frame_unidentified": 133,
   "target_verdicts": [
    {
     "visit": 2,
     "vs_visit": 0,
-    "verdict": "possible change"
+    "verdict": "steady"
    },
    {
     "visit": 3,
