@@ -27,11 +27,20 @@ About 2 minutes of downloading and 2 to 3 minutes of asteroid lookups per target
 ## Live endpoint
 
 ```bash
-python pipeline/server.py --port 8000
-# http://localhost:8000/viewer.html?ra=10.6847&dec=41.269&fov=0.1&source=api
+python pipeline/server.py --port 8000            # options: --max 36 images, --live-max-mb 500
+# http://localhost:8000/search.html  -> Raw search works for any RA/Dec
 ```
-`GET /api/patch?ra=&dec=&fov=&det=` answers at once for any processed target (from `public/data/`).
-For any other spot it lists the SPHEREx images there, downloads up to `--max` (default 60) cutouts,
-cleans and stacks them, and writes `public/data/live/<key>.json` plus PNGs (usually 30 to 90 s the first
-time, instant after that). No SPHEREx images there gives HTTP 404 `{"status": "no-coverage", "nearest": …}`.
+`GET /api/patch?ra=&dec=&fov=&det=&layers=gaia,wise` answers at once for any processed target (from `public/data/`)
+or any spot processed live before. For a new spot it starts a background job and answers HTTP 202 with its
+progress (`step`, `steps`, `message`, `done`, `total`, `elapsed_s`); the viewer asks again every 1.5 s and shows
+"Step 2 of 4 · Downloading and cleaning SPHEREx images (14 of 36)". The job lists the SPHEREx images there,
+downloads up to `--max` cutouts, cleans and stacks them, fetches the ticked catalogues (Gaia DR3, CatWISE2020)
+at the same time, and writes `public/data/live/<key>.json` plus PNGs (usually 20 to 50 s, instant after that).
+No SPHEREx images there gives HTTP 404 `{"status": "no-coverage", "nearest": …}`.
 Live patches skip the movers/asteroid steps (too slow for a click); the processed targets have them.
+
+**Storage.** `public/data/live` is a cache on the machine running `server.py`, not part of the website build
+(it is in `.gitignore`). Raw and cleaned frames are deleted as soon as a patch is saved, a patch is about
+0.2 to 0.5 MB, and the folder is kept under `--live-max-mb` (default 500 MB) by deleting the least recently
+viewed patches first. A static-only deploy (for example Vercel without the Python server) serves just the
+100 processed targets; the raw search then says the spot needs the live server.

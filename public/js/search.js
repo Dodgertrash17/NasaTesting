@@ -62,22 +62,42 @@ form.addEventListener('submit', (e) => {
   }
   formError.textContent = '';
   const named = knownTarget(ra, dec);
-  const url = viewerUrl({ ra, dec, fov: fovInput.value, name: named?.name });
+  const url = viewerUrl({ ra, dec, fov: fovInput.value, name: named?.name, ...layerParams() });
   location.href = e.submitter?.value === 'dome' ? url.replace('viewer.html', 'dome.html') : url;
+});
+
+// "Data to load": which catalogues to fetch along with the SPHEREx images. All ticked by default;
+// the choice is remembered on this browser and passed to the viewer as &layers=gaia,wise (+ &gaia=1
+// &wise=1 so those overlays start switched on).
+const layerBoxes = [...document.querySelectorAll('input[name="layer"]')];
+try {
+  const saved = JSON.parse(localStorage.getItem('skyblink-layers'));
+  if (Array.isArray(saved)) for (const b of layerBoxes) b.checked = saved.includes(b.value);
+} catch { /* storage unavailable: keep the defaults */ }
+function layerParams() {
+  const on = layerBoxes.filter(b => b.checked).map(b => b.value);
+  return { layers: on.join(','), ...Object.fromEntries(on.map(k => [k, '1'])) };
+}
+document.querySelector('#layers').addEventListener('change', () => {
+  try { localStorage.setItem('skyblink-layers', JSON.stringify(layerBoxes.filter(b => b.checked).map(b => b.value))); } catch {}
+  renderPresets();
 });
 
 fovInput.replaceChildren(...FOV_OPTIONS.map(o => new Option(o.label, o.deg)));
 fovInput.value = String(15 / 60);
 
 // One click opens the viewer with the field of view that suits each target.
+function renderPresets() {
 document.querySelector('#presets').replaceChildren(...TARGETS.map(t => {
   const a = document.createElement('a');
   a.className = 'btn preset';
-  a.href = viewerUrl({ ra: t.ra, dec: t.dec, fov: t.fov, name: t.name });
+  a.href = viewerUrl({ ra: t.ra, dec: t.dec, fov: t.fov, name: t.name, ...layerParams() });
   a.innerHTML = `<span></span><span class="preset-kind">${t.kind === 'mover' ? 'moves' : 'varies'}</span>`;
   a.firstChild.textContent = t.name;
   return a;
 }));
+}
+renderPresets();
 
 // ---------- gallery cards (used by Gallery and Filtered) ----------
 

@@ -47,6 +47,14 @@
           </div>
           <button type="submit" class="primary" value="viewer">Show images →</button>
           <button type="submit" value="dome">🌐 Find in Sky Dome</button>
+          <fieldset class="layers" id="layers">
+            <legend>Data to load</legend>
+            <label class="check" title="The images are what the viewer blinks, so they are always loaded">
+              <input type="checkbox" checked disabled> SPHEREx images <span class="muted small">(always)</span></label>
+            <label class="check"><input type="checkbox" name="layer" value="gaia" checked> Gaia DR3 star positions</label>
+            <label class="check"><input type="checkbox" name="layer" value="wise" checked> WISE infrared sources</label>
+            <span class="muted small layers-hint">Untick what you don't need: each catalogue is one more lookup on a new spot.</span>
+          </fieldset>
         </form>
         <p id="form-error" role="alert"></p>
         <div class="presets">

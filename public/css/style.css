@@ -222,6 +222,12 @@ kbd { font-family: var(--mono); font-size: 0.8rem; padding: 1px 6px; border: 1px
 .field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 14rem; }
 .field label { font-size: 0.9rem; color: var(--muted); }
 .field-fov { flex: 0 0 auto; }
+.layers { flex: 1 0 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; border: 0; padding: 0; margin: 4px 0 0; }
+.layers legend { float: left; font-size: 0.9rem; color: var(--muted); margin-right: 4px; padding: 0; }
+.layers input:disabled + * , .layers label:has(input:disabled) { opacity: 0.75; cursor: default; }
+.layers-hint { flex-basis: 100%; }
+#coord-form .layers input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; padding: 0; margin: 0; flex: none; }
+.layers .check { white-space: nowrap; }
 #form-error { color: var(--error); min-height: 1.5em; margin: 10px 0 0; }
 .presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 8px; }
 .presets button { min-height: 36px; padding: 0 14px; border-radius: 999px; font-size: 0.9rem; }
@@ -396,7 +402,8 @@ kbd { font-family: var(--mono); font-size: 0.8rem; padding: 1px 6px; border: 1px
 .viewer-top .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .badge-fov { right: 12px; top: 12px; color: var(--muted); }
-.loading .progress { width: 180px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.loading-detail { max-width: 34ch; text-align: center; line-height: 1.4; }
+.loading .progress { width: 220px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .loading .progress i { display: block; height: 100%; width: 0; background: var(--brand); transition: width .15s; }
 .sky-caption { text-align: center; margin: 8px 0 0; }
 
