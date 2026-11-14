@@ -55,7 +55,7 @@ def tap_async(query, poll=20, max_wait=3600):
 
 def spherex_images_at(ra, dec):
     """Every SPHEREx Level-2 spectral image (all releases) whose footprint contains (ra, dec)."""
-    q = ("SELECT obs_id, obs_collection, t_min, t_max, energy_bandpassname, em_min, em_max, access_url "
+    q = ("SELECT obs_id, obs_collection, t_min, t_max, energy_bandpassname, em_min, em_max, access_url, s_region "
          "FROM spherex.obscore "
          f"WHERE CONTAINS(POINT('ICRS',{ra:.6f},{dec:.6f}), s_region)=1")
     rows = tap(q)

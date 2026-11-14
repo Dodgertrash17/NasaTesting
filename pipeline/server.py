@@ -119,14 +119,51 @@ def group_visits(rows, gap=20.0):
     return rows
 
 
+def field_coverage(s_region, ra, dec, fov, k=9):
+    """Fraction of the requested square field inside one image's footprint (s_region polygon), from a
+    k x k grid of test points. Both are projected onto the field's tangent plane, where the polygon's
+    great-circle edges are straight lines, so a plain point-in-polygon test is exact."""
+    try:
+        v = [float(x) for x in s_region.split()[2:]]
+    except (AttributeError, ValueError):
+        return 1.0
+    if len(v) < 6:
+        return 1.0
+    r0, d0 = math.radians(ra), math.radians(dec)
+    poly = []
+    for a, b in zip(v[0::2], v[1::2]):
+        a, b = math.radians(a), math.radians(b)
+        c = math.sin(d0) * math.sin(b) + math.cos(d0) * math.cos(b) * math.cos(a - r0)
+        if c <= 0:
+            return 1.0
+        poly.append((math.cos(b) * math.sin(a - r0) / c,
+                     (math.cos(d0) * math.sin(b) - math.sin(d0) * math.cos(b) * math.cos(a - r0)) / c))
+    h = math.radians(fov) / 2
+    pts = [(-h + 2 * h * i / (k - 1), -h + 2 * h * j / (k - 1)) for i in range(k) for j in range(k)]
+    inside = 0
+    for x, y in pts:
+        hit = False
+        for (x1, y1), (x2, y2) in zip(poly, poly[1:] + poly[:1]):
+            if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+                hit = not hit
+        inside += hit
+    return inside / len(pts)
+
+
 def pick(rows, max_images):
-    """Spread the budget over every (visit, detector), keeping a range of wavelengths in each."""
+    """Spread the budget over every (visit, detector), keeping a range of wavelengths in each. Within a
+    group, images that cover the whole field come first: a visit often mixes exposures centred on the
+    spot with ones where it sits near a detector edge, and the edge ones only cover part of the field.
+    Stacking those made dates show large empty wedges and a different set of stars, which looked like
+    the frames were shifted against each other."""
     groups = defaultdict(list)
     for r in rows:
         groups[(r["visit"], r["detector"])].append(r)
     per = max(2, max_images // max(1, len(groups)))
     keep = []
     for g in groups.values():
+        best = max(r.get("cover", 1.0) for r in g)
+        g = [r for r in g if r.get("cover", 1.0) >= min(0.98, 0.9 * best)] or g   # full cover if any, else the best few
         g.sort(key=lambda r: r["em_min_um"])
         step = max(1, len(g) / per)
         keep += [g[int(i * step)] for i in range(min(per, len(g)))]
@@ -173,6 +210,8 @@ def process(ra, dec, fov, max_images, key, log, progress, layers=()):
     if not rows:
         side.shutdown(wait=False, cancel_futures=True)
         return None
+    for r in rows:
+        r["cover"] = field_coverage(r.get("s_region"), ra, dec, fov)
     rows = pick(group_visits(rows), max_images)
     log(f"{len(rows)} images selected ({time.time() - t0:.0f} s)")
     paths = resolve_paths(did_of(r["access_url"]) for r in rows)
@@ -262,6 +301,7 @@ def process(ra, dec, fov, max_images, key, log, progress, layers=()):
             save_png(np.where(~np.isfinite(img), 255, 0).astype(np.uint8), os.path.join(fdir, name + "_flags.png"))
             frames.append(dict(file=f"/data/live/{key}/{name}.png", flags_file=f"/data/live/{key}/{name}_flags.png",
                                mjd=mjd, detector=det, wavelength_um=m["wl"], n_exposures=m["n"],
+                               coverage=round(float(np.isfinite(img).mean()), 3),
                                band="All 6 detectors added" if det == "all" else f"Detector {det}, stacked",
                                flags=[f"{m['n']} exposures, around {mjd_to_date(m['mjd'])}"]))
             if m["flux"] is not None and np.isfinite(m["flux"]):

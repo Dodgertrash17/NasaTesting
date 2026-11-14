@@ -277,7 +277,12 @@ function caption(frame) {
   const what = state.req.mode === 'stack' ? 'All dates added together'
     : state.req.mode === 'diff' ? 'Difference image' : `Image from ${mjdToDate(frame.mjd)}`;
   const det = DETECTORS.find(d => d.id === state.req.det)?.label || '';
-  return `${what} · ${det} · ${formatFov(state.geom.size * state.geom.scale / 3600)} field, north up, east left.`;
+  let text = `${what} · ${det} · ${formatFov(state.geom.size * state.geom.scale / 3600)} field, north up, east left.`;
+  // a date where SPHEREx only saw part of the field: say so, so the empty area isn't read as a shift
+  if (state.req.mode !== 'stack' && state.req.mode !== 'diff' && frame.coverage != null && frame.coverage < 0.95) {
+    text += ` Only ${Math.round(frame.coverage * 100)}% of the field was observed on this date; the black area has no data.`;
+  }
+  return text;
 }
 
 function drawOverlays(ctx, fi, frame) {
