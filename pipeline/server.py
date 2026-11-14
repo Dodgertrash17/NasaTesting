@@ -403,7 +403,10 @@ class Handler(SimpleHTTPRequestHandler):
         u = urlparse(self.path)
         p = u.path.rstrip("/")
         if p.endswith("/api/patch"):
-            return self.api_patch(parse_qs(u.query))
+            # keep_blank_values: an empty "layers=" (every catalogue unticked) must mean "no catalogues",
+            # not fall back to the default. Other blank parameters are dropped as before.
+            q = {k: v for k, v in parse_qs(u.query, keep_blank_values=True).items() if k == "layers" or any(v)}
+            return self.api_patch(q)
         if p.endswith("/api/health"):
             return self.send_json(200, {"ok": True, "jobs_running": sum(j["status"] == "working" for j in JOBS.values())})
         return super().do_GET()
@@ -421,6 +424,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_json(400, {"error": "need numeric ra, dec (degrees)"})
         if not -90 <= dec <= 90:
             return self.send_json(400, {"error": "dec must be between -90 and 90"})
+        # Missing = all catalogues; "layers=" or "layers=none" = SPHEREx images only.
         layers = tuple(x for x in ",".join(q.get("layers", ["gaia,wise"])).split(",") if x in LAYERS)
         near = nearest_patch(ra, dec)
         if near and near[0] <= (near[1].get("fov_deg") or 0.25) / 2 * 0.95:

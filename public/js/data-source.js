@@ -90,7 +90,7 @@ const SkyData = (() => {
 
   function apiUrl({ ra, dec, fov, det }) {
     const u = new URL(config.apiBase, location.href);
-    u.search = new URLSearchParams({ ra, dec, fov, det: det || 'all', layers: config.layers.join(',') });
+    u.search = new URLSearchParams({ ra, dec, fov, det: det || 'all', layers: config.layers.join(',') || 'none' });  // 'none': an empty value can be dropped on the way
     return u;
   }
 

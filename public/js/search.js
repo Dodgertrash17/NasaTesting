@@ -76,7 +76,7 @@ try {
 } catch { /* storage unavailable: keep the defaults */ }
 function layerParams() {
   const on = layerBoxes.filter(b => b.checked).map(b => b.value);
-  return { layers: on.join(','), ...Object.fromEntries(on.map(k => [k, '1'])) };
+  return { layers: on.join(',') || 'none', ...Object.fromEntries(on.map(k => [k, '1'])) };
 }
 document.querySelector('#layers').addEventListener('change', () => {
   try { localStorage.setItem('skyblink-layers', JSON.stringify(layerBoxes.filter(b => b.checked).map(b => b.value))); } catch {}
