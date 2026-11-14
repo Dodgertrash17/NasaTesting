@@ -62,6 +62,8 @@ const els = Object.fromEntries([
   'raw-frame', 'flag-summary', 'raw-cursor', 'raw-patch', 'download',
   'show-flags', 'ov-gaia', 'ov-wise', 'show-track', 'overlay-note',
   'stretch', 'contrast', 'invert', 'crosshair', 'ai-list', 'reveal', 'status',
+  'open-wiseview', 'mark-btn', 'mark-hint', 'mark-list', 'mark-actions', 'report-copy', 'report-download',
+  'report-clear', 'report-sources',
 ].map(id => [id.replace(/-(\w)/g, (_, c) => c.toUpperCase()), document.getElementById(id)]));
 const canvas = els.sky;
 
@@ -335,6 +337,23 @@ function drawOverlays(ctx, fi, frame) {
     if (pt) drawShape(ctx, 'circle', X(pt.x), Y(pt.y), R, { color: '#ffc857' });
   }
 
+  // The user's own marks ("Report a find"), numbered like the list.
+  marks.forEach((m, i) => {
+    const p = g.skyToPx(m.ra, m.dec);
+    const x = X(p.x), y = Y(p.y), r = R * 0.9;
+    ctx.save();
+    ctx.strokeStyle = '#000c'; ctx.lineWidth = 5;
+    for (const pass of [0, 1]) {
+      if (pass) { ctx.strokeStyle = '#ff7ad9'; ctx.lineWidth = 2.5; }
+      ctx.beginPath();
+      ctx.moveTo(x - r, y); ctx.lineTo(x - r * 0.4, y); ctx.moveTo(x + r * 0.4, y); ctx.lineTo(x + r, y);
+      ctx.moveTo(x, y - r); ctx.lineTo(x, y - r * 0.4); ctx.moveTo(x, y + r * 0.4); ctx.lineTo(x, y + r);
+      ctx.stroke();
+    }
+    ctx.restore();
+    label(ctx, String(i + 1), x + r * 0.6, y - r * 0.6);
+  });
+
   // The spot being measured for the brightness chart, when the user picked it.
   if (state.aperture) {
     drawShape(ctx, 'circle', X(state.aperture.x), Y(state.aperture.y), APERTURE_R * k, { color: '#ffffff', lw: 2 });
@@ -427,6 +446,7 @@ function renderRawPatch() {
     ['Dates', frames.length],
     ['Span', `${mjdToDate(frames[0].mjd)} → ${mjdToDate(frames.at(-1).mjd)}`],
     ['Source', SkyData.usedApi ? 'processed live from SPHEREx' : p.simulated ? 'sample files (simulated)' : 'pre-processed SPHEREx files'],
+    ['Data used', dataUsed().map(d => d.short).join(', ')],
   ]);
 }
 
@@ -700,6 +720,180 @@ function renderOverlayNote() {
   els.overlayNote.textContent = [...new Set(notes)].join(' ');
 }
 
+// ---------- data credits for this view ----------
+
+// The sources this view actually uses. SPHEREx images always; Gaia DR3 and CatWISE only when the user
+// picked them on the search page (&layers=); SkyBoT only for pre-processed targets, whose pipeline ran it.
+// Shown under "Patch", and written into every report so a find carries its own credits.
+function dataUsed() {
+  const used = [{ key: 'spherex', short: 'SPHEREx', credit: 'SPHEREx images: NASA/JPL-Caltech, via NASA/IPAC IRSA' }];
+  const layers = SkyData.config.layers;
+  if (layers.includes('gaia')) used.push({ key: 'gaia', short: 'Gaia DR3', credit: 'Gaia DR3: ESA/Gaia/DPAC' });
+  if (layers.includes('wise')) used.push({ key: 'wise', short: 'CatWISE2020', credit: 'CatWISE2020 (WISE/NEOWISE): NASA/JPL-Caltech, via IRSA' });
+  if (patch()?.pipeline) used.push({ key: 'skybot', short: 'SkyBoT', credit: 'Known asteroids: SkyBoT (IMCCE, Observatoire de Paris)' });
+  return used;
+}
+
+// ---------- report a find ----------
+
+// Marks are kept per patch in this browser only (a convenience; nothing is sent anywhere).
+let marks = [];
+let marking = false;
+const MATCH_ARCSEC = 12;   // two SPHEREx pixels: a catalogue source this close is probably the same object
+const MARK_KINDS = [
+  ['moves', 'Moves between dates'],
+  ['appears', 'Appears or disappears'],
+  ['brightness', 'Changes brightness'],
+  ['unsure', 'Not sure'],
+];
+
+function marksKey() {
+  const r = state.req;
+  return `skyblink-marks|${r.ra.toFixed(4)}|${r.dec.toFixed(4)}`;
+}
+function loadMarks() {
+  try { marks = JSON.parse(localStorage.getItem(marksKey())) || []; } catch { marks = []; }
+  if (!Array.isArray(marks)) marks = [];
+  // Re-check against the catalogues loaded now: the user may have changed what this search includes.
+  for (const m of marks) m.matches = nearestMatches(m.ra, m.dec);
+}
+function saveMarks() {
+  try { localStorage.setItem(marksKey(), JSON.stringify(marks)); } catch {}
+}
+
+// Nearest source from each catalogue the user chose to load. A catalogue they left out is reported as
+// "not checked", never looked up behind their back.
+function nearestMatches(ra, dec) {
+  const out = [];
+  for (const key of ['gaia', 'wise']) {
+    const meta = SkyData.CATALOGS[key];
+    if (!SkyData.config.layers.includes(key)) { out.push({ catalog: meta.label, checked: false }); continue; }
+    const ov = SkyData.getOverlay(key, { patch: patch(), target: state.target });
+    if (ov.status !== 'ok') { out.push({ catalog: meta.label, checked: false, note: ov.note }); continue; }
+    let best = null;
+    for (const s of ov.sources) {
+      const d = separation(ra, dec, s.ra, s.dec) * 3600;
+      if (!best || d < best.d) best = { d, label: s.label };
+    }
+    out.push(best && best.d <= MATCH_ARCSEC
+      ? { catalog: meta.label, checked: true, match: best.label || meta.label, sep_arcsec: +best.d.toFixed(1) }
+      : { catalog: meta.label, checked: true, match: null });
+  }
+  return out;
+}
+
+function matchText(m) {
+  if (!m.checked) return `${m.catalog}: not checked (not included in this search)`;
+  if (!m.match) return `${m.catalog}: nothing within ${MATCH_ARCSEC}″`;
+  return `${m.catalog}: ${m.match}, ${m.sep_arcsec}″ away`;
+}
+
+function setMarking(on) {
+  marking = on && !!state.data;
+  els.markBtn.setAttribute('aria-pressed', String(marking));
+  els.markBtn.textContent = marking ? 'Click the object… (Esc to cancel)' : '✚ Mark this';
+  els.markHint.hidden = !marking;
+  canvas.classList.toggle('marking', marking);
+  if (marking) canvas.focus();
+}
+
+function addMark(x, y) {
+  const g = state.geom;
+  const sky = g.pxToSky(x, y);
+  const frame = frameAt();
+  marks.push({
+    ra: +sky.ra.toFixed(6), dec: +sky.dec.toFixed(6),
+    date: mjdToDate(frame.mjd), mjd: +frame.mjd.toFixed(4),
+    detector: String(frame.detector ?? state.req.det), mode: state.req.mode,
+    kind: 'unsure', note: '',
+    matches: nearestMatches(sky.ra, sky.dec),
+  });
+  saveMarks();
+  setMarking(false);
+  renderMarks();
+  render();
+  setStatus(`Marked spot ${marks.length} at RA ${formatRA(sky.ra)}, Dec ${formatDec(sky.dec)}.`);
+}
+
+function renderMarks() {
+  els.markActions.hidden = !marks.length;
+  els.reportSources.textContent = state.data
+    ? `This view uses: ${dataUsed().map(d => d.short).join(', ')}. Change what's included from the search page.` : '';
+  els.markList.replaceChildren(...marks.map((m, i) => {
+    const li = document.createElement('li');
+    li.className = 'mark-item';
+    const head = document.createElement('div');
+    head.className = 'ai-row';
+    head.innerHTML = `<strong>#${i + 1}</strong><span class="mono small">${formatRA(m.ra)} ${formatDec(m.dec)}</span>`;
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'ghost small mark-del'; del.textContent = 'Remove';
+    del.setAttribute('aria-label', `Remove mark ${i + 1}`);
+    del.addEventListener('click', () => { marks.splice(i, 1); saveMarks(); renderMarks(); render(); });
+    head.append(del);
+    const meta = document.createElement('p');
+    meta.className = 'ai-kind';
+    meta.textContent = `${m.date} · detector ${m.detector === 'all' ? 'all' : m.detector} · ${m.matches.map(matchText).join(' · ')}`;
+    const kind = document.createElement('select');
+    kind.setAttribute('aria-label', `What mark ${i + 1} does`);
+    for (const [v, t] of MARK_KINDS) kind.add(new Option(t, v, false, m.kind === v));
+    kind.addEventListener('change', () => { m.kind = kind.value; saveMarks(); });
+    const note = document.createElement('input');
+    note.type = 'text'; note.placeholder = 'Note (optional)'; note.value = m.note;
+    note.setAttribute('aria-label', `Note for mark ${i + 1}`);
+    note.addEventListener('input', () => { m.note = note.value; saveMarks(); });
+    li.append(head, meta, kind, note);
+    return li;
+  }));
+}
+
+function reportLink() {
+  return location.href.replace(/([?&])embed=1&?/, '$1').replace(/[?&]$/, '');
+}
+
+function reportJSON() {
+  const r = state.req;
+  return {
+    tool: SITE.name, made: new Date().toISOString(),
+    patch: { name: r.name, ra: r.ra, dec: r.dec, fov_deg: r.fov, link: reportLink(),
+             wiseview: wiseviewUrl({ ra: r.ra, dec: r.dec, fov: r.fov, gaia: SkyData.config.layers.includes('gaia') }) },
+    data_used: dataUsed().map(d => d.credit),
+    marks: marks.map((m, i) => ({ n: i + 1, ...m, kind: MARK_KINDS.find(k => k[0] === m.kind)?.[1] || m.kind })),
+  };
+}
+
+function reportText() {
+  const j = reportJSON();
+  const lines = [
+    `${j.tool} find report · ${j.patch.name}`,
+    `Patch: RA ${j.patch.ra.toFixed(5)}, Dec ${j.patch.dec.toFixed(5)}, field ${formatFov(j.patch.fov_deg)}`,
+    `View it: ${j.patch.link}`,
+    `Same spot in WiseView: ${j.patch.wiseview}`,
+    '',
+    ...j.marks.flatMap(m => [
+      `#${m.n} ${m.kind}: RA ${m.ra.toFixed(5)} (${formatRA(m.ra)}), Dec ${m.dec.toFixed(5)} (${formatDec(m.dec)})`,
+      `   seen on ${m.date} (MJD ${m.mjd}), detector ${m.detector}, view "${m.mode}"`,
+      ...m.matches.map(x => `   ${matchText(x)}`),
+      ...(m.note ? [`   note: ${m.note}`] : []),
+    ]),
+    '',
+    `Data used: ${j.data_used.join('; ')}.`,
+    'Before reporting a new object, check it is not a known star (SIMBAD) or asteroid (MPC), and not a detector artefact.',
+  ];
+  return lines.join('\n');
+}
+
+els.markBtn.addEventListener('click', () => setMarking(!marking));
+els.reportCopy.addEventListener('click', () => copy(els.reportCopy, reportText(), 'Report copied'));
+els.reportDownload.addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(reportJSON(), null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `skyblink-report-${state.req.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.json`;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+els.reportClear.addEventListener('click', () => { marks = []; saveMarks(); renderMarks(); render(); });
+
 // ---------- URL: the page state is always shareable ----------
 
 function syncUrl() {
@@ -800,6 +994,7 @@ async function load() {
     const actions = [];
     if (near) actions.push([`Open nearest: ${near.title}`, viewerUrl({ ra: near.ra, dec: near.dec, fov: r.fov, name: near.title.replace(/ \(simulated\)$/, '') }), true]);
     actions.push(demoAction);
+    actions.push(['Look here in WiseView', els.openWiseview.href]);
     showEmpty('No SPHEREx images for this spot yet',
       `Nothing in our image set covers RA ${formatRA(r.ra)}, Dec ${formatDec(r.dec)}.` +
       (near ? ` The nearest patch we have is ${near.title}, ${near.sepDeg.toFixed(1)}° away.` : '') +
@@ -822,6 +1017,9 @@ async function load() {
   renderDetectors();
   applyDetector();
   renderPredictions();
+  loadMarks();
+  renderMarks();
+  render();
 }
 
 // ---------- detectors ----------
@@ -967,6 +1165,7 @@ canvas.addEventListener('mousemove', renderCursor);
 canvas.addEventListener('click', (e) => {
   if (!state.data) return;
   const p = canvasToPx(e);
+  if (marking) { addMark(p.x, p.y); return; }
   state.aperture = { x: Math.round(p.x), y: Math.round(p.y) };
   computeLightCurve();
   render();
@@ -1001,6 +1200,13 @@ els.copyEmbed.addEventListener('click', () => copy(els.copyEmbed, embedCode(), '
 // Keyboard shortcuts anywhere on the page, except while typing or using a control.
 document.addEventListener('keydown', (e) => {
   if (!state.data || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (marking && e.key === 'Escape') { setMarking(false); return; }
+  if (marking && e.key === 'Enter' && e.target === canvas) {
+    e.preventDefault();
+    const g = state.geom;
+    addMark(g.sx + g.size / 2 - 0.5, g.sy + g.size / 2 - 0.5);
+    return;
+  }
   if (e.target.closest('input, select, textarea, button, summary, a')) return;
   if (e.key === ' ') { e.preventDefault(); state.playing ? stopBlink() : startBlink(); }
   if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
@@ -1056,6 +1262,7 @@ function updateTitle() {
       ? ` It has moved about ${moved.toFixed(1)}′ since its ${t.epoch} catalogue position, so it is not under the crosshair: the dashed orange circle shows where it should be on each date.`
       : '');
   }
+  els.openWiseview.href = wiseviewUrl({ ra, dec, fov, gaia: SkyData.config.layers.includes('gaia') });
   els.domeLink.href = `dome.html?${new URLSearchParams({ ra: ra.toFixed(5), dec: dec.toFixed(5), fov, name })}`;
   if (EMBED) { els.openFull.hidden = false; els.copyEmbed.hidden = true; }
   els.openFull.href = location.href.replace(/([?&])embed=1&?/, '$1').replace(/[?&]$/, '');

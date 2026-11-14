@@ -3,6 +3,16 @@
 Turns real SPHEREx Level 2 images (NASA/IPAC IRSA) into the files the website in `public/` reads.
 Every step reads the previous step's output, so you can rerun any step on its own.
 
+**How we get the data.** The SPHEREx access follows the
+[IRSA SPHEREx tutorial notebooks](https://caltech-ipac.github.io/irsa-tutorials/) (NASA/IPAC IRSA):
+find images with an ADQL query on IRSA's TAP service (`spherex.obscore`, see `irsa.py`), then read only the
+cutout's bytes from NASA's public AWS copy (`s3://nasa-irsa-spherex`, step 2), as the cloud-access tutorial does.
+Catalogue lookups use **Gaia DR3** (`gaia_dr3_source`) and CatWISE2020, both through IRSA TAP.
+
+**Credits.** Data and acknowledgements for every source (SPHEREx, IRSA, CatWISE2020, Gaia DR3 with the
+ESA/Gaia/DPAC acknowledgement, SkyBoT, WiseView) are on the site's About page (`public/about.html#credits`).
+Keep that list in step with any new data source.
+
 | Step | Script | What it does | Output |
 |---|---|---|---|
 | 1 Query | `step1_select_targets.py`, `step1_inventory.py` | Picks 100 targets (fast movers, brown dwarfs, variables) and lists every SPHEREx image of each | `out/targets.json`, `out/inventory/` |

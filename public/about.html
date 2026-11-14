@@ -31,11 +31,53 @@
       </div>
     </section>
 
-    <section class="card">
-      <h2 style="margin-bottom:12px">Data &amp; credits</h2>
-      <p>Images: SPHEREx/JPL/Caltech/NASA, via the NASA/IPAC Infrared Science Archive (IRSA).
-         SPHEREx is managed by NASA's Jet Propulsion Laboratory.</p>
-      <p class="muted">Images labelled "Simulated" are made-up practice data, not real observations.</p>
+    <section class="card credits" id="credits">
+      <h2>Data &amp; credits</h2>
+      <p>SkyBlink only shows public data. Each source below has its own terms of use, and we follow them.
+         The search page lets you choose which of these each search uses: SPHEREx images are always loaded,
+         Gaia and WISE positions only when ticked.</p>
+
+      <dl class="credit-list">
+        <dt>SPHEREx images</dt>
+        <dd>SPHEREx Level 2 spectral images, from the
+          <a href="https://irsa.ipac.caltech.edu/Missions/spherex.html" target="_blank" rel="noopener">NASA/IPAC Infrared Science Archive (IRSA)</a>
+          and its public copy on AWS. SPHEREx is a NASA mission managed by the Jet Propulsion Laboratory (JPL)
+          and the California Institute of Technology (Caltech). Image credit: NASA/JPL-Caltech.
+          Our data access follows the
+          <a href="https://caltech-ipac.github.io/irsa-tutorials/" target="_blank" rel="noopener">IRSA SPHEREx tutorial notebooks</a>.</dd>
+
+        <dt>IRSA</dt>
+        <dd>This project has made use of the NASA/IPAC Infrared Science Archive, which is funded by the
+          National Aeronautics and Space Administration and operated by the California Institute of Technology.</dd>
+
+        <dt>WISE positions (CatWISE2020)</dt>
+        <dd>The <a href="https://irsa.ipac.caltech.edu/Missions/wise.html" target="_blank" rel="noopener">CatWISE2020 catalogue</a>
+          (Marocco et al. 2021, ApJS 253, 8), built from WISE and NEOWISE data, via IRSA. WISE and NEOWISE are
+          NASA missions (JPL/Caltech, UCLA).</dd>
+
+        <dt>Gaia DR3 positions</dt>
+        <dd>This work has made use of data from the European Space Agency (ESA) mission
+          <a href="https://www.cosmos.esa.int/gaia" target="_blank" rel="noopener">Gaia</a>, processed by the Gaia Data
+          Processing and Analysis Consortium (<a href="https://www.cosmos.esa.int/web/gaia/dpac/consortium" target="_blank" rel="noopener">DPAC</a>).
+          Funding for the DPAC has been provided by national institutions, in particular the institutions participating
+          in the Gaia Multilateral Agreement. We use Gaia Data Release 3 (Gaia Collaboration, Vallenari et al. 2023,
+          A&amp;A 674, A1), read through IRSA's copy of the catalogue.</dd>
+
+        <dt>Known asteroids</dt>
+        <dd>For the pre-processed targets, one-night objects are checked against known asteroids and comets with
+          <a href="https://ssp.imcce.fr/webservices/skybot/" target="_blank" rel="noopener">SkyBoT</a>
+          (IMCCE, Observatoire de Paris; Berthier et al. 2006).</dd>
+
+        <dt>WiseView</dt>
+        <dd>The "Open in WiseView" button links to <a href="http://byw.tools/wiseview" target="_blank" rel="noopener">WiseView</a>
+          (Caselden et al. 2018), the WISE blink tool used by the Backyard Worlds project. It is a separate site; SkyBlink
+          does not send it any data except the sky position in the link.</dd>
+      </dl>
+
+      <p class="muted small">Images labelled "Simulated" are made-up practice data, not real observations.</p>
+      <p class="muted small">NASA does not endorse any non-U.S. Government entity and is not responsible for information
+         contained on non-U.S. Government websites. For non-U.S. Government websites, the data use parameters of
+         that specific website apply.</p>
     </section>
   </main>
 

@@ -52,6 +52,8 @@
       <div class="actions">
         <button type="button" id="copy-link" class="ghost">Copy link</button>
         <button type="button" id="copy-embed" class="ghost">Copy embed code</button>
+        <a id="open-wiseview" class="btn ghost" target="_blank" rel="noopener"
+           title="See the same spot in WISE images from 2010 to 2024 (opens WiseView, a separate site)">Open in WiseView ↗</a>
         <a id="open-full" class="btn ghost" target="_blank" rel="noopener" hidden>Open full viewer ↗</a>
       </div>
     </div>
@@ -200,6 +202,24 @@
           <ol class="ai-list" id="ai-list"></ol>
           <label class="check small"><input type="checkbox" id="reveal"> Circle all candidates</label>
           <p class="ai-note" style="margin-top:12px">Is this right? Your blink is the final check. Predictions are a starting point, not an answer.</p>
+        </section>
+
+        <!-- Report a find: the user marks spots on the image and copies or downloads a report. -->
+        <section class="panel report" aria-labelledby="report-title">
+          <div class="ai-head">
+            <h2 id="report-title">Report a find</h2>
+          </div>
+          <p class="ai-note">Seen something move, appear or change brightness? Press <strong>Mark this</strong>, then click it on the image.
+             Marks stay in this browser until you copy or download the report.</p>
+          <button type="button" id="mark-btn" class="primary mark-btn" aria-pressed="false">✚ Mark this</button>
+          <p class="ai-note" id="mark-hint" hidden>Click the object on the image (or press Enter on the image to mark its center). Esc cancels.</p>
+          <ol class="mark-list" id="mark-list"></ol>
+          <div class="mark-actions" id="mark-actions" hidden>
+            <button type="button" id="report-copy" class="ghost small">Copy report</button>
+            <button type="button" id="report-download" class="ghost small">Download report</button>
+            <button type="button" id="report-clear" class="ghost small">Clear marks</button>
+          </div>
+          <p class="ai-note" id="report-sources"></p>
         </section>
       </div>
     </div>

@@ -585,3 +585,29 @@ body[data-page="dome"] main { max-width: none; padding: 0; position: relative; d
   .spinner { animation: none; }
   * { transition: none !important; }
 }
+
+/* ---------- credits (about page) ---------- */
+.credits h2 { margin-bottom: 12px; }
+.credit-list { display: grid; gap: 4px 20px; grid-template-columns: minmax(140px, 200px) 1fr; margin: 16px 0; }
+.credit-list dt { font-weight: 700; padding-top: 10px; }
+.credit-list dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.credit-list dt { border-bottom: 1px solid var(--line); }
+@media (max-width: 700px) {
+  .credit-list { grid-template-columns: 1fr; }
+  .credit-list dt { border-bottom: 0; padding-bottom: 0; }
+}
+.site-footer a { color: var(--brand); }
+
+/* ---------- report a find (viewer) ---------- */
+.report .mark-btn { width: 100%; margin-top: 12px; }
+.report .mark-btn[aria-pressed="true"] { background: #ff7ad922; border-color: #ff7ad9; color: var(--text); }
+.report #mark-hint { margin-top: 8px; }
+.mark-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+.mark-list:empty { display: none; }
+.mark-item { display: grid; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--line); }
+.mark-item .ai-kind { margin: 0; }
+.mark-item select, .mark-item input { width: 100%; min-height: 40px; padding: 0 10px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); }
+.mark-item .mark-del { min-height: 32px; padding: 0 10px; }
+.mark-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; }
+.mark-actions button { min-height: 36px; padding: 0 12px; }
+#sky.marking { cursor: crosshair; outline: 2px solid #ff7ad9; outline-offset: 2px; }

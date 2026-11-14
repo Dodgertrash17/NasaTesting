@@ -83,7 +83,8 @@ function renderChrome() {
   if (footer) {
     footer.className = 'site-footer';
     footer.innerHTML = `<span>${SITE.name}: ${SITE.tagline}</span>
-      <span>Data: SPHEREx/JPL/Caltech/NASA, via NASA/IPAC IRSA</span>`;
+      <span>Data: SPHEREx and WISE (NASA/JPL/Caltech, via NASA/IPAC IRSA) · Gaia DR3 (ESA/Gaia/DPAC) ·
+        <a href="about.html#credits">Full credits</a></span>`;
   }
 }
 renderChrome();
@@ -164,6 +165,20 @@ function viewerUrl({ ra, dec, fov = 0.25, name, ...extra }) {
   if (name) q.set('name', name);
   for (const [k, v] of Object.entries(extra)) if (v != null && v !== '') q.set(k, v);
   return `viewer.html?${q}`;
+}
+
+// Open the same spot in WiseView (byw.tools), the WISE blink tool the challenge points to as a model.
+// WISE covers 2010 to 2024, so it gives a much longer time baseline than SPHEREx.
+// `gaia` follows the user's Gaia choice, so WiseView's own Gaia overlay is on only if they picked Gaia.
+// WiseView pixels are 2.75″; its cutout size is clamped to what it accepts comfortably.
+function wiseviewUrl({ ra, dec, fov = 0.1, gaia = false }) {
+  const size = Math.round(Math.min(600, Math.max(64, fov * 3600 / 2.75)));
+  const q = new URLSearchParams({
+    ra: (+ra).toFixed(5), dec: (+dec).toFixed(5), size, band: 3, speed: 164,
+    minbright: '-50.0000', maxbright: '500.0000', window: 0.5, diff_window: 1, linear: 1,
+    zoom: 9, border: 1, gaia: gaia ? 1 : 0, invert: 1,
+  });
+  return `http://byw.tools/wiseview#${q}`;
 }
 
 // ---------- coordinate parsing ----------
