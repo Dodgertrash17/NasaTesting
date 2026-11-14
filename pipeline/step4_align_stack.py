@@ -24,6 +24,7 @@ import csv
 import json
 import logging
 import os
+import sys
 import warnings
 
 import numpy as np
@@ -33,7 +34,6 @@ from scipy.ndimage import map_coordinates
 
 warnings.simplefilter("ignore", FITSFixedWarning)
 warnings.filterwarnings("ignore", message=".*SIP.*")
-warnings.filterwarnings("ignore", category=RuntimeWarning)
 logging.getLogger("astropy").setLevel(logging.ERROR)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -41,8 +41,9 @@ OUT = os.path.join(HERE, "out")
 CACHE = os.environ.get("SPHEREX_CACHE", os.path.join(HERE, "cache"))
 PIX_ARCSEC = 6.15
 MIN_FRAMES = 3          # a detector stack needs at least this many frames
-MIN_VISIT_FRAMES = 12
-FLATTEN = True          # subtract smooth large-scale background (turn off for extended nebulae)   # a visit needs at least this many frames to become a blink frame
+MIN_VISIT_FRAMES = 12  # a visit needs at least this many frames to become a blink frame
+MIN_COVER = 0.4         # a stacked pixel needs at least this fraction of the best-covered pixel's frames
+FLATTEN = True          # subtract smooth large-scale background (turn off for extended nebulae)
 
 
 def make_grid(ra, dec, fov):
@@ -77,12 +78,25 @@ def reproject(path, grid, n):
 
 
 def clipped_mean(cube, nsig=3.0, iters=3):
+    """Per-pixel 3-sigma-clipped mean over frames. Pixels with no data in any frame stay NaN (silently)."""
     c = cube.copy()
-    for _ in range(iters):
-        med = np.nanmedian(c, axis=0)
-        mad = 1.4826 * np.nanmedian(np.abs(c - med), axis=0)
-        c = np.where(np.abs(c - med) <= nsig * np.maximum(mad, 1e-6), c, np.nan)
-    return np.nanmean(c, axis=0), np.sum(np.isfinite(c), axis=0)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)      # all-NaN pixels outside the footprint
+        for _ in range(iters):
+            med = np.nanmedian(c, axis=0)
+            mad = 1.4826 * np.nanmedian(np.abs(c - med), axis=0)
+            c = np.where(np.abs(c - med) <= nsig * np.maximum(mad, 1e-6), c, np.nan)
+        return np.nanmean(c, axis=0), np.sum(np.isfinite(c), axis=0)
+
+
+def stack_frames(imgs):
+    """Clipped mean of a list of frames, keeping only pixels covered by enough frames. Edge pixels seen
+    by one or two frames are much noisier than the rest and showed up as grainy wedges."""
+    if len(imgs) == 1:
+        return imgs[0], np.isfinite(imgs[0]).astype(np.int16)
+    m, k = clipped_mean(np.array(imgs))
+    need = max(2, int(np.ceil(MIN_COVER * k.max())))
+    return np.where(k >= need, m, np.nan).astype(np.float32), k
 
 
 def flatten(img):
@@ -113,7 +127,10 @@ def centroid(img, x0, y0, r=3):
     box = img[yi - r:yi + r + 1, xi - r:xi + r + 1]
     if box.shape != (2 * r + 1, 2 * r + 1) or not np.isfinite(box).any():
         return np.nan, np.nan, np.nan
-    b = np.nan_to_num(box - np.nanmedian(img), nan=0.0)
+    # saturated cores are NaN in the cleaned frames; they are the brightest part of the star, so count
+    # them at the box's peak instead of zero (otherwise the centroid is pulled out into the halo)
+    box = np.where(np.isfinite(box), box, np.nanmax(box))
+    b = box - np.nanmedian(img)
     b[b < 0] = 0
     if b.sum() <= 0:
         return np.nan, np.nan, np.nan
@@ -127,6 +144,8 @@ def run(t, fov):
     visits = sorted({int(r["visit"]) for r in rows})
     visits = [v for v in visits if sum(int(r["visit"]) == v for r in rows) >= MIN_VISIT_FRAMES]
     nv = len(visits)
+    if nv == 0:
+        sys.exit(f"{t['id']}: no visit has {MIN_VISIT_FRAMES}+ cleaned frames, nothing to stack")
     stack = np.full((nv, 7, n, n), np.nan, np.float32)
     nfr = np.zeros((nv, 7, n, n), np.int16)
     satf = np.zeros((nv, 7, n, n), np.float32)
@@ -146,7 +165,7 @@ def run(t, fov):
                 imgs.append(im); sats.append(sat)
             if len(imgs) < MIN_FRAMES:
                 continue
-            m, k = clipped_mean(np.array(imgs))
+            m, k = stack_frames(imgs)
             if FLATTEN:
                 m = flatten(m)
             stack[i, det], nfr[i, det], satf[i, det] = m, k, np.mean(sats, axis=0)
@@ -155,8 +174,8 @@ def run(t, fov):
         dets = [d for d in range(1, 7) if d in per_det]
         if dets:
             # band 0: all six detectors added (each detector stack weighted equally, in MJy/sr)
-            allb = np.nanmean(stack[i, dets], axis=0)
             ncov = np.isfinite(stack[i, dets]).sum(axis=0)
+            allb = np.nansum(stack[i, dets], axis=0) / np.maximum(ncov, 1)
             stack[i, 0] = np.where(ncov >= max(1, (len(dets) + 1) // 2), allb, np.nan)  # avoid coverage steps
             nfr[i, 0] = nfr[i, dets].sum(axis=0)
             satf[i, 0] = satf[i, dets].max(axis=0)

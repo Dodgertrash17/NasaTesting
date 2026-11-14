@@ -1,0 +1,25 @@
+# Render Blueprint: hosts the live SPHEREx search server (pipeline/server.py) on Render's free plan.
+# The Vercel site calls it for any RA/Dec that is not one of the 100 pre-processed targets.
+# Setup steps: pipeline/RENDER.md
+services:
+  - type: web
+    name: skyblink-spherex-live
+    runtime: python
+    plan: free
+    branch: spherex-real-data
+    buildCommand: pip install -r pipeline/requirements.txt
+    # Free plan = 512 MB RAM and a disk that is wiped on every restart, so: one search at a time,
+    # 30 images per search, and a small cache (it refills itself as people search).
+    startCommand: python pipeline/server.py --site public --max 30 --live-max-mb 200
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ALLOWED_ORIGINS        # sites allowed to call the server; "*" = any (the data is public)
+        value: "*"
+      - key: LIVE_MAX_JOBS
+        value: "1"
+      - key: LIVE_THREADS
+        value: "8"
+      - key: SPHEREX_LIVE_CACHE
+        value: /tmp/spherex-live

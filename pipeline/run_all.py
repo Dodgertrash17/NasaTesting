@@ -5,7 +5,7 @@ Raw cutouts are deleted after cleaning (the clean frames hold everything later s
 the cache at ~140 MB per target. Targets that already have out/identify/<id>.json are skipped, so the
 run can be stopped and restarted.
 
-Usage:  python run_all.py [--parallel 3] [--skip barnard,wise0855] [--site path/to/public/data]
+Usage:  python run_all.py [--parallel 3] [--skip barnard,wise0855] [--site path/to/public/data] [--force v2]
 Logs:   out/run_all/<id>.log  and  out/run_all/summary.json
 """
 import argparse
@@ -47,6 +47,8 @@ def run_target(tid):
                         os.remove(os.path.join(d, f))
         else:
             rec["ok"] = True
+            if os.environ.get("PIPELINE_TAG"):
+                open(os.path.join(log_dir, tid + ".tag"), "w").write(os.environ["PIPELINE_TAG"])
     rec["seconds"] = round(time.time() - t0)
     print(f"{tid}: {'ok' if rec['ok'] else 'FAILED at ' + rec['failed_at']} in {rec['seconds']} s", flush=True)
     return rec
@@ -58,13 +60,21 @@ def main():
     ap.add_argument("--skip", default="")
     ap.add_argument("--only")
     ap.add_argument("--site")
+    ap.add_argument("--force", metavar="TAG", help="rerun targets even if done; a target finished under the "
+                    "same TAG (out/run_all/<id>.tag) is still skipped, so a forced rerun can be resumed")
     a = ap.parse_args()
     targets = json.load(open(os.path.join(OUT, "targets.json")))
     ids = [t["id"] for t in targets]
     if a.only:
         ids = [i for i in ids if i in a.only.split(",")]
     skip = set(filter(None, a.skip.split(",")))
-    todo = [i for i in ids if i not in skip and not os.path.exists(os.path.join(OUT, "identify", i + ".json"))]
+    def done(i):
+        if a.force:
+            tagf = os.path.join(OUT, "run_all", i + ".tag")
+            return os.path.exists(tagf) and open(tagf).read().strip() == a.force
+        return os.path.exists(os.path.join(OUT, "identify", i + ".json"))
+    todo = [i for i in ids if i not in skip and not done(i)]
+    os.environ["PIPELINE_TAG"] = a.force or ""
     print(f"{len(todo)} targets to run, {a.parallel} at a time", flush=True)
     with ThreadPoolExecutor(a.parallel) as ex:
         recs = list(ex.map(run_target, todo))

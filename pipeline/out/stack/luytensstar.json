@@ -1,0 +1,131 @@
+{
+ "id": "luytensstar",
+ "name": "Luyten's Star",
+ "ra": 111.856222,
+ "dec": 5.199129,
+ "fov_deg": 0.25,
+ "size_px": 147,
+ "pixel_scale_arcsec": 6.15,
+ "visits": [
+  {
+   "visit": 0,
+   "mjd_mean": 60960.054,
+   "mjd_min": 60955.548,
+   "mjd_max": 60965.596,
+   "n_frames": 111,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.737,
+      1.111
+     ]
+    },
+    "2": {
+     "n_frames": 19,
+     "wavelength_um": [
+      1.085,
+      1.641
+     ]
+    },
+    "3": {
+     "n_frames": 18,
+     "wavelength_um": [
+      1.644,
+      2.395
+     ]
+    },
+    "4": {
+     "n_frames": 18,
+     "wavelength_um": [
+      2.407,
+      3.712
+     ]
+    },
+    "5": {
+     "n_frames": 19,
+     "wavelength_um": [
+      3.8,
+      4.419
+     ]
+    },
+    "6": {
+     "n_frames": 18,
+     "wavelength_um": [
+      4.427,
+      4.989
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.02,
+    73.13
+   ],
+   "target_measured_px": [
+    73.08,
+    73.17
+   ],
+   "offset_arcsec": 0.44
+  },
+  {
+   "visit": 1,
+   "mjd_mean": 61132.9,
+   "mjd_min": 61124.04,
+   "mjd_max": 61141.626,
+   "n_frames": 113,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.736,
+      1.102
+     ]
+    },
+    "2": {
+     "n_frames": 19,
+     "wavelength_um": [
+      1.089,
+      1.642
+     ]
+    },
+    "3": {
+     "n_frames": 19,
+     "wavelength_um": [
+      1.634,
+      2.386
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.408,
+      3.778
+     ]
+    },
+    "5": {
+     "n_frames": 19,
+     "wavelength_um": [
+      3.805,
+      4.42
+     ]
+    },
+    "6": {
+     "n_frames": 18,
+     "wavelength_um": [
+      4.42,
+      4.983
+     ]
+    }
+   },
+   "target_predicted_px": [
+    72.98,
+    72.85
+   ],
+   "target_measured_px": [
+    73.01,
+    72.88
+   ],
+   "offset_arcsec": 0.28
+  }
+ ]
+}

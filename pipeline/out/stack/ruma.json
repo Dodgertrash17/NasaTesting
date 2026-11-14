@@ -1,0 +1,131 @@
+{
+ "id": "ruma",
+ "name": "R Ursae Majoris",
+ "ra": 161.15949,
+ "dec": 68.775568,
+ "fov_deg": 0.25,
+ "size_px": 147,
+ "pixel_scale_arcsec": 6.15,
+ "visits": [
+  {
+   "visit": 0,
+   "mjd_mean": 60970.477,
+   "mjd_min": 60962.007,
+   "mjd_max": 60991.008,
+   "n_frames": 118,
+   "detectors": {
+    "1": {
+     "n_frames": 19,
+     "wavelength_um": [
+      0.745,
+      1.111
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.093,
+      1.617
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.643,
+      2.341
+     ]
+    },
+    "4": {
+     "n_frames": 19,
+     "wavelength_um": [
+      2.429,
+      3.816
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.845,
+      4.396
+     ]
+    },
+    "6": {
+     "n_frames": 20,
+     "wavelength_um": [
+      4.429,
+      4.952
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    72.97,
+    73.11
+   ],
+   "offset_arcsec": 0.72
+  },
+  {
+   "visit": 1,
+   "mjd_mean": 61142.297,
+   "mjd_min": 61128.781,
+   "mjd_max": 61169.585,
+   "n_frames": 120,
+   "detectors": {
+    "1": {
+     "n_frames": 20,
+     "wavelength_um": [
+      0.762,
+      1.116
+     ]
+    },
+    "2": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.093,
+      1.637
+     ]
+    },
+    "3": {
+     "n_frames": 20,
+     "wavelength_um": [
+      1.645,
+      2.413
+     ]
+    },
+    "4": {
+     "n_frames": 20,
+     "wavelength_um": [
+      2.429,
+      3.792
+     ]
+    },
+    "5": {
+     "n_frames": 20,
+     "wavelength_um": [
+      3.811,
+      4.415
+     ]
+    },
+    "6": {
+     "n_frames": 20,
+     "wavelength_um": [
+      4.397,
+      5.004
+     ]
+    }
+   },
+   "target_predicted_px": [
+    73.0,
+    73.0
+   ],
+   "target_measured_px": [
+    73.02,
+    72.98
+   ],
+   "offset_arcsec": 0.16
+  }
+ ]
+}

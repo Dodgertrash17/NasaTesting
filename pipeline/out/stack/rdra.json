@@ -9,7 +9,7 @@
  "visits": [
   {
    "visit": 0,
-   "mjd_mean": 60837.62,
+   "mjd_mean": 60837.705,
    "mjd_min": 60789.88,
    "mjd_max": 60876.774,
    "n_frames": 120,
@@ -39,21 +39,21 @@
      "n_frames": 20,
      "wavelength_um": [
       2.423,
-      3.755
+      3.757
      ]
     },
     "5": {
      "n_frames": 20,
      "wavelength_um": [
-      3.822,
-      4.385
+      3.825,
+      4.397
      ]
     },
     "6": {
      "n_frames": 20,
      "wavelength_um": [
-      4.411,
-      4.986
+      4.417,
+      4.956
      ]
     }
    },
@@ -62,14 +62,14 @@
     73.0
    ],
    "target_measured_px": [
-    73.04,
-    72.91
+    73.09,
+    72.87
    ],
-   "offset_arcsec": 0.58
+   "offset_arcsec": 0.94
   },
   {
    "visit": 1,
-   "mjd_mean": 61000.496,
+   "mjd_mean": 61000.514,
    "mjd_min": 60916.371,
    "mjd_max": 61053.413,
    "n_frames": 120,
@@ -98,22 +98,22 @@
     "4": {
      "n_frames": 20,
      "wavelength_um": [
-      2.418,
-      3.701
+      2.463,
+      3.766
      ]
     },
     "5": {
      "n_frames": 20,
      "wavelength_um": [
-      3.843,
-      4.416
+      3.849,
+      4.423
      ]
     },
     "6": {
      "n_frames": 20,
      "wavelength_um": [
-      4.403,
-      4.97
+      4.41,
+      4.977
      ]
     }
    },
@@ -122,14 +122,14 @@
     73.0
    ],
    "target_measured_px": [
-    73.14,
-    73.02
+    72.87,
+    72.98
    ],
-   "offset_arcsec": 0.87
+   "offset_arcsec": 0.82
   },
   {
    "visit": 2,
-   "mjd_mean": 61202.231,
+   "mjd_mean": 61202.213,
    "mjd_min": 61079.482,
    "mjd_max": 61300.453,
    "n_frames": 118,
@@ -151,8 +151,8 @@
     "3": {
      "n_frames": 20,
      "wavelength_um": [
-      1.658,
-      2.409
+      1.718,
+      2.4
      ]
     },
     "4": {
@@ -165,15 +165,15 @@
     "5": {
      "n_frames": 19,
      "wavelength_um": [
-      3.798,
-      4.409
+      3.804,
+      4.415
      ]
     },
     "6": {
      "n_frames": 20,
      "wavelength_um": [
-      4.465,
-      4.985
+      4.439,
+      4.996
      ]
     }
    },
@@ -182,10 +182,10 @@
     73.0
    ],
    "target_measured_px": [
-    73.15,
-    72.98
+    73.02,
+    72.99
    ],
-   "offset_arcsec": 0.89
+   "offset_arcsec": 0.12
   }
  ]
 }

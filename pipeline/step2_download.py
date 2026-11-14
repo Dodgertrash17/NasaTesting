@@ -66,6 +66,12 @@ def cap_rows(rows, cap):
     return sorted(keep, key=lambda r: float(r["mjd"]))
 
 
+# The detector is rotated relative to north by a different roll angle every visit. A square cutout of
+# exactly FOV only covers the inscribed circle of the north-up grid, leaving empty corners. sqrt(2) plus
+# a margin for the proper-motion shift guarantees the whole FOV x FOV grid is covered at any angle.
+PAD = 1.5
+
+
 def fetch_cutout(uri, ra, dec, size, dest, retries=5):
     url = f"https://irsa.ipac.caltech.edu/{uri}?center={ra:.6f},{dec:.6f}&size={size}&gzip=false"
     for attempt in range(retries):
@@ -143,7 +149,7 @@ def run_target(t, a):
             if os.path.exists(dest):
                 done += 1; continue
             fn = fetch_s3 if a.source == "s3" else fetch_cutout
-            jobs.append(ex.submit(fn, uri, t["ra"], t["dec"], a.fov, dest))
+            jobs.append(ex.submit(fn, uri, t["ra"], t["dec"], a.fov * PAD, dest))
         for j in as_completed(jobs):
             try:
                 rb, kb = j.result(); raw_bytes += rb; kept_bytes += kb; done += 1

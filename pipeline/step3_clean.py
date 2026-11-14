@@ -11,7 +11,7 @@ For every image of a target (from step 2's cache/<id>/manifest.csv):
      the WCS-WAVE table gives the wavelength at every pixel)
   5. measure the target's flux in a small aperture (for spectra and light curves later)
 
-Writes cache/<id>/clean/<file> (extensions SCI, ERR, BAD, SAT, same WCS) and out/clean/<id>.csv
+Writes cache/<id>/clean/<file> (extensions SCI, BAD, SAT, same WCS; the error plane is used for photometry here and not stored) and out/clean/<id>.csv
 Usage:  python step3_clean.py --only barnard,wise0855
 """
 import argparse
@@ -66,13 +66,24 @@ def position_at(t, mjd):
 
 
 def sigma_clip_stats(v, n=3, it=5):
+    """Clipped median and MAD noise. Never returns NaN for a frame that has finite pixels: a clip that
+    would empty the sample (MAD = 0, e.g. a mostly saturated or masked frame) stops at the last sample."""
     v = v[np.isfinite(v)]
+    if v.size == 0:
+        return 0.0, 0.0
     for _ in range(it):
         if v.size < 10:
             break
-        m, s = np.median(v), 1.4826 * np.median(np.abs(v - np.median(v)))
-        v = v[np.abs(v - m) < n * s]
-    return float(np.median(v)), float(1.4826 * np.median(np.abs(v - np.median(v))))
+        m = np.median(v)
+        s = 1.4826 * np.median(np.abs(v - m))
+        if s <= 0:
+            break
+        keep = v[np.abs(v - m) < n * s]
+        if keep.size < 10:
+            break
+        v = keep
+    m = np.median(v)
+    return float(m), float(1.4826 * np.median(np.abs(v - m)))
 
 
 def aperture(sci, err, bad, x, y, r=2.0, r_in=5.0, r_out=8.0):
@@ -110,6 +121,8 @@ def clean_one(path, t, row):
         bg_pix = ~bad & ((flags & (1 << BITS["SOURCE"])) == 0)
         if bg_pix.sum() < 200:      # some early deep-field files flag SOURCE on every pixel
             bg_pix = ~bad
+        if bg_pix.sum() < 200:      # almost everything masked (e.g. a very bright star fills the cutout)
+            bg_pix = ~dbad
         sky, noise = sigma_clip_stats(sci[bg_pix])
         sci = sci - sky
         sci[dbad] = np.nan
@@ -137,7 +150,6 @@ def clean_one(path, t, row):
                 whdr[k] = hdr[k]
         out = fits.HDUList([fits.PrimaryHDU(),
                             fits.ImageHDU(sci.astype(np.float32), whdr, name="SCI"),
-                            fits.ImageHDU(err.astype(np.float32), whdr, name="ERR"),
                             fits.ImageHDU((bad & ~dbad).astype(np.uint8), whdr, name="BAD"),  # 1 = keep for display, skip for photometry
                             fits.ImageHDU(sat.astype(np.uint8), whdr, name="SAT")])
     flag_counts = {b: int(((flags >> BITS[b]) & 1).sum()) for b in REPORT_BITS}
@@ -162,6 +174,8 @@ def run(t):
             recs.append(rec)
         except Exception as e:  # noqa: BLE001
             print("  skip", r["file"], e)
+    if not recs:
+        sys.exit(f"{t['id']}: no images could be cleaned (did step 2 download any?)")
     os.makedirs(os.path.join(OUT, "clean"), exist_ok=True)
     with open(os.path.join(OUT, "clean", t["id"] + ".csv"), "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(recs[0].keys()))

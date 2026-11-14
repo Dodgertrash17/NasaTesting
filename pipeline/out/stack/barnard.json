@@ -9,10 +9,10 @@
  "visits": [
   {
    "visit": 0,
-   "mjd_mean": 60913.096,
+   "mjd_mean": 60913.163,
    "mjd_min": 60902.865,
    "mjd_max": 60923.107,
-   "n_frames": 109,
+   "n_frames": 108,
    "detectors": {
     "1": {
      "n_frames": 19,
@@ -24,36 +24,36 @@
     "2": {
      "n_frames": 18,
      "wavelength_um": [
-      1.097,
+      1.096,
       1.629
      ]
     },
     "3": {
      "n_frames": 18,
      "wavelength_um": [
-      1.626,
+      1.627,
       2.405
      ]
     },
     "4": {
      "n_frames": 18,
      "wavelength_um": [
-      2.433,
+      2.432,
       3.799
      ]
     },
     "5": {
      "n_frames": 18,
      "wavelength_um": [
-      3.809,
-      4.401
+      3.816,
+      4.407
      ]
     },
     "6": {
-     "n_frames": 18,
+     "n_frames": 17,
      "wavelength_um": [
-      4.407,
-      4.989
+      4.414,
+      4.996
      ]
     }
    },
@@ -63,9 +63,9 @@
    ],
    "target_measured_px": [
     72.84,
-    72.45
+    72.43
    ],
-   "offset_arcsec": 0.77
+   "offset_arcsec": 0.73
   },
   {
    "visit": 2,
@@ -105,15 +105,15 @@
     "5": {
      "n_frames": 19,
      "wavelength_um": [
-      3.794,
-      4.4
+      3.801,
+      4.406
      ]
     },
     "6": {
      "n_frames": 20,
      "wavelength_um": [
-      4.391,
-      4.996
+      4.394,
+      5.002
      ]
     }
    },
@@ -122,17 +122,17 @@
     73.35
    ],
    "target_measured_px": [
-    72.94,
-    73.37
+    72.95,
+    73.4
    ],
    "offset_arcsec": 0.56
   },
   {
    "visit": 4,
-   "mjd_mean": 61274.056,
+   "mjd_mean": 61274.01,
    "mjd_min": 61268.631,
    "mjd_max": 61285.257,
-   "n_frames": 109,
+   "n_frames": 110,
    "detectors": {
     "1": {
      "n_frames": 18,
@@ -149,7 +149,7 @@
      ]
     },
     "3": {
-     "n_frames": 16,
+     "n_frames": 17,
      "wavelength_um": [
       1.646,
       2.373
@@ -179,13 +179,13 @@
    },
    "target_predicted_px": [
     73.08,
-    74.08
+    74.07
    ],
    "target_measured_px": [
-    73.21,
-    74.05
+    73.16,
+    74.06
    ],
-   "offset_arcsec": 0.78
+   "offset_arcsec": 0.46
   }
  ]
 }

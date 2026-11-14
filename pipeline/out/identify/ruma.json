@@ -1,0 +1,314 @@
+{
+ "id": "ruma",
+ "name": "R Ursae Majoris",
+ "movers": [
+  {
+   "visits": [
+    0,
+    1
+   ],
+   "x": [
+    73.04,
+    75.11
+   ],
+   "y": [
+    69.8,
+    70.86
+   ],
+   "pm_arcsec_yr": 30.38,
+   "pm_err": 2.77,
+   "pm_ra_arcsec_yr": -27.03,
+   "pm_dec_arcsec_yr": 13.86,
+   "fit_rms_px": 0.0,
+   "snr": 32118.5,
+   "is_target": false,
+   "found_in": "saturated_all",
+   "ra": 161.149535,
+   "dec": 68.771912,
+   "epoch": 2026.277,
+   "match": null,
+   "status": "unconfirmed"
+  },
+  {
+   "visits": [
+    0,
+    1
+   ],
+   "x": [
+    74.18,
+    75.13
+   ],
+   "y": [
+    76.3,
+    75.16
+   ],
+   "pm_arcsec_yr": 19.4,
+   "pm_err": 2.77,
+   "pm_ra_arcsec_yr": -12.37,
+   "pm_dec_arcsec_yr": -14.95,
+   "fit_rms_px": 0.0,
+   "snr": 32105.8,
+   "is_target": false,
+   "found_in": "saturated_all",
+   "ra": 161.149437,
+   "dec": 68.779258,
+   "epoch": 2026.277,
+   "match": null,
+   "status": "unconfirmed"
+  },
+  {
+   "visits": [
+    0,
+    1
+   ],
+   "x": [
+    69.71,
+    70.89
+   ],
+   "y": [
+    71.85,
+    70.86
+   ],
+   "pm_arcsec_yr": 20.19,
+   "pm_err": 2.77,
+   "pm_ra_arcsec_yr": -15.43,
+   "pm_dec_arcsec_yr": -13.02,
+   "fit_rms_px": 0.0,
+   "snr": 31639.1,
+   "is_target": false,
+   "found_in": "saturated_all",
+   "ra": 161.169445,
+   "dec": 68.771912,
+   "epoch": 2026.277,
+   "match": null,
+   "status": "unconfirmed"
+  }
+ ],
+ "asteroids": [],
+ "asteroids_predicted_in_field": [],
+ "unidentified_one_frame": 91,
+ "unidentified_examples": [
+  {
+   "file": "2026W14_1A_0361_2_D6.fits",
+   "mjd": 61130.7503,
+   "visit": 1,
+   "detector": 6,
+   "x": 86,
+   "y": 5,
+   "ra": 161.098463,
+   "dec": 68.65939,
+   "snr": 337.0
+  },
+  {
+   "file": "2026W14_1A_0361_3_D6.fits",
+   "mjd": 61130.75179,
+   "visit": 1,
+   "detector": 6,
+   "x": 110,
+   "y": 97,
+   "ra": 160.98457,
+   "dec": 68.816478,
+   "snr": 325.0
+  },
+  {
+   "file": "2026W17_1B_0166_1_D4.fits",
+   "mjd": 61150.84201,
+   "visit": 1,
+   "detector": 4,
+   "x": 69,
+   "y": 115,
+   "ra": 161.178427,
+   "dec": 68.847317,
+   "snr": 253.0
+  },
+  {
+   "file": "2026W15_2A_0312_3_D5.fits",
+   "mjd": 61140.662,
+   "visit": 1,
+   "detector": 5,
+   "x": 82,
+   "y": 34,
+   "ra": 161.117147,
+   "dec": 68.708938,
+   "snr": 212.7
+  },
+  {
+   "file": "2026W14_2A_0262_4_D6.fits",
+   "mjd": 61133.80917,
+   "visit": 1,
+   "detector": 6,
+   "x": 32,
+   "y": 87,
+   "ra": 161.353171,
+   "dec": 68.799374,
+   "snr": 208.1
+  },
+  {
+   "file": "2026W14_2A_0554_1_D6.fits",
+   "mjd": 61135.43113,
+   "visit": 1,
+   "detector": 6,
+   "x": 121,
+   "y": 65,
+   "ra": 160.933125,
+   "dec": 68.76175,
+   "snr": 190.9
+  },
+  {
+   "file": "2025W42_1A_0359_2_D4.fits",
+   "mjd": 60962.35192,
+   "visit": 0,
+   "detector": 4,
+   "x": 88,
+   "y": 32,
+   "ra": 161.088929,
+   "dec": 68.705512,
+   "snr": 186.6
+  },
+  {
+   "file": "2025W42_1A_0359_3_D4.fits",
+   "mjd": 60962.35342,
+   "visit": 0,
+   "detector": 4,
+   "x": 5,
+   "y": 112,
+   "ra": 161.481333,
+   "dec": 68.841889,
+   "snr": 157.1
+  },
+  {
+   "file": "2026W14_1A_0373_4_D6.fits",
+   "mjd": 61130.82162,
+   "visit": 1,
+   "detector": 6,
+   "x": 111,
+   "y": 35,
+   "ra": 160.980695,
+   "dec": 68.710557,
+   "snr": 155.7
+  },
+  {
+   "file": "2026W14_1A_0361_1_D6.fits",
+   "mjd": 61130.74881,
+   "visit": 1,
+   "detector": 6,
+   "x": 33,
+   "y": 13,
+   "ra": 161.347378,
+   "dec": 68.672964,
+   "snr": 153.5
+  },
+  {
+   "file": "2026W15_1A_0340_1_D6.fits",
+   "mjd": 61137.87723,
+   "visit": 1,
+   "detector": 6,
+   "x": 126,
+   "y": 62,
+   "ra": 160.909603,
+   "dec": 68.756592,
+   "snr": 147.3
+  },
+  {
+   "file": "2026W13_2A_0632_1_D6.fits",
+   "mjd": 61128.78088,
+   "visit": 1,
+   "detector": 6,
+   "x": 17,
+   "y": 141,
+   "ra": 161.425131,
+   "dec": 68.891528,
+   "snr": 143.9
+  },
+  {
+   "file": "2026W17_1B_0166_2_D4.fits",
+   "mjd": 61150.8435,
+   "visit": 1,
+   "detector": 4,
+   "x": 132,
+   "y": 19,
+   "ra": 160.882229,
+   "dec": 68.683091,
+   "snr": 126.0
+  },
+  {
+   "file": "2026W14_1A_0373_3_D6.fits",
+   "mjd": 61130.82013,
+   "visit": 1,
+   "detector": 6,
+   "x": 29,
+   "y": 115,
+   "ra": 161.367791,
+   "dec": 68.847191,
+   "snr": 96.9
+  },
+  {
+   "file": "2026W14_2A_0262_1_D6.fits",
+   "mjd": 61133.80469,
+   "visit": 1,
+   "detector": 6,
+   "x": 23,
+   "y": 28,
+   "ra": 161.39462,
+   "dec": 68.69853,
+   "snr": 96.5
+  },
+  {
+   "file": "2026W15_2A_0721_1_D5.fits",
+   "mjd": 61142.69651,
+   "visit": 1,
+   "detector": 5,
+   "x": 91,
+   "y": 30,
+   "ra": 161.07483,
+   "dec": 68.702089,
+   "snr": 87.7
+  },
+  {
+   "file": "2026W14_1A_0361_2_D6.fits",
+   "mjd": 61130.7503,
+   "visit": 1,
+   "detector": 6,
+   "x": 105,
+   "y": 103,
+   "ra": 161.008138,
+   "dec": 68.826751,
+   "snr": 82.8
+  },
+  {
+   "file": "2026W15_2A_0298_4_D5.fits",
+   "mjd": 61140.59676,
+   "visit": 1,
+   "detector": 5,
+   "x": 21,
+   "y": 122,
+   "ra": 161.405796,
+   "dec": 68.859098,
+   "snr": 82.2
+  },
+  {
+   "file": "2025W44_2B_0002_4_D6.fits",
+   "mjd": 60978.51786,
+   "visit": 0,
+   "detector": 6,
+   "x": 78,
+   "y": 17,
+   "ra": 161.135997,
+   "dec": 68.6799,
+   "snr": 67.7
+  },
+  {
+   "file": "2026W14_1A_0373_4_D6.fits",
+   "mjd": 61130.82162,
+   "visit": 1,
+   "detector": 6,
+   "x": 11,
+   "y": 116,
+   "ra": 161.453026,
+   "dec": 68.848773,
+   "snr": 50.6
+  }
+ ],
+ "skybot_queries": 53,
+ "skybot_failed": 0
+}

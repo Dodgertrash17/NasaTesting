@@ -55,7 +55,7 @@ const els = Object.fromEntries([
   'back-link', 'goto-form', 'g-ra', 'g-dec', 'g-fov', 'goto-error', 'preset-list',
   'viewer-title', 'target-coords', 'target-note', 'copy-link', 'copy-embed', 'open-full',
   'empty', 'empty-title', 'empty-detail', 'empty-actions', 'viewer', 'stage', 'sky', 'sky-caption',
-  'sim-badge', 'fov-badge', 'frame-badge', 'count-badge', 'loading', 'loading-text', 'loading-bar',
+  'sim-badge', 'fov-badge', 'frame-badge', 'count-badge', 'loading', 'loading-text', 'loading-bar', 'loading-detail',
   'prev', 'blink', 'next', 'speed', 'ref-wrap', 'ref', 'det', 'mode-help',
   'lc-svg', 'lc-tip', 'lc-where', 'lc-reset', 'lc-summary', 'lc-rows',
   'frame', 'frame-date', 'tl-ticks', 'dome-link',
@@ -299,16 +299,17 @@ function drawOverlays(ctx, fi, frame) {
     if (!box.checked) continue;
     const ov = SkyData.getOverlay(key, { patch: patch(), target: state.target });
     const color = key === 'gaia' ? '#c9a7ff' : '#7be0c8';
+    const few = ov.sources.length <= 12;          // a whole field of sources: markers only, no labels
     for (const s of ov.sources) {
       const p = g.skyToPx(s.ra, s.dec);
-      if (now && state.target) {
+      if (now && state.target && few) {
         ctx.save();
         ctx.strokeStyle = color; ctx.globalAlpha = 0.7; ctx.lineWidth = 2; ctx.setLineDash([6, 5]);
         ctx.beginPath(); ctx.moveTo(X(p.x), Y(p.y)); ctx.lineTo(X(now.x), Y(now.y)); ctx.stroke();
         ctx.restore();
       }
-      drawShape(ctx, ov.catalog.shape, X(p.x), Y(p.y), R * 0.7, { color, lw: 2.5 });
-      label(ctx, `${key === 'gaia' ? 'Gaia' : 'WISE'} ${Math.round(s.epoch ?? ov.catalog.epoch)}`, X(p.x) + R, Y(p.y) - R * 0.6);
+      drawShape(ctx, ov.catalog.shape, X(p.x), Y(p.y), few ? R * 0.7 : R * 0.45, { color, lw: few ? 2.5 : 1.5 });
+      if (few) label(ctx, `${key === 'gaia' ? 'Gaia' : 'WISE'} ${Math.round(s.epoch ?? ov.catalog.epoch)}`, X(p.x) + R, Y(p.y) - R * 0.6);
     }
   }
 
@@ -425,7 +426,7 @@ function renderRawPatch() {
     ['Pixel', `${g.scale.toFixed(2)}″`],
     ['Dates', frames.length],
     ['Span', `${mjdToDate(frames[0].mjd)} → ${mjdToDate(frames.at(-1).mjd)}`],
-    ['Source', SkyData.config.source === 'api' ? 'live service' : p.simulated ? 'sample files (simulated)' : 'sample files'],
+    ['Source', SkyData.usedApi ? 'processed live from SPHEREx' : p.simulated ? 'sample files (simulated)' : 'pre-processed SPHEREx files'],
   ]);
 }
 
@@ -741,19 +742,44 @@ function showEmpty(title, text, actions = []) {
 const demo = TARGETS.find(t => t.id === 'wise0855');
 const demoAction = ['Open the WISE 0855 demo', viewerUrl({ ...demo, fov: demo.fov })];
 
+// Live processing progress: "Step 2 of 4 · Downloading and cleaning SPHEREx images (14 of 36)".
+// The bar spreads the four steps over 0-100%, with downloading (the slow part) taking most of it.
+const STEP_SPAN = { 1: [0, 8], 2: [8, 85], 3: [85, 93], 4: [93, 100] };
+function showStage(info) {
+  if (info.wake) {
+    els.loadingText.textContent = `${info.message}…`;
+    els.loadingBar.style.width = '3%';
+    els.loadingDetail.textContent = 'It runs on free hosting that sleeps after about 15 minutes without visitors, ' +
+      'so the first search after a quiet spell waits up to a minute while it starts. After that it stays awake.';
+    setStatus(`${info.message}…`);
+    return;
+  }
+  const [a, b] = STEP_SPAN[info.step] || [0, 100];
+  const frac = info.total ? info.done / info.total : 0;
+  const count = info.total ? ` (${info.done} of ${info.total})` : '';
+  els.loadingText.textContent = `Step ${info.step} of ${info.steps} · ${info.message}${count}`;
+  els.loadingBar.style.width = `${a + (b - a) * frac}%`;
+  els.loadingDetail.textContent = `No one has looked at this spot before, so we're processing it now from NASA's archive ` +
+    `(${info.elapsed_s} s so far; usually 20 to 50 s). It's saved after this, so next time it opens instantly.`;
+  setStatus(`${info.message}…`);
+}
+
 async function load() {
   const r = state.req;
   els.empty.hidden = true;
   els.viewer.hidden = false;
   els.loading.hidden = false;
   els.loadingText.textContent = 'Finding SPHEREx images for this spot…';
+  els.loadingDetail.textContent = '';
   els.loadingBar.style.width = '0%';
   setStatus('Loading sky images…');
   let res;
   try {
     res = await SkyData.getPatch(r, {
+      onStage(info) { showStage(info); },
       onProgress(done, total) {
         els.loadingText.textContent = `Loading image ${done} of ${total}…`;
+        els.loadingDetail.textContent = '';
         els.loadingBar.style.width = `${(done / total) * 100}%`;
       },
     });
@@ -777,7 +803,9 @@ async function load() {
     showEmpty('No SPHEREx images for this spot yet',
       `Nothing in our image set covers RA ${formatRA(r.ra)}, Dec ${formatDec(r.dec)}.` +
       (near ? ` The nearest patch we have is ${near.title}, ${near.sepDeg.toFixed(1)}° away.` : '') +
-      (SkyData.config.source === 'static' ? ' Right now only the five test targets are loaded; any coordinates will work once the live data service is connected.' : ' New SPHEREx data arrives every few weeks, so check back.'),
+      (res.liveUnavailable || SkyData.config.source === 'static'
+        ? ' The live SPHEREx server that processes new spots could not be reached (it may be restarting, or not set up yet), so right now only the 100 pre-processed targets open. Try again in a minute.'
+        : ' New SPHEREx data arrives every few weeks, so check back.'),
       actions);
     return;
   }
@@ -910,7 +938,7 @@ els.gotoForm.addEventListener('submit', (e) => {
     (ra === null ? els.gRa : els.gDec).focus();
     return;
   }
-  const keep = Object.fromEntries(['embed', 'source'].map(k => [k, new URLSearchParams(location.search).get(k)]));
+  const keep = Object.fromEntries(['embed', 'source', 'layers', 'gaia', 'wise'].map(k => [k, new URLSearchParams(location.search).get(k)]));
   location.href = viewerUrl({ ra, dec, fov: Number(els.gFov.value), name: knownTarget(ra, dec)?.name, ...keep });
 });
 

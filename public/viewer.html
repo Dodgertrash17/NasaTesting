@@ -92,8 +92,9 @@
           <span id="count-badge" class="badge badge-count mono" aria-hidden="true"></span>
           <div id="loading" class="loading" hidden>
             <span class="spinner"></span>
-            <span id="loading-text">Loading sky images…</span>
+            <span id="loading-text" aria-live="polite">Loading sky images…</span>
             <span class="progress" aria-hidden="true"><i id="loading-bar"></i></span>
+            <span id="loading-detail" class="loading-detail small"></span>
           </div>
         </div>
         <figcaption id="sky-caption" class="muted small sky-caption"></figcaption>
@@ -176,7 +177,7 @@
           <h2 id="layers-title">Layers</h2>
           <label class="check"><input type="checkbox" id="show-flags"> <span class="swatch swatch-flag" aria-hidden="true"></span> Contamination flags</label>
           <label class="check"><input type="checkbox" id="ov-gaia"> <span class="swatch swatch-gaia" aria-hidden="true">◆</span> Gaia DR3 positions (2016)</label>
-          <label class="check"><input type="checkbox" id="ov-wise"> <span class="swatch swatch-wise" aria-hidden="true">■</span> WISE positions (2010)</label>
+          <label class="check"><input type="checkbox" id="ov-wise"> <span class="swatch swatch-wise" aria-hidden="true">■</span> WISE positions (CatWISE)</label>
           <label class="check"><input type="checkbox" id="show-track"> <span class="swatch swatch-track" aria-hidden="true">○</span> Expected position on each date</label>
           <p class="ai-note" id="overlay-note"></p>
           <details class="adjust-inline">

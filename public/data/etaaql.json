@@ -21,7 +21,7 @@
    "detector": "all",
    "wavelength_um": [
     0.739,
-    4.978
+    4.984
    ],
    "n_exposures": 113,
    "flags": [
@@ -29,8 +29,8 @@
     "target saturated in 112 of 113 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1673
+    "SATURATED": 282,
+    "NO_DATA": 22
    }
   },
   {
@@ -49,8 +49,8 @@
     "target saturated in 20 of 20 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 2041
+    "SATURATED": 232,
+    "NO_DATA": 29
    }
   },
   {
@@ -69,8 +69,8 @@
     "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1390
+    "SATURATED": 180,
+    "NO_DATA": 25
    }
   },
   {
@@ -89,8 +89,8 @@
     "target saturated in 17 of 17 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1542
+    "SATURATED": 178,
+    "NO_DATA": 25
    }
   },
   {
@@ -100,8 +100,8 @@
    "band": "Detector 4, its ~17 channels stacked",
    "detector": 4,
    "wavelength_um": [
-    2.411,
-    3.747
+    2.408,
+    3.746
    ],
    "n_exposures": 20,
    "flags": [
@@ -109,8 +109,8 @@
     "target saturated in 20 of 20 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 2032
+    "SATURATED": 254,
+    "NO_DATA": 34
    }
   },
   {
@@ -120,8 +120,8 @@
    "band": "Detector 5, its ~17 channels stacked",
    "detector": 5,
    "wavelength_um": [
-    3.797,
-    4.423
+    3.803,
+    4.429
    ],
    "n_exposures": 19,
    "flags": [
@@ -129,8 +129,8 @@
     "target saturated in 19 of 19 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1331
+    "SATURATED": 115,
+    "NO_DATA": 7
    }
   },
   {
@@ -140,8 +140,8 @@
    "band": "Detector 6, its ~17 channels stacked",
    "detector": 6,
    "wavelength_um": [
-    4.426,
-    4.978
+    4.432,
+    4.984
    ],
    "n_exposures": 18,
    "flags": [
@@ -149,8 +149,8 @@
     "target saturated in 17 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 0,
-    "NO_DATA": 1477
+    "SATURATED": 71,
+    "NO_DATA": 5
    }
   },
   {
@@ -161,7 +161,7 @@
    "detector": "all",
    "wavelength_um": [
     0.754,
-    4.971
+    4.977
    ],
    "n_exposures": 120,
    "flags": [
@@ -169,8 +169,8 @@
     "target saturated in 120 of 120 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 287,
-    "NO_DATA": 1337
+    "SATURATED": 289,
+    "NO_DATA": 26
    }
   },
   {
@@ -190,7 +190,7 @@
    ],
    "flag_bits": {
     "SATURATED": 221,
-    "NO_DATA": 1124
+    "NO_DATA": 32
    }
   },
   {
@@ -209,8 +209,8 @@
     "target saturated in 20 of 20 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 182,
-    "NO_DATA": 1390
+    "SATURATED": 183,
+    "NO_DATA": 29
    }
   },
   {
@@ -229,8 +229,8 @@
     "target saturated in 20 of 20 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 221,
-    "NO_DATA": 1928
+    "SATURATED": 224,
+    "NO_DATA": 27
    }
   },
   {
@@ -241,7 +241,7 @@
    "detector": 4,
    "wavelength_um": [
     2.453,
-    3.776
+    3.777
    ],
    "n_exposures": 20,
    "flags": [
@@ -250,7 +250,7 @@
    ],
    "flag_bits": {
     "SATURATED": 261,
-    "NO_DATA": 1077
+    "NO_DATA": 35
    }
   },
   {
@@ -260,8 +260,8 @@
    "band": "Detector 5, its ~17 channels stacked",
    "detector": 5,
    "wavelength_um": [
-    3.804,
-    4.412
+    3.811,
+    4.418
    ],
    "n_exposures": 20,
    "flags": [
@@ -270,7 +270,7 @@
    ],
    "flag_bits": {
     "SATURATED": 112,
-    "NO_DATA": 1322
+    "NO_DATA": 9
    }
   },
   {
@@ -280,8 +280,8 @@
    "band": "Detector 6, its ~17 channels stacked",
    "detector": 6,
    "wavelength_um": [
-    4.412,
-    4.971
+    4.419,
+    4.977
    ],
    "n_exposures": 20,
    "flags": [
@@ -290,7 +290,7 @@
    ],
    "flag_bits": {
     "SATURATED": 66,
-    "NO_DATA": 1870
+    "NO_DATA": 4
    }
   },
   {
@@ -309,8 +309,8 @@
     "target saturated in 87 of 87 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 278,
-    "NO_DATA": 1824
+    "SATURATED": 279,
+    "NO_DATA": 23
    }
   },
   {
@@ -330,7 +330,7 @@
    ],
    "flag_bits": {
     "SATURATED": 258,
-    "NO_DATA": 2051
+    "NO_DATA": 78
    }
   },
   {
@@ -350,7 +350,7 @@
    ],
    "flag_bits": {
     "SATURATED": 182,
-    "NO_DATA": 1903
+    "NO_DATA": 33
    }
   },
   {
@@ -369,8 +369,8 @@
     "target saturated in 18 of 18 exposures (brightness approximate)"
    ],
    "flag_bits": {
-    "SATURATED": 167,
-    "NO_DATA": 1163
+    "SATURATED": 168,
+    "NO_DATA": 26
    }
   },
   {
@@ -390,7 +390,7 @@
    ],
    "flag_bits": {
     "SATURATED": 213,
-    "NO_DATA": 2059
+    "NO_DATA": 878
    }
   },
   {
@@ -410,7 +410,7 @@
    ],
    "flag_bits": {
     "SATURATED": 109,
-    "NO_DATA": 1824
+    "NO_DATA": 8
    }
   },
   {
@@ -430,7 +430,7 @@
    ],
    "flag_bits": {
     "SATURATED": 70,
-    "NO_DATA": 1132
+    "NO_DATA": 7
    }
   }
  ],
@@ -444,43 +444,43 @@
   },
   {
    "mjd": 60950.583,
-   "flux": 20891636.41,
-   "err": 913249.99,
+   "flux": 20346378.23,
+   "err": 757289.94,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 60945.501,
-   "flux": 24337651.33,
-   "err": 8489899.65,
+   "flux": 24583309.93,
+   "err": 8500226.89,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 60950.595,
-   "flux": 29885624.94,
-   "err": 1119989.17,
+   "flux": 29780515.02,
+   "err": 1081109.8,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 60945.318,
-   "flux": 20373911.57,
-   "err": 1186426.97,
+   "flux": 20095426.26,
+   "err": 838417.93,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61152.462,
-   "flux": 31558014.06,
-   "err": 1494455.89,
+   "flux": 31354933.49,
+   "err": 1154040.19,
    "flagged": true,
    "unit": "uJy"
   },
   {
    "mjd": 61155.233,
-   "flux": 18515572.41,
-   "err": 1286596.53,
+   "flux": 18243520.11,
+   "err": 1491148.4,
    "flagged": true,
    "unit": "uJy"
   },
@@ -501,7 +501,7 @@
   {
    "mjd": 61311.877,
    "flux": 20695737.05,
-   "err": 988895.53,
+   "err": 988895.72,
    "flagged": true,
    "unit": "uJy"
   }
@@ -517,126 +517,11 @@
   ],
   "wise": []
  },
- "predictions": [
-  {
-   "id": "M0",
-   "label": "Eta Aquilae",
-   "kind": "Possible mover, no catalogue match (likely an artefact)",
-   "confidence": 0.15,
-   "pm_arcsec_yr": 9.1,
-   "track": [
-    {
-     "epoch": 0,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 1,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 2,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 3,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 4,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 5,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 6,
-     "x": 71.5,
-     "y": 71.87
-    },
-    {
-     "epoch": 7,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 8,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 9,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 10,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 11,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 12,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 13,
-     "x": 70.5,
-     "y": 72.98
-    },
-    {
-     "epoch": 14,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 15,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 16,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 17,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 18,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 19,
-     "x": 70.64,
-     "y": 73.0
-    },
-    {
-     "epoch": 20,
-     "x": 70.64,
-     "y": 73.0
-    }
-   ]
-  }
- ],
+ "predictions": [],
  "pipeline": {
   "asteroids_named": 0,
   "asteroids_predicted_in_field": 4,
-  "one_frame_unidentified": 116,
+  "one_frame_unidentified": 119,
   "target_verdicts": [
    {
     "visit": 2,
