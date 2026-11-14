@@ -6,7 +6,7 @@ services:
     name: skyblink-spherex-live
     runtime: python
     plan: free
-    branch: spherex-real-data
+    branch: main
     buildCommand: pip install -r pipeline/requirements.txt
     # Free plan = 512 MB RAM and a disk that is wiped on every restart, so: one search at a time,
     # 30 images per search, and a small cache (it refills itself as people search).
