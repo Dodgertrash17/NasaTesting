@@ -16,7 +16,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.8
       - key: ALLOWED_ORIGINS        # sites allowed to call the server; "*" = any (the data is public)
-        value: "*"
+        value: "https://nasatesting.vercel.app"
       - key: LIVE_MAX_JOBS
         value: "1"
       - key: LIVE_THREADS

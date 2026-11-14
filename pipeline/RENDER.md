@@ -43,4 +43,4 @@ Every later push to `spherex-real-data` redeploys Render automatically too.
 | `--live-max-mb 200` | cache cap | small, temporary disk |
 | `LIVE_MAX_JOBS=1` | searches at once | stay under 512 MB |
 | `LIVE_THREADS=8` | parallel downloads | |
-| `ALLOWED_ORIGINS=*` | who may call it | the data is public; set to your Vercel address to restrict, e.g. `https://nasatesting.vercel.app,https://*.vercel.app` |
+| `ALLOWED_ORIGINS=https://nasatesting.vercel.app` | who may call it | only the Vercel site may call the server from a browser. Separate several sites with commas; to also allow every `vercel.app` subdomain (preview deployments), add `*.vercel.app` (no `https://`, which is how `server.py` matches wildcards). `*` allows any site. |
